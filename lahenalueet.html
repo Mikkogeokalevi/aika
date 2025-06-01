@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lahen kaupunginosat mysteeri</title>
+</head>
+<body>
+  <div>
+    <h2>Lahen mysteeri</h2>
+    <label for="input">Vastaus:</label>
+    <input id="input" type="text"/>
+    <button onclick="tarkista()">Tarkista</button>
+    <p id="viesti"></p>
+  </div>
+
+  <script src="puzzle_data.js"></script>
+  <script>
+    const input = document.getElementById("input");
+    const viesti = document.getElementById("viesti");
+    let currentStepIndex = 0;
+
+    function getBrowserID() {
+      const key = "selainID";
+      let id = localStorage.getItem(key);
+      if (!id) {
+        id = "id_" + Math.random().toString(36).substring(2, 10);
+        localStorage.setItem(key, id);
+      }
+      return id;
+    }
+
+    async function logToGoogleForms(vaiheIndex) {
+      const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSdWvKXolX3pglwWvQptnIv_R5i-Ef3WvHYK-jGJ3NrsxRfHNA/formResponse";
+      const data = new URLSearchParams();
+      data.append("entry.1899885798", vaiheIndex + 1); // vaihe
+      data.append("entry.327107234", new Date().toISOString()); // aikaleima
+      data.append("entry.314364688", getBrowserID()); // selainID
+
+      try {
+        await fetch(formURL, {
+          method: "POST",
+          mode: "no-cors",
+          body: data
+        });
+      } catch (e) {
+        console.log("Lokitus epäonnistui (voi olla normaalia no-cors-moodissa)");
+      }
+    }
+
+    function tarkista() {
+      const vastaus = input.value.trim().toLowerCase();
+      const step = puzzleSetup.steps[currentStepIndex];
+      const odotettu = typeof step.expectedInput === "function" ? step.expectedInput() : step.expectedInput;
+
+      if (vastaus === odotettu.toLowerCase()) {
+        viesti.textContent = step.responseMessage || "Oikein!";
+        logToGoogleForms(currentStepIndex);
+        currentStepIndex++;
+        input.value = "";
+      } else {
+        viesti.textContent = puzzleSetup.wrongInputMessage || "Väärin!";
+      }
+    }
+  </script>
+</body>
+</html>
