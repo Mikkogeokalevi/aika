@@ -1,7 +1,7 @@
 const allQuestions = [
     { question: "Mikä on Suomen pääkaupunki?", options: ["A. Tampere", "B. Helsinki", "C. Turku"], answer: "B", type: "multiple-choice", time: 10 },
     { question: "Paljonko on kaksi plus kaksi?", options: [], answer: "4", type: "text", time: 30 },
-    { question: "Mikä on kuvassa näkyvä ruumiin osa?", image: "01.jpg", options: [], answer: "koira", type: "text", time: 30 },
+    { question: "Mikä on kuvassa näkyvä ruumiin osa?", image: "01.jpg", options: [], answer: "jalka", type: "text", time: 30 },
     { question: "Mitä ovat kuvassa näkyvät rakennukset?", image: "02.jpg", options: ["A. mummonmökkejä", "B. luxus huviloita", "C. kerrostaloja"], answer: "A", type: "multiple-choice", time: 30 }
 ];
 
