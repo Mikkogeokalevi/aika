@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aikarajoitettu kyselypeli</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <p>
+            <img src="https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png" alt="Mikkokalevin logo" style="width:120px;height:120px;border:2px solid #90EE90;border-radius:50%;display:inline-block;vertical-align:middle;box-shadow:1px 1px 3px rgba(0,0,0,0.4);background-color:#556B2F;padding:3px;" />
+        </p>
+        <h3 style="color:#90EE90;">Aikarajoitettu kyselypeli</h3>
+        <button id="startButton">Aloita peli</button>
+        <div id="gameContent" style="display: none;">
+            <div class="timer">
+                Aikaa jäljellä: <span id="time">10</span> sekuntia
+            </div>
+            <div id="imageContainer"></div>
+            <div class="question" id="question"></div>
+            <div class="options" id="options"></div>
+            <input type="text" id="textAnswer" placeholder="Kirjoita vastauksesi tähän" style="display: none;" />
+            <button id="submitAnswer" style="display: none;">Lähetä vastaus</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
