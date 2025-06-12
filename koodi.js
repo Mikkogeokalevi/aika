@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const message = document.getElementById('message');
 
     // HUOMIO: Muuta näitä lauseita, jos haluat vaihtaa lauseita.
-    let currentSentence = "geokätköily on mukava ilmainen harrastus jossa mennään pöljänpolkua purkille ja tietä pitkin takaisin";
+    let currentSentence = "geokätköily on mukava ilmainen harrastus, jossa mennään pöljänpolkua purkille ja tietä pitkin takaisin";
     let secondSentence = "lähelle on joskus pitkä matka varsinkin kätköilijällä";
     let thirdSentence = "hunttaaminen on ainoa asia missä geokätköilyssä kilpaillaan";
 
@@ -83,17 +83,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const inputText = sentenceInput.value.trim();
 
         // HUOMIO: Tarkista, että nämä ehdot vastaavat oikeaa lausetta vaiheessa.
-        if (!isSecondSentence && !isThirdSentence && inputText === currentSentence) {
+        if (!isSecondSentence && !isThirdSentence && inputText.toLowerCase() === currentSentence.toLowerCase()) {
             message.textContent = "Oikein! Siirry seuraavaan vaiheeseen.";
             isSecondSentence = true;
             sentenceInput.value = '';
             initializeGrid();
-        } else if (isSecondSentence && !isThirdSentence && inputText === secondSentence) {
+        } else if (isSecondSentence && !isThirdSentence && inputText.toLowerCase() === secondSentence.toLowerCase()) {
             message.textContent = "Oikein! Siirry viimeiseen vaiheeseen.";
             isThirdSentence = true;
             sentenceInput.value = '';
             initializeGrid();
-        } else if (isThirdSentence && inputText === thirdSentence) {
+        } else if (isThirdSentence && inputText.toLowerCase() === thirdSentence.toLowerCase()) {
             message.textContent = "Onnea sait oikein! KätköilijänTärkeinVälineOnKynä";
         } else {
             message.textContent = "Väärä vastaus, yritä uudelleen!";
