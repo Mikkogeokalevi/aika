@@ -5,13 +5,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const sentenceInput = document.getElementById('sentenceInput');
     const message = document.getElementById('message');
 
-    let texts = Array(100).fill("X");
+    // HUOMIO: Muuta näitä lauseita, jos haluat vaihtaa lauseita.
     let currentSentence = "geokätköily on mukava ilmainen harrastus jossa mennään pöljänpolkua purkille ja tietä pitkin takaisin";
     let secondSentence = "lähelle on joskus pitkä matka varsinkin kätköilijällä";
     let thirdSentence = "hunttaaminen on ainoa asia missä geokätköilyssä kilpaillaan";
+
+    // HUOMIO: Lauseet jaetaan sanoihin, joten älä muuta näitä rivejä.
     let words = currentSentence.split(' ');
     let secondWords = secondSentence.split(' ');
     let thirdWords = thirdSentence.split(' ');
+
     let isSecondSentence = false;
     let isThirdSentence = false;
 
@@ -28,6 +31,8 @@ document.addEventListener('DOMContentLoaded', function() {
         texts = Array(100).fill("X");
         let indices = Array.from({ length: 100 }, (_, i) => i);
         let shuffledIndices = shuffleArray(indices);
+
+        // HUOMIO: Tarkista, että tämä osa vastaa oikeaa lausetta vaiheessa.
         let currentWords = isThirdSentence ? thirdWords : (isSecondSentence ? secondWords : words);
 
         shuffledIndices.slice(0, currentWords.length).forEach((index, i) => {
@@ -76,6 +81,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     checkButton.addEventListener('click', () => {
         const inputText = sentenceInput.value.trim();
+
+        // HUOMIO: Tarkista, että nämä ehdot vastaavat oikeaa lausetta vaiheessa.
         if (!isSecondSentence && !isThirdSentence && inputText === currentSentence) {
             message.textContent = "Oikein! Siirry seuraavaan vaiheeseen.";
             isSecondSentence = true;
