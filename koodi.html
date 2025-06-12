@@ -47,6 +47,9 @@
         .cell.word-cell {
             background-color: #ffcccc;
         }
+        .cell.second-word-cell {
+            background-color: #ADD8E6;
+        }
         button {
             margin-top: 20px;
             padding: 10px 20px;
@@ -60,6 +63,16 @@
         button:hover {
             background-color: #556B2F;
         }
+        input {
+            margin-top: 10px;
+            padding: 8px;
+            width: 80%;
+            max-width: 300px;
+        }
+        .message {
+            margin-top: 20px;
+            color: #F8F8F8;
+        }
     </style>
 </head>
 <body>
@@ -70,28 +83,25 @@
             </p>
         </div>
         <div class="grid" id="grid"></div>
+        <input type="text" id="sentenceInput" placeholder="Syötä lause tähän">
         <button id="resetButton">Aloita alusta</button>
-        <p style="color:#F8F8F8; margin-top: 20px;">Syötä sanoista muodostuva lause kätkökuvauksen chekkeriin saadaksesi loppu purkin koordinaatit!</p>
+        <button id="checkButton">Tarkista</button>
+        <p id="message" class="message"></p>
     </div>
 
     <script>
         const grid = document.getElementById('grid');
         const resetButton = document.getElementById('resetButton');
+        const checkButton = document.getElementById('checkButton');
+        const sentenceInput = document.getElementById('sentenceInput');
+        const message = document.getElementById('message');
 
-        // Alustetaan kaikki tekstikentät tyhjiksi
         let texts = Array(100).fill("X");
-
-        // Lause jaettu sanoihin
-        const sentence = "geokätköily on mukava ilmainen harrastus jossa mennään pöljänpolkua purkille ja polkua pitkin takaisin";
-        const words = sentence.split(' ');
-
-        // Lisätään sanat satunnaisiin ruutuihin
-        const indices = Array.from({ length: 100 }, (_, i) => i);
-        const shuffledIndices = shuffleArray(indices).slice(0, words.length);
-
-        shuffledIndices.forEach((index, i) => {
-            texts[index] = words[i];
-        });
+        let currentSentence = "geokätköily on mukava ilmainen harrastus jossa mennään pöljänpolkua purkille ja polkua pitkin takaisin";
+        let secondSentence = "lähelle joskus pitkä matka varsinkin kätköilijällä";
+        let words = currentSentence.split(' ');
+        let secondWords = secondSentence.split(' ');
+        let isSecondSentence = false;
 
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
@@ -103,7 +113,17 @@
 
         function initializeGrid() {
             grid.innerHTML = '';
+            texts = Array(100).fill("X");
+            let indices = Array.from({ length: 100 }, (_, i) => i);
+            let shuffledIndices = shuffleArray(indices).slice(0, isSecondSentence ? secondWords.length : words.length);
+            let currentWords = isSecondSentence ? secondWords : words;
+
+            shuffledIndices.forEach((index, i) => {
+                texts[index] = currentWords[i];
+            });
+
             texts = shuffleArray(texts);
+
             for (let i = 0; i < 100; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
@@ -113,14 +133,17 @@
                         cell.textContent = texts[i];
                         cell.classList.add('clicked');
                         if (texts[i] !== 'X') {
-                            cell.classList.add('word-cell');
+                            if (isSecondSentence) {
+                                cell.classList.add('second-word-cell');
+                            } else {
+                                cell.classList.add('word-cell');
+                            }
                             setTimeout(() => {
                                 cell.textContent = '';
-                            }, 2000);
+                            }, isSecondSentence ? 2000 : 2000);
                         } else {
                             setTimeout(() => {
                                 cell.textContent = '';
-                                cell.classList.remove('word-cell');
                             }, 1000);
                         }
                     }
@@ -129,7 +152,31 @@
             }
         }
 
-        resetButton.addEventListener('click', initializeGrid);
+        resetButton.addEventListener('click', () => {
+            isSecondSentence = false;
+            sentenceInput.value = '';
+            message.textContent = '';
+            initializeGrid();
+        });
+
+        checkButton.addEventListener('click', () => {
+            const inputText = sentenceInput.value.trim();
+            if (!isSecondSentence && inputText === currentSentence) {
+                message.textContent = "Onnea sait oikein! KätköilijänTärkeinVälineOnKynä";
+                isSecondSentence = true;
+                sentenceInput.value = '';
+                initializeGrid();
+            } else if (isSecondSentence && inputText === secondSentence) {
+                message.textContent = "Onnea sait oikein! KätköilijänTärkeinVälineOnKynä";
+            } else {
+                message.textContent = "Väärä vastaus, yritä uudelleen!";
+                setTimeout(() => {
+                    sentenceInput.value = '';
+                    initializeGrid();
+                }, 1000);
+            }
+        });
+
         window.addEventListener('load', initializeGrid);
     </script>
 </body>
