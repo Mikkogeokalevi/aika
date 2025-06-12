@@ -52,8 +52,8 @@
         }
         button {
             margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 8px 16px;
+            font-size: 14px;
             cursor: pointer;
             background-color: #36451C;
             color: white;
@@ -73,6 +73,9 @@
             margin-top: 20px;
             color: #F8F8F8;
         }
+        .button-container {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -84,9 +87,11 @@
         </div>
         <div class="grid" id="grid"></div>
         <input type="text" id="sentenceInput" placeholder="Syötä lause tähän">
-        <button id="resetButton">Aloita alusta</button>
         <button id="checkButton">Tarkista</button>
         <p id="message" class="message"></p>
+        <div class="button-container">
+            <button id="resetButton">Aloita alusta</button>
+        </div>
     </div>
 
     <script>
