@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const message = document.getElementById('message');
 
     // HUOMIO: Muuta näitä lauseita, jos haluat vaihtaa lauseita.
-    let currentSentence = "geokätköily on mukava ilmainen harrastus, jossa mennään pöljänpolkua purkille ja tietä pitkin takaisin";
-    let secondSentence = "lähelle on joskus pitkä matka varsinkin kätköilijällä";
-    let thirdSentence = "hunttaaminen on ainoa asia missä geokätköilyssä kilpaillaan";
+    let currentSentence = "geokätköily on mukava ilmainen harrastus, jossa mennään pöljänpolkua purkille ja tietä pitkin takaisin.";
+    let secondSentence = "lähelle on joskus pitkä matka varsinkin kätköilijällä.";
+    let thirdSentence = "hunttaaminen on ainoa asia missä geokätköilyssä kilpaillaan.";
 
     // HUOMIO: Lauseet jaetaan sanoihin, joten älä muuta näitä rivejä.
     let words = currentSentence.split(' ');
