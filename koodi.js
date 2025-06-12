@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const message = document.getElementById('message');
 
     let texts = Array(100).fill("X");
-    let currentSentence = "geokätköily on mukava ilmainen harrastus jossa mennään pöljänpolkua purkille ja polkua pitkin takaisin";
-    let secondSentence = "lähelle joskus pitkä matka varsinkin kätköilijällä";
-    let thirdSentence = "aarre jaetaan aina tasan puolitetaan vaikka viillolla";
+    let currentSentence = "geokätköily on mukava ilmainen harrastus jossa mennään pöljänpolkua purkille ja tietä pitkin takaisin";
+    let secondSentence = "lähelle on joskus pitkä matka varsinkin kätköilijällä";
+    let thirdSentence = "hunttaaminen on ainoa asia missä geokätköilyssa kilpaillaan";
     let words = currentSentence.split(' ');
     let secondWords = secondSentence.split(' ');
     let thirdWords = thirdSentence.split(' ');
