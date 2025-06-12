@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruudukko mysteeri</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            text-align: center;
+            background-color: #8FBC8F;
+        }
+        .container {
+            padding: 10px;
+            margin: 15px auto;
+            background-color: #556B2F;
+            border: 3px solid #36451C;
+            border-radius: 12px;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
+            max-width: 600px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            gap: 1px;
+            width: 100%;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+        .cell {
+            background-color: #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            aspect-ratio: 1 / 1;
+            font-size: 10px;
+            overflow: hidden;
+            word-break: break-word;
+            padding: 2px;
+            box-sizing: border-box;
+        }
+        .cell.clicked {
+            background-color: #66ff66;
+        }
+        .cell.word-cell {
+            background-color: #ffcccc;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #36451C;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #556B2F;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="color:#F8F8F8; line-height:1.8; text-align:justify; padding:10px; font-size:1.1em;">
+            <p style="text-align:center; margin-bottom:15px;">
+                <img src="https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png" alt="Mikkokalevin logo" style="width:120px; height:120px; border:2px solid #90EE90; border-radius:50%; display:inline-block; vertical-align:middle; box-shadow:1px 1px 3px rgba(0,0,0,0.4); background-color:#556B2F; padding:3px;" />
+            </p>
+        </div>
+        <div class="grid" id="grid"></div>
+        <button id="resetButton">Aloita alusta</button>
+        <p style="color:#F8F8F8; margin-top: 20px;">Syötä sanoista muodostuva lause kätkökuvauksen chekkeriin saadaksesi loppu purkin koordinaatit!</p>
+    </div>
+
+    <script>
+        const grid = document.getElementById('grid');
+        const resetButton = document.getElementById('resetButton');
+
+        // Alustetaan kaikki tekstikentät tyhjiksi
+        let texts = Array(100).fill("X");
+
+        // Lause jaettu sanoihin
+        const sentence = "geokätköily on mukava ilmainen harrastus jossa mennään pöljänpolkua purkille ja polkua pitkin takaisin";
+        const words = sentence.split(' ');
+
+        // Lisätään sanat satunnaisiin ruutuihin
+        const indices = Array.from({ length: 100 }, (_, i) => i);
+        const shuffledIndices = shuffleArray(indices).slice(0, words.length);
+
+        shuffledIndices.forEach((index, i) => {
+            texts[index] = words[i];
+        });
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function initializeGrid() {
+            grid.innerHTML = '';
+            texts = shuffleArray(texts);
+            for (let i = 0; i < 100; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.textContent = '';
+                cell.addEventListener('click', () => {
+                    if (!cell.classList.contains('clicked')) {
+                        cell.textContent = texts[i];
+                        cell.classList.add('clicked');
+                        if (texts[i] !== 'X') {
+                            cell.classList.add('word-cell');
+                            setTimeout(() => {
+                                cell.textContent = '';
+                            }, 2000);
+                        } else {
+                            setTimeout(() => {
+                                cell.textContent = '';
+                                cell.classList.remove('word-cell');
+                            }, 1000);
+                        }
+                    }
+                });
+                grid.appendChild(cell);
+            }
+        }
+
+        resetButton.addEventListener('click', initializeGrid);
+        window.addEventListener('load', initializeGrid);
+    </script>
+</body>
+</html>
