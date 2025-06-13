@@ -6,22 +6,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const sentenceLabel = document.getElementById('sentenceLabel');
     const message = document.getElementById('message');
 
-    // Apufunktio, joka purkaa Base64-koodatun ja UTF-8-enkoodatun tekstin.
-    function decode(encodedString) {
-        return decodeURIComponent(atob(encodedString));
+    // Funktio Base64-koodatun ja UTF-8-enkoodatun tekstin purkamiseen
+    function base64ToUtf8(str) {
+        return decodeURIComponent(atob(str).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
     }
 
     let texts = Array(100).fill("X");
     
-    // Lauseet on koodattu Base64-muotoon
+    // Lauseet Base64-koodattuina. Nämä eivät näy selkokielisinä lähdekoodissa.
     let sentences = [
-        decode('R2Vva8OkdGvDpilseSBvbiBtdWthdmEgaWxtYWluenIGhhcnJhc3R1cywgam9zcw0gbWVudMOkbiBww7xsamFucG9sa3VhIHB1cmtpbGxlIGphIHRpZXTDpiBwaXRraW4gdGFrYWlzaW4u'),
-        decode('TMOkaGVsbGUgb24gam9za3VzIHBpdGvDpiBtYXRrYSwgdmFyc2lua2luIGvDpHRrw7ZpbGlqw6RsbMOkLg=='),
-        decode('SHVudHRhYW1pbmVuIG9uIGFpbm9hIGFzaWEsIG1pc3PDpSBnZW9rw6R0a8O2aWx5c3PDpSBraWxwYWlsbGFhbi4='),
-        decode('S29za2FhbiBlaSBvbGUgbGlpYW4gdmFuaGEgZXRzaW3DpHNuIG11b3ZpcmFzaW9pdGEga2l2ZW5rb2xvaXN0YS4='),
-        decode('WWtzaSBoYXJyYXN0dXMsIHR1aGFuc2lhIHBvbGt1amEgamEgeXN0w6R2acOkLg=='),
-        decode('S8OkdGvDpilseSB2aWUgc2ludXQgcGFpa2tvaWhpbiwgam9paGluIGV0IG11dXRlbiBla3N5c2ku'),
-        decode('TWlrc2kgaXN0dWEgc2lzw6RsbMOkLCBrdW4gdm9pdCByecO2bWnDpSBzaWxsYW4gYWxsZSBqYSB2w6Rpc3RlbGzDpHV0ZWxpYWl0YCBsZW5ra2VpbGlqw7ZpdMOkPw==')
+        base64ToUtf8('R2Vva8OkdGvDpilseSBvbiBtdWthdmEgaWxtYWluZW4gaGFycmFzdHVzLCBqb3NzYSBtZW5uw6RuIHB2bGpcdTAwZjRpcG9sa3VhIHB1cmtpbGxlIGphIHRpZXRcdTAwZTEgcGl0a2luIHRha2Fpc2luLg=='),
+        base64ToUtf8('TMOkaGVsbGUgb24gam9za3VzIHBpdGvDpiBtYXRrYSwgdmFyc2lua2luIGvDpHRrw7ZpbGlqw6RsbMOkLg=='),
+        base64ToUtf8('SHVudHRhYW1pbmVuIG9uIGFpbm9hIGFzaWEsIG1pc3PDpSBnZW9rw6R0a8O2aWx5c3PDpCBraWxwYWlsbGFhbi4='),
+        base64ToUtf8('S29za2FhbiBlaSBvbGUgbGlpYW4gdmFuaGEgZXRzaW3DpHNuIG11b3ZpcmFzaW9pdGEga2l2ZW5rb2xvaXN0YS4='),
+        base64ToUtf8('WWtzaSBoYXJyYXN0dXMsIHR1aGFuc2lhIHBvbGt1amEgamEgeXN0w6R2acOkLg=='),
+        base64ToUtf8('S8OkdGvDpilseSB2aWUgc2ludXQgcGFpa2tvaWhpbiwgam9paGluIGV0IG11dXRlbiBla3N5c2ku'),
+        base64ToUtf8('TWlrc2kgaXN0dWEgc2lzw6RsbMOkLCBrdW4gdm9pdCByecO2bWnDpSBzaWxsYW4gYWxsZSBqYSB2w6Rpc3RlbGzDpHV0ZWxpYWl0YCBsZW5ra2VpbGlqw7ZpdMOkPw==')
     ];
 
     let currentSentenceIndex = 0;
@@ -56,7 +58,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     cell.textContent = texts[i];
                     cell.classList.add('clicked');
                     if (texts[i] !== 'X') {
-                        // Dynamisesti lisätyt luokat nykyisen lauseindeksin perusteella
                         const classNames = ['word-cell', 'second-word-cell', 'third-word-cell', 'fourth-word-cell', 'fifth-word-cell', 'sixth-word-cell', 'seventh-word-cell'];
                         if (currentSentenceIndex < classNames.length) {
                             cell.classList.add(classNames[currentSentenceIndex]);
@@ -95,8 +96,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 sentenceInput.value = '';
                 initializeGrid();
             } else {
-                // Loppuviesti on koodattu Base64-muotoon
-                message.textContent = decode('T25uZWEgc2FpdCB2aWltZWlzZW4gbGF1c2VlbiBvaWtlaW4hIFZhc3RhYSBzZXVyYWF2aWluIGt5c3lteWtzaWluIGphIGtpcmphYSB2YXN0YXVzIGvDpHRrw7ZzaXZ1biBjaGVra2VyaWluIGlsbWFuIHbDpGxpbHlvbnRlw6Rqw6EgeWh0ZWVuIHJpdmlpbi4gS3VrYSBvbiBwaWxsb3R0YW51dCBMYWhkZW4gw6Ruc2ltbcOkc2VuIGvDpHRrw7ZuPyBLdWthIG9uIHBpaWxvdHRhbnV0IFN1b21lbiBlbnNpbW3DpHNlbiBrw6R0a8O2bj8gTWlrw6Egb2xpIExhaGRlbiBlbnNpbW3DpHNlbiBXZWJjYW0ta8OkdGvDtm4gbmltaT8=');
+                // Loppuviesti Base64-koodattuna
+                message.textContent = base64ToUtf8('T25uZWEgc2FpdCB2aWltZWlzZW4gbGF1c2VlbiBvaWtlaW4hIFZhc3RhYSBzZXVyYWF2aWluIGt5c3lteWtzaWluIGphIGtpcmphYSB2YXN0YXVzIGvDpHRrw7ZzaXZ1biBjaGVra2VyaWluIGlsbWFuIHbDpGxpbHlvbnRlw6Rqw6EgeWh0ZWVuIHJpdmlpbi4gS3VrYSBvbiBwaWxsb3R0YW51dCBMYWhkZW4gw6Ruc2ltbcOkc2VuIGvDpHRrw7ZuPyBLdWthIG9uIHBpaWxvdHRhbnV0IFN1b21lbiBlbnNpbW3DpHNlbiBrw6R0a8O2bj8gTWlrw6Egb2xpIExhaGRlbiBlbnNpbW3DpHNlbiBXZWJjYW0ta8OkdGvDtm4gbmltaT8=');
             }
         } else {
             message.textContent = "Väärä vastaus, yritä uudelleen!";
