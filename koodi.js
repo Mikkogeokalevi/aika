@@ -22,7 +22,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Purku Base64-muodosta
     function decodeBase64(encoded) {
-        return atob(encoded);
+        try {
+            return decodeURIComponent(escape(atob(encoded)));
+        } catch (e) {
+            console.error("Error decoding Base64:", e);
+            return "";
+        }
     }
 
     let currentSentenceIndex = 0;
