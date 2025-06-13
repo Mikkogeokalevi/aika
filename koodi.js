@@ -48,6 +48,9 @@ document.addEventListener('DOMContentLoaded', function() {
         let shuffledIndices = shuffleArray(indices);
         let currentWords = decodeBase64(encodedSentences[currentSentenceIndex]).split(' ');
 
+        // Tarkistetaan, että sanat on purettu oikein
+        console.log("Current words:", currentWords);
+
         shuffledIndices.slice(0, currentWords.length).forEach((index, i) => {
             texts[index] = currentWords[i];
         });
