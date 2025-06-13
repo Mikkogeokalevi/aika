@@ -6,29 +6,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const sentenceLabel = document.getElementById('sentenceLabel');
     const message = document.getElementById('message');
 
-    // Salatut lauseet Base64-muodossa
-    const encodedSentences = [
-        "R2Vva8O8YcO8aw==IG9uIG11a2F2YSBpbG1haW5lbiBoYXJyYXN0dXMsIHPDtnJzYSBtZW7DtnJ1IG1lbm7DtnJhbiBww6RuYcO8YW4gcMOpbGrDtnJhbnBvbHVrdWEgcHVya2lsbGUgYWphIHRpZcO8YSBwaXRraW4gdGFrYWlzaW4u",
-        "TMOkZWhsZSBvbiBqb3NrdXMgcGl0sw==YSBtYXRrYSwgdmFyc2lua2luIMO8YcO8YWrDtnJhbGxDtnJhLg==",
-        "SHVudHRhYW1pbmVuIG9uIGFpbm9hIGFzaWEgbWlzc8O8YSBnZWvDtnJyw6Ryw7xpbGnDtnJhbGx5c8O8YW4u",
-        "S29zamFhbiBlaSBvaGVsIGxpaWFuIHZhbmhhIGV0c2nDtnJtYcO8YSBtdW92aXJhc2lvaXRhIGtpdmVuaw==b2xvaXN0YQ==",
-        "WXrDtnJpIGhhcnJhc3R1cywgdHVoYW5zaWEgcG9sbHVqYSBqYSB5c8O8YcO8YWzDtnJhLg==",
-        "SsO8YXRrw7xpbHkgdmllIHNpbnV0IHBhaWtrb2l0aW4sIHppb2luIGV0IG11dGV0IGVrc3lpc2ku",
-        "TWlrc2kgacO8c3RvYSBzaXPDtnJsw6Rsw60gb2xsw60gc2lsbGFuIGFsbGUgYW5kIHbDtnJzdMOkbGzDtnJhIGxlbmtrZWlsw7xqYcO8YQ=="
+    // Lauseet
+    const sentences = [
+        "Geokätköily on mukava ilmainen harrastus, jossa mennään pöljänpolkua purkille ja tietä pitkin takaisin.",
+        "Lähelle on joskus pitkä matka, varsinkin kätköilijällä.",
+        "Hunttaaminen on ainoa asia, missä geokätköilyssä kilpaillaan.",
+        "Koskaan ei ole liian vanha etsimään muovirasioita kivenkoloista.",
+        "Yksi harrastus, tuhansia polkuja ja ystäviä.",
+        "Kätköily vie sinut paikkoihin, joihin et muuten eksyisi.",
+        "Miksi istua sisällä, kun voit ryömiä sillan alle ja väistellä uteliaita lenkkeilijöitä?"
     ];
-
-    // Salattu lopullinen viesti Base64-muodossa
-    const encodedFinalMessage = "T25uZWEgc2FpdCB2aWltZWlzZW4gbGF1c2VlbiBva2VpbiEgVmFzdGFhIHNlaXB1YXZpbiBzZWl0YXZpYSBrw7x0eW1pc2luaSBhbmQga2lyanJhYSB2YXN0YXVzIGTDtnJyw6Ryw7x0ZW7DtnJ0ZW4gcGVuw7x0ZW5lIHNpw7xyYWlzZW4gaw==DtnJ0aw==b25rYSBvbiBzaWzDtnJ0YW5ldCBzZWlzZW7DtnJ0ZW4gcGVuw7x0ZW5lIHNpw7xyYWlzZW4gaw==DtnJ0aw==b25rYSBvbiBNYWjDtnJhIG9saSBMYWhkZW4gcGVuw7x0ZW5lIHNpw7xyYWlzZW4gV2ViY2FtLWTDtnJ0aw==b24gbmltaw==";
-
-    // Purku Base64-muodosta
-    function decodeBase64(encoded) {
-        try {
-            return decodeURIComponent(escape(atob(encoded)));
-        } catch (e) {
-            console.error("Error decoding Base64:", e);
-            return "";
-        }
-    }
 
     let currentSentenceIndex = 0;
     let texts = Array(100).fill("X");
@@ -46,10 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         texts = Array(100).fill("X");
         let indices = Array.from({ length: 100 }, (_, i) => i);
         let shuffledIndices = shuffleArray(indices);
-        let currentWords = decodeBase64(encodedSentences[currentSentenceIndex]).split(' ');
-
-        // Tarkistetaan, että sanat on purettu oikein
-        console.log("Current words:", currentWords);
+        let currentWords = sentences[currentSentenceIndex].split(' ');
 
         shuffledIndices.slice(0, currentWords.length).forEach((index, i) => {
             texts[index] = currentWords[i];
@@ -60,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let i = 0; i < 100; i++) {
             const cell = document.createElement('div');
             cell.className = 'cell';
-            cell.textContent = '';
+            cell.textContent = texts[i] !== 'X' ? texts[i] : '';
             cell.addEventListener('click', () => {
                 if (!cell.classList.contains('clicked')) {
                     cell.textContent = texts[i];
@@ -106,16 +90,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     checkButton.addEventListener('click', () => {
         const inputText = sentenceInput.value.trim().toLowerCase();
-        const currentSentence = decodeBase64(encodedSentences[currentSentenceIndex]).toLowerCase();
+        const currentSentence = sentences[currentSentenceIndex].toLowerCase();
 
         if (inputText === currentSentence) {
-            if (currentSentenceIndex < encodedSentences.length - 1) {
+            if (currentSentenceIndex < sentences.length - 1) {
                 currentSentenceIndex++;
                 message.textContent = `Oikein! Siirry seuraavaan lauseeseen: ${currentSentenceIndex + 1}.`;
                 sentenceInput.value = '';
                 initializeGrid();
             } else {
-                message.textContent = decodeBase64(encodedFinalMessage);
+                message.textContent = "Onnea sait viimeisen lauseen oikein! Vastaa seuraaviin kysymyksiin ja kirjaa vastaus kätkösivun chekkeriin ilman välilyöntejä yhteen riviin: Kuka on piilottanut Lahden ensimmäisen kätkön? Kuka on piilottanut Suomen ensimmäisen kätkön? Mikä oli Lahden ensimmäisen Webcam-kätkön nimi?";
             }
         } else {
             message.textContent = "Väärä vastaus, yritä uudelleen!";
