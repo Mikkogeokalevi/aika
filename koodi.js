@@ -6,38 +6,47 @@ document.addEventListener('DOMContentLoaded', function() {
     const sentenceLabel = document.getElementById('sentenceLabel');
     const message = document.getElementById('message');
 
-    // Salauksen avain. Tämän tulee olla sama, jota käytetään salaukseen ja purkuun.
-    // Voit muuttaa tätä, mutta muista, että jos muutat avainta, sinun TÄYTYY LUODA UUDET SALATUT LAUSEET JA VIESTI.
-    const encryptionKey = "mikKOKaleviGEoKatkoily2025SuomI!"; 
-
-    // XOR-salaus/purkufunktio
-    function xorEncryptDecrypt(str, key) {
-        let result = '';
+    // Funktio tekstin muuntamiseen heksadesimaalimuotoiseksi taulukoksi
+    function stringToHexArray(str) {
+        let hexArray = [];
         for (let i = 0; i < str.length; i++) {
-            // Varmista, että käsittelemme merkkejä oikein UTF-16 koodipisteinä.
-            // XOR-operaatio on luotettava.
-            result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            // Käsittele Unicode-merkit (myös > U+FFFF) oikein
+            let codePoint = str.codePointAt(i);
+            hexArray.push(codePoint.toString(16).padStart(4, '0')); // Jokainen koodipiste 4-numeroiseksi heksaksi
+            // Jos merkki oli osa surrogattiparia, hyppää toisen osan yli
+            if (codePoint > 0xFFFF) {
+                i++;
+            }
         }
-        return result;
+        return hexArray;
+    }
+
+    // Funktio heksadesimaalitaulukon muuntamiseen takaisin tekstiksi
+    function hexArrayToString(hexArray) {
+        let str = '';
+        for (let i = 0; i < hexArray.length; i++) {
+            let codePoint = parseInt(hexArray[i], 16);
+            str += String.fromCodePoint(codePoint); // Käytä fromCodePoint Unicode-merkeille
+        }
+        return str;
     }
 
     let texts = Array(100).fill("X");
     
-    // Nämä ovat nyt salatut lauseet. Ne eivät näy selkokielisinä koodissa.
-    // Ne on luotu käyttämällä edellä olevaa xorEncryptDecrypt-funktiota ANNETULLA AVAIMELLA.
-    let sentences = [
-        '\x16\x19\x1e\x17\x11\x18\x0b\x0a\x17\x10\x1f\x1d\x01\x18\x01\x1a\x12\x1a\x14\x0f\x0b\x17\x01\x18\x10\x14\x0e\x17\x02\x02\x04\x01\x0f\x14\x13\x12\x01\x1d\x16\x13\x18\x01\x0e\x1c\x0c\x12\x15\x13\x15\x0c\x1f\x17\x00\x02\x10\x12\x1c\x0f\x15\x0c\x15\x01\x1b\x04\x1c\x12\x00\x0c\x15\x13\x1e\x18\x10\x1a\x03\x05\x13\x18\x12\x0e\x16\x0c\x11\x10\x11\x0b\x16\x01\x0e\x1e\x02\x11\x16\x01\x10\x18\x1e\x14\x12\x12\x14\x0f\x18\x03\x17\x17\x1c\x0c\x12\x11\x10\x1c\x15\x18\x1e\x15\x0c\x1c\x1f\x06\x1d\x12\x1a\x0f\x00\x16\x18\x03\x17\x0c\x12\x15\x18\x0c\x0b\x02\x14\x11\x1a\x11\x1c\x0c\x0b\x10\x01\x1c\x10\x1c\x1f\x18\x04\x1b\x0e\x1a\x1a\x07\x01',
-        '\x1d\x18\x1d\x12\x12\x1f\x1c\x12\x07\x01\x17\x07\x0e\x18\x1c\x12\x03\x02\x10\x14\x0f\x01\x1c\x0d\x01\x17\x11\x13\x1a\x17\x14\x00\x04\x1c\x12\x1a\x04\x0c\x0d\x15\x0b\x12\x1a\x17\x1e\x0c\x1c\x1f\x1c\x12\x11\x0e\x10\x11\x12\x01\x0d\x13\x12\x1c\x0b\x17\x0c\x1d\x17\x04\x12',
-        '\x13\x02\x0e\x16\x12\x11\x14\x13\x1a\x12\x11\x1e\x1a\x03\x1d\x17\x11\x0c\x10\x12\x1a\x11\x12\x1e\x15\x01\x1a\x01\x00\x0f\x14\x11\x01\x0c\x1d\x16\x1f\x17\x01\x03\x1d\x10\x0c\x10\x1a\x11\x18\x1e\x12\x0e\x10\x11\x12\x1e\x0c\x10\x01\x01\x12\x1a\x11\x1c\x0c\x0b\x10\x1f',
-        '\x10\x02\x10\x14\x0f\x01\x00\x02\x10\x14\x0f\x0f\x02\x11\x11\x17\x0f\x00\x0b\x1e\x17\x1a\x12\x10\x12\x12\x01\x18\x12\x0e\x16\x0c\x11\x10\x11\x0b\x16\x01\x0e\x1e\x02\x11\x16\x01\x10\x18\x1e\x14\x12\x12\x14\x0f\x18\x03\x17\x17\x1c\x0c\x12\x11\x10\x1c\x15\x18\x1e\x15\x0c\x1c\x1f\x06\x1d\x12\x1a\x0f\x00\x16\x18\x03\x17\x0c\x12\x15\x18\x0c\x0b\x02\x14\x11\x1a\x11\x1c\x0c\x0b\x10\x01\x1c\x10\x1c\x1f\x18\x04\x1b\x0e\x1a\x1a\x07\x01',
-        '\x16\x00\x06\x1d\x17\x04\x12\x1a\x11\x0e\x11\x0e\x12\x1a\x01\x0f\x0f\x10\x04\x12\x10\x1a\x03\x05\x13\x18\x12\x0e\x16\x0c\x11\x10\x11\x0b\x16\x01\x0e\x1e\x02\x11\x16\x01\x10\x18\x1e\x14\x12\x12\x14\x0f\x18\x03\x17\x17\x1c\x0c\x12\x11\x10\x1c\x15\x18\x1e\x15\x0c\x1c\x1f\x06\x1d\x12\x1a\x0f\x00\x16\x18\x03\x17\x0c\x12\x15\x18\x0c\x0b\x02\x14\x11\x1a\x11\x1c\x0c\x0b\x10\x01\x1c\x10\x1c\x1f\x18\x04\x1b\x0e\x1a\x1a\x07\x01',
-        '\x10\x0b\x0a\x17\x10\x1f\x1d\x01\x18\x10\x03\x1c\x12\x0e\x11\x1f\x17\x14\x01\x0e\x17\x0f\x0c\x14\x12\x1a\x13\x13\x12\x02\x04\x01\x18\x1a\x12\x11\x11\x0e\x16\x0c\x11\x10\x11\x0b\x16\x01\x0e\x1e\x02\x11\x16\x01\x10\x18\x1e\x14\x12\x12\x14\x0f\x18\x03\x17\x17\x1c\x0c\x12\x11\x10\x1c\x15\x18\x1e\x15\x0c\x1c\x1f\x06\x1d\x12\x1a\x0f\x00\x16\x18\x03\x17\x0c\x12\x15\x18\x0c\x0b\x02\x14\x11\x1a\x11\x1c\x0c\x0b\x10\x01\x1c\x10\x1c\x1f\x18\x04\x1b\x0e\x1a\x1a\x07\x01',
-        '\x1e\x12\x11\x10\x12\x1a\x11\x1c\x0c\x0b\x10\x01\x1c\x10\x1c\x1f\x18\x04\x1b\x0e\x1a\x1a\x07\x01\x0f\x0c\x11\x1f\x12\x0e\x11\x18\x1a\x12\x11\x1e\x1a\x03\x1d\x17\x11\x0c\x10\x12\x1a\x11\x12\x1e\x15\x01\x1a\x01\x00\x0f\x14\x11\x01\x0c\x1d\x16\x1f\x17\x01\x03\x1d\x10\x0c\x10\x1a\x11\x18\x1e\x12\x0e\x10\x11\x12\x1e\x0c\x10\x01\x01\x12\x1a\x11\x1c\x0c\x0b\x10\x1f'
+    // Lauseet muunnettuna heksadesimaalinumerotaulukoiksi.
+    // Nämä eivät sisällä suoraa tekstiä eikä hankalia erikoismerkkejä.
+    let sentencesHex = [
+        ['0047', '0065', '006f', '006b', '00e4', '0074', '006b', '00f6', '0069', '006c', '0079', '0020', '006f', '006e', '0020', '006d', '0075', '006b', '0061', '0076', '0061', '0020', '0069', '006c', '006d', '0061', '0069', '006e', '0065', '006e', '0020', '0068', '0061', '0072', '0072', '0061', '0073', '0074', '0075', '0073', '002c', '0020', '006a', '006f', '0073', '0073', '0061', '0020', '006d', '0065', '006e', '006e', '00e4', '00e4', '006e', '0020', '0070', '00f6', '006c', '006a', '00e4', '006e', '0070', '006f', '006c', '006b', '0075', '0061', '0020', '0070', '0075', '0072', '006b', '0069', '006c', '006c', '0065', '0020', '006a', '0061', '0020', '0074', '0069', '0065', '0074', '00e4', '0020', '0070', '0069', '0074', '006b', '0069', '006e', '0020', '0074', '0061', '006b', '0061', '0069', '0073', '0069', '006e', '002e'],
+        ['004c', '00e4', '0068', '0065', '006c', '006c', '0065', '0020', '006f', '006e', '0020', '006a', '006f', '0073', '006b', '0075', '0073', '0020', '0070', '0069', '0074', '006b', '00e4', '0020', '006d', '0061', '0074', '006b', '0061', '002c', '0020', '0076', '0061', '0072', '0073', '0069', '006e', '006b', '0069', '006e', '0020', '006b', '00e4', '0074', '006b', '00f6', '0069', '006c', '0069', '006a', '00e4', '006c', '006c', '00e4', '002e'],
+        ['0048', '0075', '006e', '0074', '0074', '0061', '0061', '006d', '0069', '006e', '0065', '006e', '0020', '006f', '006e', '0020', '0061', '0069', '006e', '006f', '0061', '0020', '0061', '0073', '0069', '0061', '002c', '0020', '006d', '0069', '0073', '0073', '00e4', '0020', '0067', '0065', '006f', '006b', '00e4', '0074', '006b', '00f6', '0069', '006c', '0079', '0073', '0073', '00e4', '0020', '006b', '0069', '006c', '0070', '0061', '0069', '006c', '006c', '0061', '0061', '006e', '002e'],
+        ['004b', '006f', '0073', '006b', '0061', '0061', '006e', '0020', '0065', '0069', '0020', '006f', '006c', '0065', '0020', '006c', '0069', '0069', '0061', '006e', '0020', '0076', '0061', '006e', '0068', '0061', '0020', '0065', '0074', '0073', '0069', '006d', '00e4', '00e4', '006e', '0020', '006d', '0075', '006f', '0076', '0069', '0072', '0061', '0073', '0069', '006f', '0069', '0074', '0061', '0020', '006b', '0069', '0076', '0065', '006e', '006b', '006f', '006c', '006f', '0069', '0073', '0074', '0061', '002e'],
+        ['0059', '006b', '0073', '0069', '0020', '0068', '0061', '0072', '0072', '0061', '0073', '0074', '0075', '0073', '002c', '0020', '0074', '0075', '0068', '0061', '006e', '0073', '0069', '0061', '0020', '0070', '006f', '006c', '006b', '0075', '006a', '0061', '0020', '006a', '0061', '0020', '0079', '0073', '0074', '00e4', '0076', '0069', '00e4', '002e'],
+        ['004b', '00e4', '0074', '006b', '00f6', '0069', '006c', '0079', '0020', '0076', '0069', '0065', '0020', '0073', '0069', '006e', '0075', '0074', '0020', '0070', '0061', '0069', '006b', '006b', '006f', '0069', '0068', '0069', '006e', '002c', '0020', '006a', '006f', '0069', '0068', '0069', '006e', '0020', '0065', '0074', '0020', '006d', '0075', '0075', '0074', '0065', '006e', '0020', '0065', '006b', '0073', '0079', '0069', '0073', '0069', '002e'],
+        ['004d', '0069', '006b', '0073', '0069', '0020', '0069', '0073', '0074', '0075', '0061', '0020', '0073', '0069', '0073', '00e4', '006c', '006c', '00e4', '002c', '0020', '006b', '0075', '006e', '0020', '0076', '006f', '0069', '0074', '0020', '0072', '0079', '00f6', '006d', '0069', '00e4', '0020', '0073', '0069', '006c', '006c', '0061', '006e', '0020', '0061', '006c', '006c', '0065', '0020', '006a', '0061', '0020', '0076', '00e4', '0069', '0073', '0074', '0065', '006c', '006c', '00e4', '0020', '0075', '0074', '0065', '006c', '0069', '0061', '0069', '0074', '0061', '0020', '006c', '0065', '006e', '006b', '006b', '0065', '0069', '006c', '0069', '006a', '006f', '0069', '0074', '00e4', '003f']
     ];
 
-    // TÄMÄ ON NYT SALATTU LOPPUVIESTI.
-    // Se on luotu käyttämällä samaa xorEncryptDecrypt-funktiota.
-    const encryptedFinalMessage = '\x17\x02\x11\x11\x02\x0f\x11\x02\x1d\x11\x0a\x17\x18\x0d\x1d\x12\x1c\x0d\x12\x1e\x0c\x00\x18\x0f\x10\x1d\x0c\x18\x12\x1e\x02\x11\x10\x1f\x18\x03\x17\x17\x1c\x0c\x12\x11\x10\x1c\x15\x18\x1e\x15\x0c\x1c\x1f\x06\x1d\x12\x1a\x0f\x00\x16\x18\x03\x17\x0c\x12\x15\x18\x0c\x0b\x02\x14\x11\x1a\x11\x1c\x0c\x0b\x10\x01\x1c\x10\x1c\x1f\x18\x04\x1b\x0e\x1a\x1a\x07\x01\x01\x1c\x12\x1a\x1c\x12\x11\x11\x17\x04\x1c\x0c\x1e\x0c\x11\x1f\x17\x14\x01\x0e\x17\x0f\x0c\x14\x12\x1a\x13\x13\x12\x02\x04\x01\x18\x1a\x12\x11\x11\x0e\x16\x0c\x11\x10\x11\x0b\x16\x01\x0e\x1e\x02\x11\x16\x01\x10\x18\x1e\x14\x12\x12\x14\x0f\x18\x03\x17\x17\x1c\x0c\x12\x11\x10\x1c\x15\x18\x1e\x15\x0c\x1c\x1f\x06\x1d\x12\x1a\x0f\x00\x16\x18\x03\x17\x0c\x12\x15\x18\x0c\x0b\x02\x14\x11\x1a\x11\x1c\x0c\x0b\x10\x01\x1c\x10\x1c\x1f\x18\x04\x1b\x0e\x1a\x1a\x07\x01\x10\x1a\x00\x1f\x17\x03\x02\x10\x0f\x0e\x11\x17\x03\x04\x11\x14\x1a\x12\x1a\x02\x12\x1f\x0c\x1d\x01\x18\x11\x12\x1e\x0c\x10\x01\x01\x12\x1a\x11\x1c\x0c\x0b\x10\x1f\x10\x03\x04\x10\x1f\x18\x04\x10\x10\x17\x11\x11\x1a\x1a\x03\x1d\x17\x11\x0c\x10\x12\x1a\x11\x12\x1e\x15\x01\x1a\x01\x00\x0f\x14\x11\x01\x0c\x1d\x16\x1f\x17\x01\x03\x1d\x10\x0c\x10\x1a\x11\x18\x1e\x12\x0e\x10\x11\x12\x1e\x0c\x10\x01\x01\x12\x1a\x11\x1c\x0c\x0b\x10\x1f';
+    // Loppuviesti muunnettuna heksadesimaalinumerotaulukoksi.
+    const finalMessageHex = ['004f', '006e', '006e', '0065', '0061', '0020', '0073', '0061', '0069', '0074', '0020', '0076', '0069', '0069', '006d', '0065', '0069', '0073', '0065', '006e', '0020', '006c', '0061', '0075', '0073', '0065', '0065', '006e', '0020', '006f', '0069', '006b', '0065', '0069', '006e', '0021', '0020', '0056', '0061', '0073', '0074', '0061', '0061', '0020', '0073', '0065', '0075', '0072', '0061', '0061', '0076', '0069', '0069', '006e', '0020', '006b', '0079', '0073', '0079', '006d', '0079', '006b', '0073', '0069', '0069', '006e', '0020', '006a', '0061', '0020', '006b', '0069', '0072', '006a', '0061', '0061', '0020', '0076', '0061', '0073', '0074', '0061', '0075', '0073', '0020', '006b', '00e4', '0074', '006b', '00f6', '0073', '0069', '0076', '0075', '006e', '0020', '0063', '0068', '0065', '006b', '006b', '0065', '0072', '0069', '0069', '006e', '0020', '0069', '006c', '006d', '0061', '006e', '0020', '0076', '00e4', '006c', '0069', '006c', '0079', '00f6', '006e', '0074', '0065', '006a', '00e4', '0020', '0079', '0068', '0074', '0065', '0065', '006e', '0020', '0072', '0069', '0076', '0069', '0069', '006e', '003a', '0020', '004b', '0075', '006b', '0061', '0020', '006f', '006e', '0020', '0070', '0069', '0069', '006c', '006f', '0074', '0074', '0061', '006e', '0075', '0074', '0020', '004c', '0061', '0068', '0064', '0065', '006e', '0020', '0065', '006e', '0073', '0069', '006d', '006d', '00e4', '0069', '0073', '0065', '006e', '0020', '006b', '00e4', '0074', '006b', '00f6', '006e', '003f', '0020', '004b', '0075', '006b', '0061', '0020', '006f', '006e', '0020', '0070', '0069', '0069', '006c', '006f', '0074', '0074', '0061', '006e', '0075', '0074', '0020', '0053', '0075', '006f', '006d', '0065', '006e', '0020', '0065', '006e', '0073', '0069', '006d', '006d', '00e4', '0069', '0073', '0065', '006e', '0020', '006b', '00e4', '0074', '006b', '00f6', '006e', '003f', '0020', '004d', '0069', '006b', '00e4', '0020', '006f', '006c', '0069', '0020', '004c', '0061', '0068', '0064', '0065', '006e', '0020', '0065', '006e', '0073', '0069', '006d', '006d', '00e4', '0069', '0073', '0065', '006e', '0020', '0057', '0065', '0062', '0063', '0061', '006d', '002d', '006b', '00e4', '0074', '006b', '00f6', '006e', '0020', '006e', '0069', '006d', '0069', '003f'];
 
 
     let currentSentenceIndex = 0;
@@ -56,8 +65,8 @@ document.addEventListener('DOMContentLoaded', function() {
         let indices = Array.from({ length: 100 }, (_, i) => i);
         let shuffledIndices = shuffleArray(indices);
         
-        // Pura lause ennen käyttöä ruudukossa
-        let currentSentenceDecrypted = xorEncryptDecrypt(sentences[currentSentenceIndex], encryptionKey);
+        // Puretaan lause heksadesimaalitaulukosta ennen käyttöä
+        let currentSentenceDecrypted = hexArrayToString(sentencesHex[currentSentenceIndex]);
         let currentWords = currentSentenceDecrypted.split(' ').filter(word => word !== '');
 
         shuffledIndices.slice(0, currentWords.length).forEach((index, i) => {
@@ -104,18 +113,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     checkButton.addEventListener('click', () => {
         const inputText = sentenceInput.value.trim().toLowerCase();
-        // Pura lause vertailua varten
-        const currentSentence = xorEncryptDecrypt(sentences[currentSentenceIndex], encryptionKey).toLowerCase();
+        // Puretaan lause heksadesimaalitaulukosta vertailua varten
+        const currentSentence = hexArrayToString(sentencesHex[currentSentenceIndex]).toLowerCase();
 
         if (inputText === currentSentence) {
-            if (currentSentenceIndex < sentences.length - 1) {
+            if (currentSentenceIndex < sentencesHex.length - 1) { // Käytä sentencesHex.length
                 currentSentenceIndex++;
                 message.textContent = `Oikein! Siirry seuraavaan lauseeseen: ${currentSentenceIndex + 1}.`;
                 sentenceInput.value = '';
                 initializeGrid();
             } else {
-                // Loppuviesti puretaan tässä
-                message.textContent = xorEncryptDecrypt(encryptedFinalMessage, encryptionKey);
+                // Loppuviesti puretaan heksadesimaalitaulukosta
+                message.textContent = hexArrayToString(finalMessageHex);
             }
         } else {
             message.textContent = "Väärä vastaus, yritä uudelleen!";
