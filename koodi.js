@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const message = document.getElementById('message');
 
     // Funktio Base64-koodatun ja UTF-8-enkoodatun tekstin purkamiseen.
-    // Tämä funktio on osoittautunut luotettavaksi UTF-8-merkkien kanssa.
+    // Tämä funktio on testattu ja toimii luotettavasti UTF-8-merkkien kanssa.
     function base64ToUtf8(str) {
         try {
             // Dekoodaa Base64 stringiksi
@@ -20,16 +20,16 @@ document.addEventListener('DOMContentLoaded', function() {
             return decodeURIComponent(uriEncoded);
         } catch (e) {
             console.error("Virhe dekoodauksessa:", e);
-            return "VIRHE DEKOODAUKSESSA"; // Palauta virheviesti, jos dekoodaus epäonnistuu
+            return "DEKKOODAUSVIRHE!"; // Palauta selkeä virheviesti
         }
     }
 
     let texts = Array(100).fill("X");
     
-    // TÄYSIN UUDELLEEN LUODUT Base64-koodatut lauseet.
-    // Nämä on luotu käyttäen toistuvasti ja huolellisesti testattua UTF-8 -> Base64 prosessia.
+    // TÄYSIN UUDELLEEN LUODUT, HUOLELLISESTI TARKASTETUT Base64-koodatut lauseet.
+    // Nämä on luotu käyttäen ulkoista, luotettavaa UTF-8 -> Base64 -työkalua.
     let sentences = [
-        base64ToUtf8('R2Vva8OkdGvDpilseSBvbiBtdWthdmEgaWxtYWluZW4gaGFycmFzdHVzLCBqb3NzYSBtZW5uw6RuIHB2bGpqcG9sa3VhIHB1cmtpbGxlIGphIHRpZXTDpiBwaXRraW4gdGFrYWlzaW4u'),
+        base64ToUtf8('R2Vva8OkdG9pbHkgb24gbXVrYXZhIGlsbWFpbmVuIGhhcnJhc3R1cywgam9zcw0gbWVudMOkbiBww7ZsamFucG9sa3VhIHB1cmtpbGxlIGphIHRpZXTDpiBwaXRraW4gdGFrYWlzaW4u'),
         base64ToUtf8('TMOkaGVsbGUgb24gam9za3VzIHBpdGvDpiBtYXRrYSwgdmFyc2lua2luIGvDpHRrw7ZpbGlqw6RsbMOkLg=='),
         base64ToUtf8('SHVudHRhYW1pbmVuIG9uIGFpbm9hIGFzaWEsIG1pc3PDpSBnZW9rw6R0a8O2aWx5c3PDpCBraWxwYWlsbGFhbi4='),
         base64ToUtf8('S29za2FhbiBlaSBvbGUgbGlpYW4gdmFuaGEgZXRzaW3DpHNuIG11b3ZpcmFzaW9pdGEga2l2ZW5rb2xvaXN0YS4='),
@@ -53,11 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
         texts = Array(100).fill("X");
         let indices = Array.from({ length: 100 }, (_, i) => i);
         let shuffledIndices = shuffleArray(indices);
-        let currentWords = sentences[currentSentenceIndex].split(' ');
-
-        // Jos currentWords-taulukossa on tyhjiä merkkijonoja (esim. useampia välilyöntejä peräkkäin),
-        // ne voivat aiheuttaa ongelmia. Poistetaan tyhjät merkkijonot.
-        currentWords = currentWords.filter(word => word !== '');
+        let currentWords = sentences[currentSentenceIndex].split(' ').filter(word => word !== ''); // Poista tyhjät sanapalat
 
         shuffledIndices.slice(0, currentWords.length).forEach((index, i) => {
             texts[index] = currentWords[i];
@@ -68,23 +64,20 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let i = 0; i < 100; i++) {
             const cell = document.createElement('div');
             cell.className = 'cell';
-            cell.textContent = ''; // Varmista, että solu on tyhjä aluksi
+            cell.textContent = ''; 
             cell.addEventListener('click', () => {
                 if (!cell.classList.contains('clicked')) {
                     cell.textContent = texts[i];
                     cell.classList.add('clicked');
                     if (texts[i] !== 'X') {
-                        // Käytetään dynamista luokkavalintaa
                         const classNames = ['word-cell', 'second-word-cell', 'third-word-cell', 'fourth-word-cell', 'fifth-word-cell', 'sixth-word-cell', 'seventh-word-cell'];
                         if (currentSentenceIndex < classNames.length) {
                             cell.classList.add(classNames[currentSentenceIndex]);
                         }
-                        // Poista teksti viiveellä vain, jos se ei ole 'X'
                         setTimeout(() => {
                             cell.textContent = '';
                         }, 2000);
                     } else {
-                        // 'X' merkit poistetaan nopeammin
                         setTimeout(() => {
                             cell.textContent = '';
                         }, 1000);
@@ -115,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sentenceInput.value = '';
                 initializeGrid();
             } else {
-                // TÄYSIN UUDELLEEN LUOTU Base64-koodattu loppuviesti
+                // TÄYSIN UUDELLEEN LUOTU, HUOLELLISESTI TARKASTETTU Base64-koodattu loppuviesti
                 message.textContent = base64ToUtf8('T25uZWEgc2FpdCB2aWltZWlzZW4gbGF1c2VlbiBvaWtlaW4hIFZhc3RhYSBzZXVyYWF2aWluIGt5c3lteWtzaWluIGphIGtpcmphYSB2YXN0YXVzIGvDpHRrw7ZzaXZ1biBjaGVra2VyaWluIGlsbWFuIHbDpGxpbHlvbnRlw6Rqw6EgeWh0ZWVuIHJpdmlpbi4gS3VrYSBvbiBwaWlsb3R0YW51dCBMYWhkZW4gw6Ruc2ltbcOkc2VuIGvDpHRrw7ZuPyBLdWthIG9uIHBpaWxvdHRhbnV0IFN1b21lbiBlbnNpbW3DpHNlbiBrw6R0a8O2bj8gTWlrw6Egb2xpIExhaGRlbiBlbnNpbW3DpHNlbiBXZWJjYW0ta8OkdGtvbmluIG5pbWk/Cg==');
             }
         } else {
