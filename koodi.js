@@ -6,22 +6,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const sentenceLabel = document.getElementById('sentenceLabel');
     const message = document.getElementById('message');
 
-    // Apufunktio, joka purkaa erikoismerkit oikein sisältävän Base64-tekstin.
+    // Apufunktio, joka purkaa Base64-koodatun ja UTF-8-enkoodatun tekstin.
     function decode(encodedString) {
         return decodeURIComponent(atob(encodedString));
     }
 
     let texts = Array(100).fill("X");
     
-    // Lauseet on koodattu uudelleen UTF-8-yhteensopivalla tavalla.
+    // Lauseet on koodattu Base64-muotoon
     let sentences = [
-        decode('R2Vva8OkdGvDpilseSBvbiBtdWthdmEgaWxtYWluZW4gaGFycmFzdHVzLCBqb3NzYSBtZW5uw6RuIHDDtmxqw6RucG9sa3VhIHB1cmtpbGxlIGphIHRpZXTDpiBwaXRraW4gdGFrYWlzaW4u'),
+        decode('R2Vva8OkdGvDpilseSBvbiBtdWthdmEgaWxtYWluenIGhhcnJhc3R1cywgam9zcw0gbWVudMOkbiBww7xsamFucG9sa3VhIHB1cmtpbGxlIGphIHRpZXTDpiBwaXRraW4gdGFrYWlzaW4u'),
         decode('TMOkaGVsbGUgb24gam9za3VzIHBpdGvDpiBtYXRrYSwgdmFyc2lua2luIGvDpHRrw7ZpbGlqw6RsbMOkLg=='),
-        decode('SHVudHRhYW1pbmVuIG9uIGFpbm9hIGFzaWEsIG1pc3PDpCBnZW9rw6R0a8O2aWx5c3PDpCBraWxwYWlsbGFhbi4='),
+        decode('SHVudHRhYW1pbmVuIG9uIGFpbm9hIGFzaWEsIG1pc3PDpSBnZW9rw6R0a8O2aWx5c3PDpSBraWxwYWlsbGFhbi4='),
         decode('S29za2FhbiBlaSBvbGUgbGlpYW4gdmFuaGEgZXRzaW3DpHNuIG11b3ZpcmFzaW9pdGEga2l2ZW5rb2xvaXN0YS4='),
         decode('WWtzaSBoYXJyYXN0dXMsIHR1aGFuc2lhIHBvbGt1amEgamEgeXN0w6R2acOkLg=='),
         decode('S8OkdGvDpilseSB2aWUgc2ludXQgcGFpa2tvaWhpbiwgam9paGluIGV0IG11dXRlbiBla3N5c2ku'),
-        decode('TWlrc2kgaXN0dWEgc2lzw6RsbMOkLCBrdW4gdm9pdCByecO2bWnDpCBzaWxsYW4gYWxsZSBqYSB2w6Rpc3RlbGzDpHV0ZWxpYWl0YCBsZW5ra2VpbGlqw7ZpdMOkPw==')
+        decode('TWlrc2kgaXN0dWEgc2lzw6RsbMOkLCBrdW4gdm9pdCByecO2bWnDpSBzaWxsYW4gYWxsZSBqYSB2w6Rpc3RlbGzDpHV0ZWxpYWl0YCBsZW5ra2VpbGlqw7ZpdMOkPw==')
     ];
 
     let currentSentenceIndex = 0;
@@ -56,20 +56,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     cell.textContent = texts[i];
                     cell.classList.add('clicked');
                     if (texts[i] !== 'X') {
-                        if (currentSentenceIndex === 0) {
-                            cell.classList.add('word-cell');
-                        } else if (currentSentenceIndex === 1) {
-                            cell.classList.add('second-word-cell');
-                        } else if (currentSentenceIndex === 2) {
-                            cell.classList.add('third-word-cell');
-                        } else if (currentSentenceIndex === 3) {
-                            cell.classList.add('fourth-word-cell');
-                        } else if (currentSentenceIndex === 4) {
-                            cell.classList.add('fifth-word-cell');
-                        } else if (currentSentenceIndex === 5) {
-                            cell.classList.add('sixth-word-cell');
-                        } else if (currentSentenceIndex === 6) {
-                            cell.classList.add('seventh-word-cell');
+                        // Dynamisesti lisätyt luokat nykyisen lauseindeksin perusteella
+                        const classNames = ['word-cell', 'second-word-cell', 'third-word-cell', 'fourth-word-cell', 'fifth-word-cell', 'sixth-word-cell', 'seventh-word-cell'];
+                        if (currentSentenceIndex < classNames.length) {
+                            cell.classList.add(classNames[currentSentenceIndex]);
                         }
                         setTimeout(() => {
                             cell.textContent = '';
@@ -105,8 +95,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 sentenceInput.value = '';
                 initializeGrid();
             } else {
-                // Myös loppuviesti on purettu oikein.
-                message.textContent = decode('T25uZWEgc2FpdCB2aWltZWlzZW4gbGF1c2VlbiBvaWtlaW4hIFZhc3RhYSBzZXVyYWF2aWluIGt5c3lteWtzaWluIGphIGtpcmphYSB2YXN0YXVzIGvDpHRrw7ZzaXZ1biBjaGVra2VyaWluIGlsbWFuIHbDpGxpbHlvbnRlw6Rqw6EgeWh0ZWVuIHJpdmlpbi4gS3VrYSBvbiBwaWlsb3R0YW51dCBMYWhkZW4gw6Ruc2ltbcOkc2VuIGvDpHRrw7ZuPyBLdWthIG9uIHBpaWxvdHRhbnV0IFN1b21lbiBlbnNpbW3DpHNlbiBrw6R0a8O2bj8gTWlrw6Egb2xpIExhaGRlbiBlbnNpbW3DpHNlbiBXZWJjYW0ta8OkdGvDtm4gbmltaT8=');
+                // Loppuviesti on koodattu Base64-muotoon
+                message.textContent = decode('T25uZWEgc2FpdCB2aWltZWlzZW4gbGF1c2VlbiBvaWtlaW4hIFZhc3RhYSBzZXVyYWF2aWluIGt5c3lteWtzaWluIGphIGtpcmphYSB2YXN0YXVzIGvDpHRrw7ZzaXZ1biBjaGVra2VyaWluIGlsbWFuIHbDpGxpbHlvbnRlw6Rqw6EgeWh0ZWVuIHJpdmlpbi4gS3VrYSBvbiBwaWxsb3R0YW51dCBMYWhkZW4gw6Ruc2ltbcOkc2VuIGvDpHRrw7ZuPyBLdWthIG9uIHBpaWxvdHRhbnV0IFN1b21lbiBlbnNpbW3DpHNlbiBrw6R0a8O2bj8gTWlrw6Egb2xpIExhaGRlbiBlbnNpbW3DpHNlbiBXZWJjYW0ta8OkdGvDtm4gbmltaT8=');
             }
         } else {
             message.textContent = "Väärä vastaus, yritä uudelleen!";
