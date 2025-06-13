@@ -54,6 +54,22 @@ body {
     background-color: #ffffcc;
 }
 
+.cell.fourth-word-cell {
+    background-color: #e6e6ff;
+}
+
+.cell.fifth-word-cell {
+    background-color: #ccffcc;
+}
+
+.cell.sixth-word-cell {
+    background-color: #ffebcc;
+}
+
+.cell.seventh-word-cell {
+    background-color: #e6ccff;
+}
+
 button {
     margin-top: 20px;
     padding: 8px 16px;
