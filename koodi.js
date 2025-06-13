@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const sentenceLabel = document.getElementById('sentenceLabel');
     const message = document.getElementById('message');
 
-    // Lauseet
-    const sentences = [
+    let texts = Array(100).fill("X");
+    let sentences = [
         "Geokätköily on mukava ilmainen harrastus, jossa mennään pöljänpolkua purkille ja tietä pitkin takaisin.",
         "Lähelle on joskus pitkä matka, varsinkin kätköilijällä.",
         "Hunttaaminen on ainoa asia, missä geokätköilyssä kilpaillaan.",
@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
     let currentSentenceIndex = 0;
-    let texts = Array(100).fill("X");
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -44,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let i = 0; i < 100; i++) {
             const cell = document.createElement('div');
             cell.className = 'cell';
-            cell.textContent = texts[i] !== 'X' ? texts[i] : '';
+            cell.textContent = '';
             cell.addEventListener('click', () => {
                 if (!cell.classList.contains('clicked')) {
                     cell.textContent = texts[i];
