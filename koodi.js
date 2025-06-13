@@ -6,28 +6,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const message = document.getElementById('message');
 
     let texts = Array(100).fill("X");
-    let currentSentence = "Geokätköily on mukava ilmainen harrastus, jossa mennään pöljänpolkua purkille ja tietä pitkin takaisin.";
-    let secondSentence = "Lähelle on joskus pitkä matka, varsinkin kätköilijällä.";
-    let thirdSentence = "Hunttaaminen on ainoa asia, missä geokätköilyssä kilpaillaan.";
-    let fourthSentence = "Koskaan ei ole liian vanha etsimään muovirasioita kivenkoloista.";
-    let fifthSentence = "Yksi harrastus, tuhansia polkuja ja ystäviä.";
-    let sixthSentence = "Kätköily vie sinut paikkoihin, joihin et muuten eksyisi.";
-    let seventhSentence = "Miksi istua sisällä, kun voit ryömiä sillan alle, ja väistellä uteliaita lenkkeilijöitä?";
+    let sentences = [
+        "Geokätköily on mukava ilmainen harrastus, jossa mennään pöljänpolkua purkille ja tietä pitkin takaisin.",
+        "Lähelle on joskus pitkä matka, varsinkin kätköilijällä.",
+        "Hunttaaminen on ainoa asia, missä geokätköilyssä kilpaillaan.",
+        "Koskaan ei ole liian vanha etsimään muovirasioita kivenkoloista.",
+        "Yksi harrastus, tuhansia polkuja ja ystäviä.",
+        "Kätköily vie sinut paikkoihin, joihin et muuten eksyisi.",
+        "Miksi istua sisällä, kun voit ryömiä sillan alle ja väistellä uteliaita lenkkeilijöitä?"
+    ];
 
-    let words = currentSentence.split(' ');
-    let secondWords = secondSentence.split(' ');
-    let thirdWords = thirdSentence.split(' ');
-    let fourthWords = fourthSentence.split(' ');
-    let fifthWords = fifthSentence.split(' ');
-    let sixthWords = sixthSentence.split(' ');
-    let seventhWords = seventhSentence.split(' ');
-
-    let isSecondSentence = false;
-    let isThirdSentence = false;
-    let isFourthSentence = false;
-    let isFifthSentence = false;
-    let isSixthSentence = false;
-    let isSeventhSentence = false;
+    let currentSentenceIndex = 0;
+    let words = sentences[currentSentenceIndex].split(' ');
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -42,14 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
         texts = Array(100).fill("X");
         let indices = Array.from({ length: 100 }, (_, i) => i);
         let shuffledIndices = shuffleArray(indices);
-
-        let currentWords = words;
-        if (isSecondSentence) currentWords = secondWords;
-        else if (isThirdSentence) currentWords = thirdWords;
-        else if (isFourthSentence) currentWords = fourthWords;
-        else if (isFifthSentence) currentWords = fifthWords;
-        else if (isSixthSentence) currentWords = sixthWords;
-        else if (isSeventhSentence) currentWords = seventhWords;
+        let currentWords = sentences[currentSentenceIndex].split(' ');
 
         shuffledIndices.slice(0, currentWords.length).forEach((index, i) => {
             texts[index] = currentWords[i];
@@ -66,13 +49,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     cell.textContent = texts[i];
                     cell.classList.add('clicked');
                     if (texts[i] !== 'X') {
-                        if (isSeventhSentence) cell.classList.add('seventh-word-cell');
-                        else if (isSixthSentence) cell.classList.add('sixth-word-cell');
-                        else if (isFifthSentence) cell.classList.add('fifth-word-cell');
-                        else if (isFourthSentence) cell.classList.add('fourth-word-cell');
-                        else if (isThirdSentence) cell.classList.add('third-word-cell');
-                        else if (isSecondSentence) cell.classList.add('second-word-cell');
-                        else cell.classList.add('word-cell');
+                        if (currentSentenceIndex === 0) {
+                            cell.classList.add('word-cell');
+                        } else if (currentSentenceIndex === 1) {
+                            cell.classList.add('second-word-cell');
+                        } else if (currentSentenceIndex === 2) {
+                            cell.classList.add('third-word-cell');
+                        } else if (currentSentenceIndex === 3) {
+                            cell.classList.add('fourth-word-cell');
+                        } else if (currentSentenceIndex === 4) {
+                            cell.classList.add('fifth-word-cell');
+                        } else if (currentSentenceIndex === 5) {
+                            cell.classList.add('sixth-word-cell');
+                        } else if (currentSentenceIndex === 6) {
+                            cell.classList.add('seventh-word-cell');
+                        }
                         setTimeout(() => {
                             cell.textContent = '';
                         }, 2000);
@@ -85,15 +76,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             grid.appendChild(cell);
         }
+        sentenceInput.placeholder = `Syötä lause tähän: ${currentSentenceIndex + 1}. [${sentences[currentSentenceIndex]}]`;
     }
 
     resetButton.addEventListener('click', () => {
-        isSecondSentence = false;
-        isThirdSentence = false;
-        isFourthSentence = false;
-        isFifthSentence = false;
-        isSixthSentence = false;
-        isSeventhSentence = false;
+        currentSentenceIndex = 0;
         sentenceInput.value = '';
         message.textContent = '';
         initializeGrid();
@@ -101,44 +88,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     checkButton.addEventListener('click', () => {
         const inputText = sentenceInput.value.trim().toLowerCase();
+        const currentSentence = sentences[currentSentenceIndex].toLowerCase();
 
-        if (!isSecondSentence && !isThirdSentence && !isFourthSentence && !isFifthSentence && !isSixthSentence && !isSeventhSentence && inputText === currentSentence.toLowerCase()) {
-            message.textContent = "Oikein! Siirry seuraavaan vaiheeseen.";
-            isSecondSentence = true;
-            sentenceInput.value = '';
-            initializeGrid();
-        } else if (isSecondSentence && !isThirdSentence && !isFourthSentence && !isFifthSentence && !isSixthSentence && !isSeventhSentence && inputText === secondSentence.toLowerCase()) {
-            message.textContent = "Oikein! Siirry seuraavaan vaiheeseen.";
-            isThirdSentence = true;
-            sentenceInput.value = '';
-            initializeGrid();
-        } else if (isThirdSentence && !isFourthSentence && !isFifthSentence && !isSixthSentence && !isSeventhSentence && inputText === thirdSentence.toLowerCase()) {
-            message.textContent = "Oikein! Siirry seuraavaan vaiheeseen.";
-            isFourthSentence = true;
-            sentenceInput.value = '';
-            initializeGrid();
-        } else if (isFourthSentence && !isFifthSentence && !isSixthSentence && !isSeventhSentence && inputText === fourthSentence.toLowerCase()) {
-            message.textContent = "Oikein! Siirry seuraavaan vaiheeseen.";
-            isFifthSentence = true;
-            sentenceInput.value = '';
-            initializeGrid();
-        } else if (isFifthSentence && !isSixthSentence && !isSeventhSentence && inputText === fifthSentence.toLowerCase()) {
-            message.textContent = "Oikein! Siirry seuraavaan vaiheeseen.";
-            isSixthSentence = true;
-            sentenceInput.value = '';
-            initializeGrid();
-        } else if (isSixthSentence && !isSeventhSentence && inputText === sixthSentence.toLowerCase()) {
-            message.textContent = "Oikein! Siirry viimeiseen vaiheeseen.";
-            isSeventhSentence = true;
-            sentenceInput.value = '';
-            initializeGrid();
-        } else if (isSeventhSentence && inputText === seventhSentence.toLowerCase()) {
-            message.textContent = "Onnea sait viimeisen lauseen oikein! Vastaa seuraaviin kysymyksiin ja kirjaa vastaus kätkösivun chekkeriin ilman välilyöntejä yhteen riviin: Kuka on piilottanut Lahden ensimmäisen kätkön? Kuka on piilottanut Suomen ensimmäisen kätkön? Mikä oli Lahden ensimmäisen Webcam-kätkön nimi?";
+        if (inputText === currentSentence) {
+            if (currentSentenceIndex < sentences.length - 1) {
+                currentSentenceIndex++;
+                message.textContent = `Oikein! Siirry seuraavaan lauseeseen: ${currentSentenceIndex + 1}.`;
+                sentenceInput.value = '';
+                initializeGrid();
+            } else {
+                message.textContent = "Onnea sait viimeisen lauseen oikein! Vastaa seuraaviin kysymyksiin ja kirjaa vastaus kätkösivun chekkeriin ilman välilyöntejä yhteen riviin: Kuka on piilottanut Lahden ensimmäisen kätkön? Kuka on piilottanut Suomen ensimmäisen kätkön? Mikä oli Lahden ensimmäisen Webcam-kätkön nimi?";
+            }
         } else {
             message.textContent = "Väärä vastaus, yritä uudelleen!";
             setTimeout(() => {
                 sentenceInput.value = '';
-                initializeGrid();
             }, 1000);
         }
     });
