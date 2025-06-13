@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const resetButton = document.getElementById('resetButton');
     const checkButton = document.getElementById('checkButton');
     const sentenceInput = document.getElementById('sentenceInput');
+    const sentenceLabel = document.getElementById('sentenceLabel');
     const message = document.getElementById('message');
 
     let texts = Array(100).fill("X");
@@ -17,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
     let currentSentenceIndex = 0;
-    let words = sentences[currentSentenceIndex].split(' ');
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -76,7 +76,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             grid.appendChild(cell);
         }
-        sentenceInput.placeholder = `Syötä lause tähän: ${currentSentenceIndex + 1}. [${sentences[currentSentenceIndex]}]`;
+        sentenceLabel.textContent = `Syötä lause tähän: ${currentSentenceIndex + 1}.`;
+        sentenceInput.placeholder = "Syötä lause tähän";
     }
 
     resetButton.addEventListener('click', () => {
