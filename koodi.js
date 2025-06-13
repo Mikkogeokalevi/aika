@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Salatut lauseet Base64-muodossa
     const encodedSentences = [
-        "R2Vva8O8YcO8aw== on bXVrYXZhIGlscmFpbmVuIGhhcnJhc3R1cywgc8O8cMOpYSBtZW5uw6RuYcO8YW4gcMOpbGrDtnJhbnBvbHVrdWEgcHVya2lsbGUgYWphIHRpZcO8YSBwaXRraW4gdGFrYWlzaW4u",
+        "R2Vva8O8YcO8aw==IG9uIG11a2F2YSBpbG1haW5lbiBoYXJyYXN0dXMsIHPDtnJzYSBtZW7DtnJ1IG1lbm7DtnJhbiBww6RuYcO8YW4gcMOpbGrDtnJhbnBvbHVrdWEgcHVya2lsbGUgYWphIHRpZcO8YSBwaXRraW4gdGFrYWlzaW4u",
         "TMOkZWhsZSBvbiBqb3NrdXMgcGl0sw==YSBtYXRrYSwgdmFyc2lua2luIMO8YcO8YWrDtnJhbGxDtnJhLg==",
         "SHVudHRhYW1pbmVuIG9uIGFpbm9hIGFzaWEgbWlzc8O8YSBnZWvDtnJyw6Ryw7xpbGnDtnJhbGx5c8O8YW4u",
         "S29zamFhbiBlaSBvaGVsIGxpaWFuIHZhbmhhIGV0c2nDtnJtYcO8YSBtdW92aXJhc2lvaXRhIGtpdmVuaw==b2xvaXN0YQ==",
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
     // Salattu lopullinen viesti Base64-muodossa
-    const encodedFinalMessage = "T25uZWEgc2FpdCB2aWltZWlzZW4gbGF1c2VlbiBva2VpbiEgVmFzdGFhIHNlaXB1YXZpbiBzZWl0YXZpYSBrb8O8c3lteWlzaW4gYW5kIGtpcmphYSB2YXN0YXVzIGTDtnJrw6Rrw6RrbMOkY2tDtnJ0dSBpbG1hbiDDtnJseWzDtnJqYW4geWjDtnJhZW4gcml2aWzDtnJqOiBLdWthIG9uIHBpaWxvdHRhdCBMYWhkZW4gcGVuw7x0ZW5lIHNpw7xyYWlzZW4gaw==DtnJ0aw==b25rYSBvbiBzaWzDtnJ0YW5ldCBzZWlzZW7DtnJ0ZW4gcGVuw7x0ZW5lIHNpw7xyYWlzZW4gaw==DtnJ0aw==b25rYSBvbiBNYWjDtnJhIG9saSBMYWhkZW4gcGVuw7x0ZW5lIHNpw7xyYWlzZW4gV2ViY2FtLWTDtnJ0aw==b24gbmltaw==";
+    const encodedFinalMessage = "T25uZWEgc2FpdCB2aWltZWlzZW4gbGF1c2VlbiBva2VpbiEgVmFzdGFhIHNlaXB1YXZpbiBzZWl0YXZpYSBrw7x0eW1pc2luaSBhbmQga2lyanJhYSB2YXN0YXVzIGTDtnJyw6Ryw7x0ZW7DtnJ0ZW4gcGVuw7x0ZW5lIHNpw7xyYWlzZW4gaw==DtnJ0aw==b25rYSBvbiBzaWzDtnJ0YW5ldCBzZWlzZW7DtnJ0ZW4gcGVuw7x0ZW5lIHNpw7xyYWlzZW4gaw==DtnJ0aw==b25rYSBvbiBNYWjDtnJhIG9saSBMYWhkZW4gcGVuw7x0ZW5lIHNpw7xyYWlzZW4gV2ViY2FtLWTDtnJ0aw==b24gbmltaw==";
 
     // Purku Base64-muodosta
     function decodeBase64(encoded) {
