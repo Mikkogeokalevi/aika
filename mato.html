@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Kirjain Matopeli 1</title>
+    <title>Kirjain Matopeli</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
         body {
@@ -101,9 +101,16 @@
 
         #eaten-letters {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             justify-content: center;
             margin-top: 10px;
+        }
+
+        .color-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 5px;
         }
 
         .eaten-letter {
@@ -205,7 +212,16 @@
                 eatenLetterDiv.className = 'eaten-letter';
                 eatenLetterDiv.style.backgroundColor = food.letter.color;
                 eatenLetterDiv.textContent = food.letter.letter;
-                eatenLettersContainer.appendChild(eatenLetterDiv);
+
+                let colorRow = document.querySelector(`.color-row[data-color="${food.letter.color}"]`);
+                if (!colorRow) {
+                    colorRow = document.createElement('div');
+                    colorRow.className = 'color-row';
+                    colorRow.setAttribute('data-color', food.letter.color);
+                    eatenLettersContainer.appendChild(colorRow);
+                }
+
+                colorRow.appendChild(eatenLetterDiv);
 
                 food = {
                     x: Math.floor(Math.random() * 20) * box,
