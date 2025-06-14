@@ -7,6 +7,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const answerInput = document.getElementById('answer-input');
     const submitButton = document.getElementById('submit-button');
     const congratulationsMessage = document.getElementById('congratulations-message');
+    
+    // Uudet elementit info-modaalia varten
+    const infoButton = document.getElementById('info-button');
+    const infoModal = document.getElementById('info-modal');
+    const closeButton = document.querySelector('.close-button');
 
     const box = 20;
     let snake = [{x: 9 * box, y: 10 * box}];
@@ -42,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let snakeHeadImage = new Image();
 
     // Kuvanlatauspaikka päivitetty .jpg-päätteeksi
-    snakeHeadImage.src = 'mato_paa.jpg'; 
+    snakeHeadImage.src = 'mato_paa.jpg'; // Varmista, että mato_paa.jpg on oikeassa paikassa!
 
     snakeHeadImage.onload = startGame; // Käynnistä peli, kun kuva latautuu onnistuneesti
     snakeHeadImage.onerror = () => { // Käynnistä peli, vaikka kuvan lataus epäonnistuisi
@@ -222,6 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!food) {
                 // Kaikki kirjaimet syöty, näytä infokontaineri
                 clearInterval(game);
+                game = null; // Aseta game nulliksi, jotta startGame voi käynnistää sen uudelleen
                 infoContainer.style.display = 'block';
             }
         } else {
@@ -239,6 +245,7 @@ document.addEventListener('DOMContentLoaded', function() {
             livesElement.textContent = lives;
             if (lives <= 0) {
                 clearInterval(game);
+                game = null; // Aseta game nulliksi
                 alert('Peli päättyi! Kaikki elämät käytetty.');
                 return;
             } else {
@@ -281,6 +288,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function resetGame() {
         clearInterval(game);
+        game = null; // Aseta game nulliksi
         snake = [{x: 9 * box, y: 10 * box}];
         direction = null;
         lives = 3;
@@ -299,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
         infoContainer.style.display = 'none';
         congratulationsMessage.innerHTML = '';
         food = generateFood(); // Generoi uusi ruoka
-        game = setInterval(drawGame, 200);
+        startGame(); // Käynnistä peli uudelleen
     }
 
     document.getElementById('pause-button').addEventListener('click', () => {
@@ -326,6 +334,32 @@ document.addEventListener('DOMContentLoaded', function() {
             direction = 'RIGHT';
         } else if (e.key === 'ArrowDown' && direction !== 'UP') {
             direction = 'DOWN';
+        }
+    });
+
+    // Info-modaalin tapahtumankäsittelijät
+    infoButton.addEventListener('click', () => {
+        infoModal.style.display = 'flex'; // Näytä modaali flexboxilla keskitystä varten
+        if (game) { // Pysäytä peli, kun modaali on auki
+            clearInterval(game);
+            game = null; // Aseta game nulliksi, jotta startGame voi käynnistää sen uudelleen
+        }
+    });
+
+    closeButton.addEventListener('click', () => {
+        infoModal.style.display = 'none'; // Piilota modaali
+        if (!isPaused) { // Jatka peliä vain, jos se ei ollut pysäytettynä jo ennen modaalin avausta
+            startGame(); // Käynnistä peli uudelleen, jos se oli pysäytetty modaalin takia
+        }
+    });
+
+    // Sulje modaali, jos käyttäjä klikkaa modaalin ulkopuolelle
+    window.addEventListener('click', (event) => {
+        if (event.target === infoModal) {
+            infoModal.style.display = 'none';
+            if (!isPaused) {
+                startGame();
+            }
         }
     });
 
