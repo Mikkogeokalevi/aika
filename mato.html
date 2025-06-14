@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Kirjain Matopeli</title>
+    <title>2 Kirjain Matopeli</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
         body {
@@ -106,9 +106,9 @@
         }
 
         .lives-container {
-            margin-left: 10px;
             font-size: 1.2em;
             color: #90EE90;
+            margin-left: 10px;
         }
 
         #eaten-letters-container {
@@ -159,14 +159,13 @@
             <h1>Kirjain Matopeli</h1>
         </div>
 
-        <div class="lives-container">
-            Elämät: <span id="lives">3</span>
-        </div>
-
         <canvas id="gameCanvas" width="400" height="400"></canvas>
         <div class="buttons-container">
             <button id="pause-button">PAUSE</button>
             <button id="restart-button">ALOITA ALUSTA</button>
+            <div class="lives-container">
+                Elämät: <span id="lives">3</span>
+            </div>
         </div>
         <div id="eaten-letters-container"></div>
         <div id="info-container">
@@ -254,16 +253,15 @@
             for (let i = 0; i < snake.length; i++) {
                 if (i === 0) {
                     ctx.drawImage(snakeHeadImage, snake[i].x, snake[i].y, box, box);
-                } else if (i <= snakeGrowthWords[0].length + snakeGrowthWords[1].length + snakeGrowthWords[2].length + snakeGrowthWords[3].length) {
-                    const wordIndex = Math.floor((i - 1) / snakeGrowthWords[0].length);
-                    const letterIndex = (i - 1) % snakeGrowthWords[wordIndex].length;
+                } else if (i <= snakeGrowthWords.join('').length) {
+                    const letterIndex = (i - 1) % snakeGrowthWords.join('').length;
                     ctx.fillStyle = '#8BC34A';
                     ctx.fillRect(snake[i].x, snake[i].y, box, box);
                     ctx.fillStyle = 'black';
                     ctx.font = '12px Arial';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText(snakeGrowthWords[wordIndex][letterIndex], snake[i].x + box / 2, snake[i].y + box / 2);
+                    ctx.fillText(snakeGrowthWords.join('')[letterIndex], snake[i].x + box / 2, snake[i].y + box / 2);
                 } else {
                     ctx.fillStyle = '#8BC34A';
                     ctx.fillRect(snake[i].x, snake[i].y, box, box);
@@ -338,7 +336,7 @@
                     // Reset snake position but keep eaten letters
                     snake = [{x: snake[0].x, y: snake[0].y}];
                     direction = null;
-                    return; // Exit to prevent immediate re-collision
+                    return;
                 }
             }
 
