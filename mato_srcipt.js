@@ -18,11 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
         { word: "Kirjasto", color: "#FF5733" }, // Oranssinpunainen
         { word: "virkailijan", color: "#33FF57" }, // Vihreä
         { word: "perjantai", color: "#3357FF" }, // Sininen
-        // Lisää lisää sanoja ja niiden värejä tähän haluamassasi järjestyksessä:
-        // { word: "Esimerkkisana", color: "#FFD700" }, // Kulta
-        // { word: "Toinen", color: "#DA70D6" } // Violetti
+        { word: "on", color: "#FFFF00" }, // Uusi sana, keltainen
+        { word: "työn", color: "#8A2BE2" }, // Uusi sana, sinivioletti
+        { word: "täyteinen", color: "#FF1493" } // Uusi sana, syvän vaaleanpunainen
     ];
-    const correctAnswer = "kirjastovirkailijanperjantai"; // Tämän tulee vastata kaikkia sanoja peräkkäin pienillä kirjaimilla
+    // Päivitetty oikea vastaus sisältäen uudet sanat
+    const correctAnswer = "kirjastovirkailijanperjantaiontyöntäyteinen"; 
 
     const snakeGrowthWords = ["MIKKO", "KALEVIN", "MATO"];
 
@@ -40,39 +41,14 @@ document.addEventListener('DOMContentLoaded', function() {
     let isPaused = false;
     let snakeHeadImage = new Image();
 
-    // Tallennetaan referenssit luotuihin color-row-elementteihin
-    const colorRows = [];
-
-    // Funktio luo ja järjestää sanarivit valmiiksi
-    function setupEatenLettersContainer() {
-        eatenLettersContainer.innerHTML = ''; // Tyhjennä vanha sisältö
-        colorRows.length = 0; // Tyhjennä vanhat referenssit
-
-        wordsConfig.forEach((item, index) => {
-            const colorRow = document.createElement('div');
-            colorRow.className = 'color-row';
-            colorRow.setAttribute('data-color', item.color); // Tarvitaan edelleen tyylitykseen
-            colorRow.setAttribute('data-word-index', index); // Tunnistaa rivin alkuperäisen sanan perusteella
-            eatenLettersContainer.appendChild(colorRow);
-            colorRows.push(colorRow); // Tallenna referenssi
-        });
-    }
-
-    // Funktio pelin käynnistämiseen
-    function startGame() {
-        if (!game) { // Käynnistä vain, jos peli ei ole jo käynnissä
-            game = setInterval(drawGame, 200);
-            food = generateFood(); // Generoi ensimmäinen ruoka, kun peli käynnistyy
-        }
-    }
+    // Uusi kuvanlatauspaikka
+    snakeHeadImage.src = 'mato_paa.png'; 
 
     snakeHeadImage.onload = startGame; // Käynnistä peli, kun kuva latautuu onnistuneesti
     snakeHeadImage.onerror = () => { // Käynnistä peli, vaikka kuvan lataus epäonnistuisi
         console.error("Failed to load snake head image. Starting game with fallback.");
         startGame();
     };
-
-    snakeHeadImage.src = 'https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png';
 
     let touchStartX = 0;
     let touchStartY = 0;
