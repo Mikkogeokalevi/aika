@@ -28,11 +28,20 @@ document.addEventListener('DOMContentLoaded', function() {
     let isPaused = false;
     let snakeHeadImage = new Image();
 
-    // Set the image source
-    snakeHeadImage.src = 'https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png';
+    // Funktio pelin käynnistämiseen
+    function startGame() {
+        if (!game) { // Käynnistä vain, jos peli ei ole jo käynnissä
+            game = setInterval(drawGame, 200);
+        }
+    }
 
-    // Start the game interval immediately
-    game = setInterval(drawGame, 200);
+    snakeHeadImage.onload = startGame; // Käynnistä peli, kun kuva latautuu onnistuneesti
+    snakeHeadImage.onerror = () => { // Käynnistä peli, vaikka kuvan lataus epäonnistuisi
+        console.error("Failed to load snake head image. Starting game with fallback.");
+        startGame();
+    };
+
+    snakeHeadImage.src = 'https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png';
 
     let touchStartX = 0;
     let touchStartY = 0;
@@ -97,11 +106,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         for (let i = 0; i < snake.length; i++) {
             if (i === 0) {
-                // Only draw the image if it has loaded
+                // Piirrä kuva vain, jos se on latautunut kokonaan
                 if (snakeHeadImage.complete && snakeHeadImage.naturalHeight !== 0) {
                     ctx.drawImage(snakeHeadImage, snake[i].x, snake[i].y, box, box);
                 } else {
-                    // Fallback if image not loaded, draw a green square
+                    // Vararatkaisu, jos kuva ei latautunut, piirrä vihreä neliö
                     ctx.fillStyle = '#8BC34A';
                     ctx.fillRect(snake[i].x, snake[i].y, box, box);
                 }
