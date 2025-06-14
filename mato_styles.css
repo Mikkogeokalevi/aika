@@ -63,22 +63,27 @@ canvas {
 .buttons-container {
     display: flex;
     justify-content: center;
+    align-items: center; /* Keskitä pystysuunnassa */
     margin-top: 10px;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap; /* Salli nappien rivitys pienemmillä näytöillä */
+    gap: 5px; /* Pienempi väli nappien välissä */
+    flex-wrap: nowrap; /* Tärkeä: Estää rivityksen */
+    width: 100%; /* Vie koko leveys, jotta justify-content toimii */
+    box-sizing: border-box;
+    padding: 0 5px; /* Pieni padding sivuille, jotta ei mene ihan reunaan */
 }
 
-#pause-button, #restart-button, #info-button {
-    width: 100px;
-    height: 40px;
-    font-size: 14px;
+#pause-button, #restart-button {
+    flex-grow: 1; /* Antaa nappuloille tilaa kasvaa */
+    max-width: 90px; /* Maksimileveys (pienempi) */
+    height: 35px; /* Pienempi korkeus */
+    font-size: 13px; /* Pienempi fontti */
     color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px; /* Hieman pienemmät reunat */
     cursor: pointer;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
-    margin: 5px; /* Pieni marginaali nappien ympärille */
+    padding: 0 5px; /* Pieni sisäinen padding */
+    white-space: nowrap; /* Estää tekstin rivityksen napin sisällä */
 }
 
 #pause-button {
@@ -100,14 +105,17 @@ canvas {
 #info-button { /* Tyylit info-napille */
     background-color: #FFA500; /* Oranssi */
     font-weight: bold;
-    font-size: 1.5em;
-    width: 40px; /* Pienempi koko */
-    height: 40px;
+    font-size: 1.2em; /* Pienempi fontti kuin aiemmin */
+    width: 35px; /* Pienempi leveys */
+    min-width: 35px; /* Estää pienenemästä liikaa */
+    height: 35px; /* Pienempi korkeus */
+    min-height: 35px; /* Estää pienenemästä liikaa */
     border-radius: 50%; /* Pyöreä muoto */
     display: flex; /* Käytä flexboxia sisällön keskittämiseen */
     justify-content: center;
     align-items: center;
     padding: 0; /* Poista padding, jotta teksti keskittyy */
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 #info-button:active {
@@ -115,9 +123,10 @@ canvas {
 }
 
 .lives-container {
-    font-size: 1.2em;
+    font-size: 1.1em; /* Pienempi fonttikoko */
     color: #A2CD5A; /* Harmonisoitu elämien tekstin väri */
-    margin-left: 10px;
+    margin: 0 5px; /* Marginaali reunoille, mutta ei vaikuta muihin nappeihin */
+    white-space: nowrap; /* Estää tekstin rivityksen */
 }
 
 #eaten-letters-container {
@@ -188,7 +197,7 @@ canvas {
     height: 100%; /* Koko korkeus */
     overflow: auto; /* Jos sisältö on liian suuri, lisätään vierityspalkki */
     background-color: rgba(0,0,0,0.7); /* Tumma, läpinäkyvä tausta */
-    /* display: flex; <--- TÄMÄ SÄÄNTÖ POISTETTU TÄSTÄ, KOSKA SE ASETETAAN JAVASCRIPTILLÄ */
+    /* display: flex; <--- TÄMÄ SÄÄNTÖ ON POISTETTU TÄSTÄ, SILLÄ JAVASCRIPT ASETTAA SEN */
     justify-content: center;
     align-items: center;
 }
