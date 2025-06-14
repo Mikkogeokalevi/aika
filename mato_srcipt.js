@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Päivitetty oikea vastaus sisältäen uudet sanat
     const correctAnswer = "kirjastovirkailijanperjantaiontyöntäyteinen"; 
 
-    const snakeGrowthWords = ["MIKKO", "KALEVIN", "MATO"];
+    const snakeGrowthWords = ["TÄMÄ", "*", "ON", "*", "MIKKO", "KALEVIN", "*", "MATO", "*", "MYSTEERI", ];
 
     // Muodosta alkuperäiset kirjaimet syötäviksi ja tallenna alkuperäinen indeksi
     let letters = wordsConfig.flatMap((item, wordOriginalIndex) =>
