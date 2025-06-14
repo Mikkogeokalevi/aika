@@ -69,7 +69,7 @@ canvas {
     flex-wrap: wrap; /* Salli nappien rivitys pienemmillä näytöillä */
 }
 
-#pause-button, #restart-button {
+#pause-button, #restart-button, #info-button { /* Lisätty #info-button */
     width: 100px;
     height: 40px;
     font-size: 14px;
@@ -78,10 +78,11 @@ canvas {
     border-radius: 10px;
     cursor: pointer;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+    margin: 5px; /* Pieni marginaali nappien ympärille */
 }
 
 #pause-button {
-    background-color: #f44336; /* Punainen edelleen ok, koska toimintonappi */
+    background-color: #f44336;
 }
 
 #pause-button:active {
@@ -89,11 +90,29 @@ canvas {
 }
 
 #restart-button {
-    background-color: #2196F3; /* Sininen edelleen ok, koska toimintonappi */
+    background-color: #2196F3;
 }
 
 #restart-button:active {
     background-color: #0b7dda;
+}
+
+#info-button { /* Tyylit info-napille */
+    background-color: #FFA500; /* Oranssi */
+    font-weight: bold;
+    font-size: 1.5em;
+    width: 40px; /* Pienempi koko */
+    height: 40px;
+    border-radius: 50%; /* Pyöreä muoto */
+    line-height: 1; /* Keskitä teksti pystysuunnassa */
+    padding: 0;
+    display: flex; /* Käytä flexboxia sisällön keskittämiseen */
+    justify-content: center;
+    align-items: center;
+}
+
+#info-button:active {
+    background-color: #CC8400;
 }
 
 .lives-container {
@@ -136,7 +155,7 @@ canvas {
 
 #info-container {
     margin-top: 10px;
-    display: none;
+    display: none; /* Tämä piilottaa vastauskentän containerin aluksi */
     background-color: rgba(0, 0, 0, 0.7);
     color: white;
     padding: 10px;
@@ -157,4 +176,66 @@ canvas {
     color: #A2CD5A; /* Harmonisoitu väri onnittelutekstille */
     margin-top: 10px;
     font-weight: bold;
+}
+
+/* Modaalin tyylit - TÄMÄ ON KORJATTU */
+.modal {
+    display: none; /* KORJATTU: Piilotettu oletuksena */
+    position: fixed; /* Pysyy paikoillaan selattaessa */
+    z-index: 1; /* Pysyy muiden elementtien edessä */
+    left: 0;
+    top: 0;
+    width: 100%; /* Koko leveys */
+    height: 100%; /* Koko korkeus */
+    overflow: auto; /* Jos sisältö on liian suuri, lisätään vierityspalkki */
+    background-color: rgba(0,0,0,0.7); /* Tumma, läpinäkyvä tausta */
+    display: flex; /* Käytä flexboxia sisällön keskittämiseen */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto; /* Keskitä vertikaalisesti ja horisontaalisesti */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Leveys */
+    max-width: 500px; /* Maksimileveys */
+    border-radius: 10px;
+    position: relative; /* Sulje-painiketta varten */
+    color: #333; /* Tekstin väri */
+    text-align: left; /* Tekstin tasaus */
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content h2, .modal-content h3 {
+    text-align: center;
+    color: #4B5320; /* Otsikoiden väri */
+}
+
+.modal-content ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    padding: 0;
+}
+
+.modal-content li {
+    margin-bottom: 5px;
 }
