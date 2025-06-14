@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>2 Kirjain Matopeli</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>4 Kirjain Matopeli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <style>
         body {
             text-align: center;
@@ -10,11 +10,10 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            touch-action: none;
+            overflow-x: hidden;
         }
 
         .game-container {
@@ -27,6 +26,8 @@
             max-width: 95%;
             display: flex;
             flex-direction: column;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .header-container {
@@ -117,6 +118,7 @@
             overflow-y: auto;
             border: 1px solid #ccc;
             padding: 5px;
+            width: 100%;
         }
 
         .color-row {
@@ -333,7 +335,6 @@
                     return;
                 } else {
                     alert(`Törmäys! Sinulla on vielä ${lives} elämää jäljellä.`);
-                    // Reset snake position but keep eaten letters
                     snake = [{x: snake[0].x, y: snake[0].y}];
                     direction = null;
                     return;
