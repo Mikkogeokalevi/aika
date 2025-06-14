@@ -22,6 +22,31 @@
             max-width: 450px;
         }
 
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #90EE90;
+            border-radius: 50%;
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+            background-color: #556B2F;
+            padding: 3px;
+            margin-right: 10px;
+        }
+
+        h1 {
+            color: #90EE90;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+            font-size: 1.5em;
+            margin: 0;
+        }
+
         canvas {
             border: 2px solid #4CAF50;
             display: block;
@@ -97,10 +122,10 @@
 </head>
 <body>
     <div class="game-container">
-        <p style="text-align:center; margin-bottom:15px;">
-            <img src="https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png" alt="Mikkokalevin logo" style="width:120px; height:120px; border:2px solid #90EE90; border-radius:50%; display:inline-block; vertical-align:middle; box-shadow:1px 1px 3px rgba(0,0,0,0.4); background-color:#556B2F; padding:3px;" />
-        </p>
-        <h1 style="color:#90EE90; text-shadow:1px 1px 2px rgba(0,0,0,0.6);">Kirjain Matopeli</h1>
+        <div class="header-container">
+            <img src="https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png" alt="Mikkokalevin logo" class="logo">
+            <h1>Kirjain Matopeli</h1>
+        </div>
 
         <canvas id="gameCanvas" width="400" height="400"></canvas>
         <div id="controls">
