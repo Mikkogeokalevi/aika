@@ -146,6 +146,19 @@ canvas {
     line-height: 1; /* Varmistaa, että sydän on rivissä */
 }
 
+/* Uusi tyyli pommille */
+.bomb {
+    background-color: black; /* Musta väri pommille */
+    border: 2px solid #555; /* Harmaa reuna */
+    border-radius: 50%; /* Pyöreä muoto */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em; /* Koko */
+    color: white; /* Tekstin väri */
+    font-weight: bold;
+}
+
 
 #eaten-letters-container {
     margin-top: 10px;
