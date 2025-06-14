@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { word: "perjantai", color: "#3357FF" }, // Sininen
         // Lisää lisää sanoja ja niiden värejä tähän haluamassasi järjestyksessä:
         // { word: "Esimerkkisana", color: "#FFD700" }, // Kulta
-        // { word: "Toinen", color: "#DA70D6" } // Oranssinpunainen
+        // { word: "Toinen", color: "#DA70D6" } // Violetti
     ];
     const correctAnswer = "kirjastovirkailijanperjantai"; // Tämän tulee vastata kaikkia sanoja peräkkäin pienillä kirjaimilla
 
