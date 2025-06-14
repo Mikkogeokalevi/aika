@@ -62,21 +62,22 @@ canvas {
 
 .buttons-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between; /* Jakaa tilaa tasaisesti */
     align-items: center; /* Keskitä pystysuunnassa */
     margin-top: 10px;
     gap: 5px; /* Pienempi väli nappien välissä */
     flex-wrap: nowrap; /* Tärkeä: Estää rivityksen */
-    width: 100%; /* Vie koko leveys, jotta justify-content toimii */
+    width: 100%; /* Vie koko leveys */
     box-sizing: border-box;
     padding: 0 5px; /* Pieni padding sivuille, jotta ei mene ihan reunaan */
 }
 
 #pause-button, #restart-button {
     flex-grow: 1; /* Antaa nappuloille tilaa kasvaa */
-    max-width: 90px; /* Maksimileveys (pienempi) */
+    min-width: 60px; /* Vähimmäisleveys, ettei mene liian pieneksi */
+    max-width: 90px; /* Maksimileveys */
     height: 35px; /* Pienempi korkeus */
-    font-size: 13px; /* Pienempi fontti */
+    font-size: 12px; /* Pienempi fontti */
     color: white;
     border: none;
     border-radius: 8px; /* Hieman pienemmät reunat */
@@ -123,11 +124,28 @@ canvas {
 }
 
 .lives-container {
-    font-size: 1.1em; /* Pienempi fonttikoko */
-    color: #A2CD5A; /* Harmonisoitu elämien tekstin väri */
-    margin: 0 5px; /* Marginaali reunoille, mutta ei vaikuta muihin nappeihin */
-    white-space: nowrap; /* Estää tekstin rivityksen */
+    /* Elämät-osion tyylit */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px; /* Väli sydänten välissä */
+    background-color: #8DBC5B; /* Samankaltainen väri kuin muualla (harmonisoitu) */
+    border-radius: 8px; /* Pyöristetyt kulmat */
+    padding: 5px 8px; /* Sisäinen täyte */
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+    font-size: 1.1em; /* Pienempi fonttikoko, vaikka täällä ei ole tekstiä */
+    color: #FF69B4; /* Sydänten väri (vaaleanpunainen) */
+    white-space: nowrap; /* Estää rivityksen */
+    min-width: 60px; /* Vähimmäisleveys, jotta mahtuu 3 sydäntä */
+    flex-grow: 1; /* Salli kasvaa muiden mukana */
+    max-width: 90px; /* Maksimileveys */
 }
+
+.heart-icon {
+    font-size: 1.2em; /* Sydämen koko */
+    line-height: 1; /* Varmistaa, että sydän on rivissä */
+}
+
 
 #eaten-letters-container {
     margin-top: 10px;
@@ -197,7 +215,6 @@ canvas {
     height: 100%; /* Koko korkeus */
     overflow: auto; /* Jos sisältö on liian suuri, lisätään vierityspalkki */
     background-color: rgba(0,0,0,0.7); /* Tumma, läpinäkyvä tausta */
-    /* display: flex; <--- TÄMÄ SÄÄNTÖ ON POISTETTU TÄSTÄ, SILLÄ JAVASCRIPT ASETTAA SEN */
     justify-content: center;
     align-items: center;
 }
