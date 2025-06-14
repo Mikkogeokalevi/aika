@@ -19,15 +19,35 @@
             <div class="lives-container">
                 Elämät: <span id="lives">3</span>
             </div>
+            <button id="info-button">!</button> 
         </div>
         <div id="eaten-letters-container"></div>
         <div id="info-container">
             <p>Kaikki kirjaimet on nyt syöty, järjestä kirjaimet värin sisällä sanoiksi ja kirjoita saamasi sanat yhdyssanana (ilman välilyöntejä) alla olevaan kenttään:</p>
-            <input type="text" id="answer-input" placeholder="Kirjoita yhdyssana tähän">
-            <button id="submit-button">Tarkista</button>
             <div id="congratulations-message"></div>
+            <input type="text" id="answer-input" placeholder="Syötä vastaus tähän">
+            <button id="submit-button">TARKISTA VASTAUS</button>
         </div>
     </div>
+
+    <div id="info-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Ohjeet Mato Mysteeriin</h2>
+            <h3>Kannettavalla:</h3>
+            <ul>
+                <li>Käytä **nuolinäppäimiä** (ylös, alas, vasen, oikea) madon liikuttamiseen.</li>
+                <li>Nappulat: **PAUSE** (pysäyttää/jatkaa peliä), **ALOITA ALUSTA** (käynnistää uuden pelin).</li>
+            </ul>
+            <h3>Kännykällä:</h3>
+            <ul>
+                <li>Ohjaa matoa pyyhkäisemällä sormella ruudulla siihen suuntaan, johon haluat madon liikkuvan (ylös, alas, vasen, oikea).</li>
+                <li>Nappulat: **PAUSE** (pysäyttää/jatkaa peliä), **ALOITA ALUSTA** (käynnistää uuden pelin).</li>
+            </ul>
+            <p>Tavoitteena on syödä kaikki kirjaimet ja muodostaa niistä oikea yhdyssana! Onnea matkaan!</p>
+        </div>
+    </div>
+
     <script src="mato_srcipt.js"></script>
 </body>
 </html>
