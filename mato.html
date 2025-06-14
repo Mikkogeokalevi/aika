@@ -42,10 +42,13 @@
         const box = 20;
         let snake = [{x: 9 * box, y: 10 * box}];
         let direction = null;
+        let message = "Kirjastovirkailijanperjantaiehtookaffeekupponen";
+        let messageIndex = 0;
+
         let food = {
             x: Math.floor(Math.random() * 20) * box,
             y: Math.floor(Math.random() * 20) * box,
-            letter: String.fromCharCode(65 + Math.floor(Math.random() * 26))
+            letter: message[messageIndex]
         };
 
         function drawGame() {
@@ -67,8 +70,10 @@
             ctx.fillRect(food.x, food.y, box, box);
 
             ctx.fillStyle = 'white';
-            ctx.font = '20px Arial';
-            ctx.fillText(food.letter, food.x + box / 3, food.y + box / 1.5);
+            ctx.font = '16px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(food.letter, food.x + box / 2, food.y + box / 2);
 
             // Käärmeen pää ja ruoka
             let snakeX = snake[0].x;
@@ -82,10 +87,11 @@
             // Törmäyksen tarkistus
             if (snakeX === food.x && snakeY === food.y) {
                 // Käärme syö ruokaa
+                messageIndex = (messageIndex + 1) % message.length;
                 food = {
                     x: Math.floor(Math.random() * 20) * box,
                     y: Math.floor(Math.random() * 20) * box,
-                    letter: String.fromCharCode(65 + Math.floor(Math.random() * 26))
+                    letter: message[messageIndex]
                 };
             } else {
                 // Poista käärmeen häntä
