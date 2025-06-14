@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     const eatenLettersContainer = document.getElementById('eaten-letters-container');
-    const livesElement = document.getElementById('lives');
+    const livesHeartsElement = document.getElementById('lives-hearts'); // UUSI ID
     const infoContainer = document.getElementById('info-container');
     const answerInput = document.getElementById('answer-input');
     const submitButton = document.getElementById('submit-button');
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Päivitetty oikea vastaus sisältäen uudet sanat
     const correctAnswer = "kirjastovirkailijanperjantaiontyöntäyteinen"; 
 
-    const snakeGrowthWords = ["TÄMÄ", "*", "ON", "*", "MIKKO", "KALEVIN", "*", "MATO", "*", "MYSTEERI", ];
+    const snakeGrowthWords = ["MIKKO", "KALEVIN", "MATO"];
 
     // Muodosta alkuperäiset kirjaimet syötäviksi ja tallenna alkuperäinen indeksi
     let letters = wordsConfig.flatMap((item, wordOriginalIndex) =>
@@ -46,8 +46,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let isPaused = false;
     let snakeHeadImage = new Image();
 
-    // Kuvanlatauspaikka päivitetty .jpg-päätteeksi
-    snakeHeadImage.src = 'mato_paa.jpg'; // Varmista, että mato_paa.jpg on oikeassa paikassa!
+    // Kuvanlatauspaikka: varmista, että mato_paa.jpg on samassa kansiossa!
+    snakeHeadImage.src = 'mato_paa.jpg'; 
 
     snakeHeadImage.onload = startGame; // Käynnistä peli, kun kuva latautuu onnistuneesti
     snakeHeadImage.onerror = () => { // Käynnistä peli, vaikka kuvan lataus epäonnistuisi
@@ -73,11 +73,23 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Funktio päivittää sydämet
+    function updateLivesDisplay() {
+        livesHeartsElement.innerHTML = ''; // Tyhjennä vanhat sydämet
+        for (let i = 0; i < lives; i++) {
+            const heart = document.createElement('span');
+            heart.className = 'heart-icon';
+            heart.textContent = '❤️'; // Sydänmerkki
+            livesHeartsElement.appendChild(heart);
+        }
+    }
+
     // Funktio pelin käynnistämiseen
     function startGame() {
         if (!game) { // Käynnistä vain, jos peli ei ole jo käynnissä
             game = setInterval(drawGame, 200);
             food = generateFood(); // Generoi ensimmäinen ruoka, kun peli käynnistyy
+            updateLivesDisplay(); // Päivitä sydämet alussa
         }
     }
 
@@ -242,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (collision(newHead, snake)) {
             lives--;
-            livesElement.textContent = lives;
+            updateLivesDisplay(); // Päivitä sydämet
             if (lives <= 0) {
                 clearInterval(game);
                 game = null; // Aseta game nulliksi
@@ -292,7 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
         snake = [{x: 9 * box, y: 10 * box}];
         direction = null;
         lives = 3;
-        livesElement.textContent = lives;
+        updateLivesDisplay(); // Päivitä sydämet
 
         // Alusta letters-lista uudelleen alkuperäisistä sanoista
         letters = wordsConfig.flatMap((item, wordOriginalIndex) =>
@@ -363,6 +375,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Kutsu setupEatenLettersContainer pelin alussa, kun DOM on latautunut
+    // Kutsu setupEatenLettersContainer ja updateLivesDisplay pelin alussa, kun DOM on latautunut
     setupEatenLettersContainer();
+    updateLivesDisplay(); // Kutsu alussa, jotta sydämet näkyvät heti
 });
