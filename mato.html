@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>4 Kirjain Matopeli</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Kirjain Matopeli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
         body {
             text-align: center;
@@ -86,10 +86,6 @@
             box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
         }
 
-        #pause-button:active {
-            background-color: #d32f2f;
-        }
-
         #restart-button {
             width: 100px;
             height: 40px;
@@ -102,10 +98,6 @@
             box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
         }
 
-        #restart-button:active {
-            background-color: #0b7dda;
-        }
-
         .lives-container {
             font-size: 1.2em;
             color: #90EE90;
@@ -114,7 +106,7 @@
 
         #eaten-letters-container {
             margin-top: 10px;
-            max-height: 100px;
+            max-height: 200px;
             overflow-y: auto;
             border: 1px solid #ccc;
             padding: 5px;
@@ -196,21 +188,17 @@
         const correctAnswer = "Kirjastovirkailijanperjantaiehtookaffeekupposenkaatumisonnettomuussuoja";
         const snakeGrowthWords = ["MIKKO", "KALEVIN", "MATO", "MYSTEERI"];
 
-        let letters = words.flatMap((word, index) => word.split('').map(letter => ({ letter: letter.toUpperCase(), color: colors[index] })));
-        letters = shuffleArray(letters);
+        let letters = words.map((word, index) => ({
+            word: word.toUpperCase(),
+            color: colors[index]
+        }));
 
-        let food = {
-            x: Math.floor(Math.random() * 20) * box,
-            y: Math.floor(Math.random() * 20) * box,
-            letter: letters.length > 0 ? letters.pop() : { letter: '', color: '#000000' }
-        };
-
+        let food = generateFood();
         let game = null;
         let isPaused = false;
         let snakeHeadImage = new Image();
         snakeHeadImage.src = 'https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png';
 
-        // Touch controls
         let touchStartX = 0;
         let touchStartY = 0;
 
@@ -246,6 +234,21 @@
             e.preventDefault();
         }, false);
 
+        function generateFood() {
+            const wordIndex = Math.floor(Math.random() * letters.length);
+            const word = letters[wordIndex].word;
+            const letterIndex = Math.floor(Math.random() * word.length);
+            const letter = word[letterIndex];
+
+            return {
+                x: Math.floor(Math.random() * 20) * box,
+                y: Math.floor(Math.random() * 20) * box,
+                letter: letter,
+                color: letters[wordIndex].color,
+                wordIndex: wordIndex
+            };
+        }
+
         function drawGame() {
             if (isPaused) return;
 
@@ -272,7 +275,7 @@
                 ctx.strokeRect(snake[i].x, snake[i].y, box, box);
             }
 
-            ctx.fillStyle = food.letter.color;
+            ctx.fillStyle = food.color;
             ctx.beginPath();
             ctx.roundRect(food.x, food.y, box, box, 10);
             ctx.fill();
@@ -281,7 +284,7 @@
             ctx.font = '16px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(food.letter.letter, food.x + box / 2, food.y + box / 2);
+            ctx.fillText(food.letter, food.x + box / 2, food.y + box / 2);
 
             let snakeX = snake[0].x;
             let snakeY = snake[0].y;
@@ -294,28 +297,29 @@
             if (snakeX === food.x && snakeY === food.y) {
                 const eatenLetterDiv = document.createElement('div');
                 eatenLetterDiv.className = 'eaten-letter';
-                eatenLetterDiv.style.backgroundColor = food.letter.color;
-                eatenLetterDiv.textContent = food.letter.letter;
+                eatenLetterDiv.style.backgroundColor = food.color;
+                eatenLetterDiv.textContent = food.letter;
 
-                let colorRow = document.querySelector(`.color-row[data-color="${food.letter.color}"]`);
+                let colorRow = document.querySelector(`.color-row[data-color="${food.color}"]`);
                 if (!colorRow) {
                     colorRow = document.createElement('div');
                     colorRow.className = 'color-row';
-                    colorRow.setAttribute('data-color', food.letter.color);
+                    colorRow.setAttribute('data-color', food.color);
                     eatenLettersContainer.appendChild(colorRow);
                 }
 
                 colorRow.appendChild(eatenLetterDiv);
 
-                food = {
-                    x: Math.floor(Math.random() * 20) * box,
-                    y: Math.floor(Math.random() * 20) * box,
-                    letter: letters.length > 0 ? letters.pop() : { letter: '', color: '#000000' }
-                };
+                letters[food.wordIndex].word = letters[food.wordIndex].word.replace(food.letter, '');
+                if (letters[food.wordIndex].word.length === 0) {
+                    letters.splice(food.wordIndex, 1);
+                }
 
                 if (letters.length === 0) {
                     clearInterval(game);
                     infoContainer.style.display = 'block';
+                } else {
+                    food = generateFood();
                 }
             } else {
                 snake.pop();
@@ -370,29 +374,19 @@
             }
         }
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
         function resetGame() {
             clearInterval(game);
             snake = [{x: 9 * box, y: 10 * box}];
             direction = null;
             lives = 3;
             livesElement.textContent = lives;
-            letters = words.flatMap((word, index) => word.split('').map(letter => ({ letter: letter.toUpperCase(), color: colors[index] })));
-            letters = shuffleArray(letters);
-            food = {
-                x: Math.floor(Math.random() * 20) * box,
-                y: Math.floor(Math.random() * 20) * box,
-                letter: letters.length > 0 ? letters.pop() : { letter: '', color: '#000000' }
-            };
+            letters = words.map((word, index) => ({
+                word: word.toUpperCase(),
+                color: colors[index]
+            }));
             eatenLettersContainer.innerHTML = '';
             infoContainer.style.display = 'none';
+            food = generateFood();
             game = setInterval(drawGame, 200);
         }
 
