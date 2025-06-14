@@ -106,12 +106,12 @@
         let snake = [{x: 9 * box, y: 10 * box}];
         let direction = null;
         let message = "Kirjastovirkailijanperjantaiehtookaffeekupponen";
-        let messageIndex = -1;
+        let messageIndex = 0;
 
         let food = {
             x: Math.floor(Math.random() * 20) * box,
             y: Math.floor(Math.random() * 20) * box,
-            letter: ''
+            letter: message[messageIndex].toUpperCase()
         };
 
         let game = null;
