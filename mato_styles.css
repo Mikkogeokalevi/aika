@@ -188,7 +188,7 @@ canvas {
     height: 100%; /* Koko korkeus */
     overflow: auto; /* Jos sisältö on liian suuri, lisätään vierityspalkki */
     background-color: rgba(0,0,0,0.7); /* Tumma, läpinäkyvä tausta */
-    display: flex; /* Käytä flexboxia sisällön keskittämiseen, tämä sääntö aktivoidaan JS:llä kun modaali avataan*/
+    /* display: flex; <--- TÄMÄ SÄÄNTÖ POISTETTU TÄSTÄ, KOSKA SE ASETETAAN JAVASCRIPTILLÄ */
     justify-content: center;
     align-items: center;
 }
