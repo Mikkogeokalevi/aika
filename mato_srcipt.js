@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     const eatenLettersContainer = document.getElementById('eaten-letters-container');
-    const livesHeartsElement = document.getElementById('lives-hearts'); // UUSI ID
+    const livesHeartsElement = document.getElementById('lives-hearts');
     const infoContainer = document.getElementById('info-container');
     const answerInput = document.getElementById('answer-input');
     const submitButton = document.getElementById('submit-button');
@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let snake = [{x: 9 * box, y: 10 * box}];
     let direction = null;
     let lives = 3;
+    let lettersEatenCount = 0; // UUSI: Laskuri syötyille kirjaimille
+    let bomb = null; // UUSI: Pommi-olio
 
     // Sanat ja värit – pidä nämä samassa järjestyksessä kuin haluat niiden näkyvän!
     const wordsConfig = [
@@ -41,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }))
     );
 
-    let food = null; // Alustetaan food myöhemmin
+    let food = null; 
     let game = null;
     let isPaused = false;
     let snakeHeadImage = new Image();
@@ -84,12 +86,71 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Funktio generoi vapaan sijainnin kentältä
+    function getRandomPosition() {
+        let x, y;
+        let collisionDetected;
+        do {
+            collisionDetected = false;
+            x = Math.floor(Math.random() * (canvas.width / box)) * box;
+            y = Math.floor(Math.random() * (canvas.height / box)) * box;
+
+            // Tarkista, ettei sijainti mene käärmeen päälle
+            for (let i = 0; i < snake.length; i++) {
+                if (x === snake[i].x && y === snake[i].y) {
+                    collisionDetected = true;
+                    break;
+                }
+            }
+            // Tarkista, ettei sijainti mene ruoan päälle (jos ruoka on jo olemassa)
+            if (!collisionDetected && food && x === food.x && y === food.y) {
+                collisionDetected = true;
+            }
+            // Tarkista, ettei sijainti mene pommin päälle (jos pommi on jo olemassa)
+            if (!collisionDetected && bomb && x === bomb.x && y === bomb.y) {
+                collisionDetected = true;
+            }
+
+        } while (collisionDetected);
+        return { x, y };
+    }
+
+    // Generoi ruokaa jäljellä olevista kirjaimista
+    function generateFood() {
+        const availableLetters = letters.filter(l => l.letter !== '');
+        if (availableLetters.length === 0) {
+            return null; // Kaikki kirjaimet syöty
+        }
+
+        const randomIndex = Math.floor(Math.random() * availableLetters.length);
+        const selectedLetter = availableLetters[randomIndex];
+
+        const pos = getRandomPosition(); // Käytä uutta funktiota vapaan paikan löytämiseen
+        return {
+            x: pos.x,
+            y: pos.y,
+            letter: selectedLetter.letter,
+            color: selectedLetter.color,
+            wordOriginalIndex: selectedLetter.wordOriginalIndex
+        };
+    }
+
+    // Generoi pommin
+    function generateBomb() {
+        const pos = getRandomPosition(); // Käytä uutta funktiota vapaan paikan löytämiseen
+        return {
+            x: pos.x,
+            y: pos.y,
+            type: 'bomb'
+        };
+    }
+
     // Funktio pelin käynnistämiseen
     function startGame() {
-        if (!game) { // Käynnistä vain, jos peli ei ole jo käynnissä
+        if (!game) { 
             game = setInterval(drawGame, 200);
-            food = generateFood(); // Generoi ensimmäinen ruoka, kun peli käynnistyy
-            updateLivesDisplay(); // Päivitä sydämet alussa
+            food = generateFood(); 
+            updateLivesDisplay(); 
         }
     }
 
@@ -133,27 +194,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return word.split('').sort(() => Math.random() - 0.5).join('');
     }
 
-    // Generoi ruokaa jäljellä olevista kirjaimista
-    function generateFood() {
-        const availableLetters = letters.filter(l => l.letter !== '');
-        if (availableLetters.length === 0) {
-            return null; // Kaikki kirjaimet syöty
-        }
-
-        // Valitse satunnainen kirjain jäljellä olevista
-        const randomIndex = Math.floor(Math.random() * availableLetters.length);
-        const selectedLetter = availableLetters[randomIndex];
-
-        // Aseta kirjaimen paikka satunnaisesti canvasille
-        return {
-            x: Math.floor(Math.random() * (canvas.width / box)) * box,
-            y: Math.floor(Math.random() * (canvas.height / box)) * box,
-            letter: selectedLetter.letter,
-            color: selectedLetter.color,
-            wordOriginalIndex: selectedLetter.wordOriginalIndex // Käytä alkuperäistä indeksiä
-        };
-    }
-
     function drawGame() {
         if (isPaused) return;
 
@@ -162,17 +202,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         for (let i = 0; i < snake.length; i++) {
             if (i === 0) {
-                // Piirrä kuva vain, jos se on latautunut kokonaan
                 if (snakeHeadImage.complete && snakeHeadImage.naturalHeight !== 0) {
                     ctx.drawImage(snakeHeadImage, snake[i].x, snake[i].y, box, box);
                 } else {
-                    // Vararatkaisu, jos kuva ei latautunut, piirrä vihreä neliö
-                    ctx.fillStyle = '#8BC34A'; // Käärmeen pään varaväri
+                    ctx.fillStyle = '#8BC34A'; 
                     ctx.fillRect(snake[i].x, snake[i].y, box, box);
                 }
             } else if (i <= snakeGrowthWords.join('').length) {
                 const letterIndex = (i - 1) % snakeGrowthWords.join('').length;
-                ctx.fillStyle = '#8BC34A'; // Käärmeen vartalon väri
+                ctx.fillStyle = '#8BC34A'; 
                 ctx.fillRect(snake[i].x, snake[i].y, box, box);
                 ctx.fillStyle = 'black';
                 ctx.font = '12px Arial';
@@ -180,14 +218,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 ctx.textBaseline = 'middle';
                 ctx.fillText(snakeGrowthWords.join('')[letterIndex], snake[i].x + box / 2, snake[i].y + box / 2);
             } else {
-                ctx.fillStyle = '#8BC34A'; // Käärmeen vartalon väri
+                ctx.fillStyle = '#8BC34A'; 
                 ctx.fillRect(snake[i].x, snake[i].y, box, box);
             }
             ctx.strokeStyle = 'white';
             ctx.strokeRect(snake[i].x, snake[i].y, box, box);
         }
 
-        // Piirrä ruoka vain jos ruokaa on jäljellä
+        // Piirrä ruoka
         if (food) {
             ctx.fillStyle = food.color;
             ctx.beginPath();
@@ -201,6 +239,20 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.fillText(food.letter, food.x + box / 2, food.y + box / 2);
         }
 
+        // Piirrä pommi
+        if (bomb) {
+            ctx.fillStyle = 'black'; // Pommin väri
+            ctx.beginPath();
+            ctx.roundRect(bomb.x, bomb.y, box, box, 10);
+            ctx.fill();
+
+            ctx.fillStyle = 'red'; // Tekstin väri pommissa
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('💣', bomb.x + box / 2, bomb.y + box / 2); // Pommi-emoji
+        }
+
         let snakeX = snake[0].x;
         let snakeY = snake[0].y;
 
@@ -209,6 +261,25 @@ document.addEventListener('DOMContentLoaded', function() {
         if (direction === 'RIGHT') snakeX += box;
         if (direction === 'DOWN') snakeY += box;
 
+        // TÄRKEÄ MUUTOS: Tarkista törmäys ensin pommiin, sitten ruokaan
+        // Tarkista pommiin osuma
+        if (bomb && snakeX === bomb.x && snakeY === bomb.y) {
+            lives--;
+            updateLivesDisplay();
+            bomb = null; // Pommi katoaa
+            if (lives <= 0) {
+                clearInterval(game);
+                game = null;
+                alert('Peli päättyi! Söit pommin ja kaikki elämät loppuivat.');
+                return;
+            } else {
+                alert(`OUCH! Söit pommin! Sinulla on vielä ${lives} elämää jäljellä.`);
+                snake = [{x: snake[0].x, y: snake[0].y}]; // Mato takaisin alkuun
+                direction = null; // Nollaa suunta
+                return;
+            }
+        }
+
         // Jos käärme syö ruoan
         if (food && snakeX === food.x && snakeY === food.y) {
             const eatenLetterDiv = document.createElement('div');
@@ -216,14 +287,11 @@ document.addEventListener('DOMContentLoaded', function() {
             eatenLetterDiv.style.backgroundColor = food.color;
             eatenLetterDiv.textContent = food.letter;
 
-            // Hae oikea rivi indeksiä käyttäen ja lisää kirjain siihen
             const targetColorRow = colorRows[food.wordOriginalIndex];
             if (targetColorRow) {
                 targetColorRow.appendChild(eatenLetterDiv);
             }
 
-            // Poista syöty kirjain letters-listasta (merkitse tyhjäksi tai poista)
-            // Tärkeää: Poistetaan vain se tietty kirjain, ei koko sanan kirjainta
             const indexToRemove = letters.findIndex(l =>
                 l.letter === food.letter &&
                 l.color === food.color &&
@@ -234,16 +302,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 letters.splice(indexToRemove, 1);
             }
 
-            // Generoi uusi ruoka
+            lettersEatenCount++; // Kasvata syötyjen kirjainten määrää
+
+            // Jos 10 kirjainta on syöty ja joka 5. kirjain sen jälkeen, generoi pommi
+            if (lettersEatenCount >= 10 && (lettersEatenCount % 5 === 0)) {
+                bomb = generateBomb();
+            } else {
+                bomb = null; // Varmista, ettei pommi ole paikalla, jos ei pitäisi
+            }
+
             food = generateFood();
             if (!food) {
-                // Kaikki kirjaimet syöty, näytä infokontaineri
                 clearInterval(game);
-                game = null; // Aseta game nulliksi, jotta startGame voi käynnistää sen uudelleen
+                game = null;
                 infoContainer.style.display = 'block';
             }
         } else {
-            // Jos ruokaa ei syöty, poista hännän pää (mato liikkuu)
             snake.pop();
         }
 
@@ -254,16 +328,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (collision(newHead, snake)) {
             lives--;
-            updateLivesDisplay(); // Päivitä sydämet
+            updateLivesDisplay();
             if (lives <= 0) {
                 clearInterval(game);
-                game = null; // Aseta game nulliksi
+                game = null;
                 alert('Peli päättyi! Kaikki elämät käytetty.');
                 return;
             } else {
                 alert(`Törmäys! Sinulla on vielä ${lives} elämää jäljellä.`);
-                snake = [{x: snake[0].x, y: snake[0].y}]; // Palauta mato alkuperäiseen kokoon, mutta säilytä paikka
-                direction = null; // Nollaa suunta törmäyksen jälkeen
+                snake = [{x: snake[0].x, y: snake[0].y}];
+                direction = null; 
                 return;
             }
         }
@@ -300,13 +374,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function resetGame() {
         clearInterval(game);
-        game = null; // Aseta game nulliksi
+        game = null; 
         snake = [{x: 9 * box, y: 10 * box}];
         direction = null;
         lives = 3;
-        updateLivesDisplay(); // Päivitä sydämet
+        lettersEatenCount = 0; // Nollaa laskuri
+        bomb = null; // Nollaa pommi
+        updateLivesDisplay(); 
 
-        // Alusta letters-lista uudelleen alkuperäisistä sanoista
         letters = wordsConfig.flatMap((item, wordOriginalIndex) =>
             shuffleWord(item.word.toUpperCase()).split('').map(letter => ({
                 letter: letter,
@@ -315,11 +390,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }))
         );
 
-        setupEatenLettersContainer(); // Luodaan rivit uudelleen tyhjinä
+        setupEatenLettersContainer(); 
         infoContainer.style.display = 'none';
         congratulationsMessage.innerHTML = '';
-        food = generateFood(); // Generoi uusi ruoka
-        startGame(); // Käynnistä peli uudelleen
+        food = generateFood(); 
+        startGame(); 
     }
 
     document.getElementById('pause-button').addEventListener('click', () => {
@@ -351,17 +426,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Info-modaalin tapahtumankäsittelijät
     infoButton.addEventListener('click', () => {
-        infoModal.style.display = 'flex'; // Näytä modaali flexboxilla keskitystä varten
-        if (game) { // Pysäytä peli, kun modaali on auki
+        infoModal.style.display = 'flex'; 
+        if (game) { 
             clearInterval(game);
-            game = null; // Aseta game nulliksi, jotta startGame voi käynnistää sen uudelleen
+            game = null; 
         }
     });
 
     closeButton.addEventListener('click', () => {
-        infoModal.style.display = 'none'; // Piilota modaali
-        if (!isPaused) { // Jatka peliä vain, jos se ei ollut pysäytettynä jo ennen modaalin avausta
-            startGame(); // Käynnistä peli uudelleen, jos se oli pysäytetty modaalin takia
+        infoModal.style.display = 'none'; 
+        if (!isPaused) { 
+            startGame(); 
         }
     });
 
@@ -375,7 +450,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Kutsu setupEatenLettersContainer ja updateLivesDisplay pelin alussa, kun DOM on latautunut
     setupEatenLettersContainer();
-    updateLivesDisplay(); // Kutsu alussa, jotta sydämet näkyvät heti
+    updateLivesDisplay(); 
 });
