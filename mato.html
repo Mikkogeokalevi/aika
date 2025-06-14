@@ -10,8 +10,9 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            overflow-y: hidden; /* Estetään sivun vieritys pystysuunnassa */
-            height: 100vh; /* Koko näytön korkeus */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .game-container {
@@ -22,8 +23,9 @@
             border-radius: 12px;
             box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
             max-width: 450px;
-            height: calc(100vh - 30px); /* Varmistetaan, että kontti ei kasva sivun ulkopuolelle */
-            overflow-y: auto; /* Lisätään vieritys vain pelikonttiin */
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .header-container {
@@ -57,20 +59,21 @@
             margin: 0 auto;
             border-radius: 10px;
             background-color: white;
+            flex-grow: 1;
         }
 
         #controls {
             display: flex;
             justify-content: center;
             margin-top: 10px;
-            flex-wrap: wrap;
+            align-items: center;
         }
 
         .control-button {
-            width: 50px;
-            height: 50px;
-            margin: 5px;
-            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            margin: 3px;
+            font-size: 16px;
             background-color: #4CAF50;
             color: white;
             border: none;
@@ -87,10 +90,10 @@
         }
 
         #pause-button {
-            width: 80px;
-            height: 50px;
-            margin: 5px;
-            font-size: 16px;
+            width: 60px;
+            height: 40px;
+            margin: 3px;
+            font-size: 12px;
             background-color: #f44336;
             color: white;
             border: none;
@@ -99,8 +102,17 @@
             box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
         }
 
-        #pause-button:active {
-            background-color: #d32f2f;
+        #restart-button {
+            width: 100px;
+            height: 40px;
+            margin: 3px;
+            font-size: 12px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
         }
 
         #eaten-letters {
@@ -108,8 +120,7 @@
             flex-direction: column;
             justify-content: center;
             margin-top: 10px;
-            max-height: 100px; /* Rajoitetaan korkeus */
-            overflow-y: auto; /* Lisätään vieritys, jos sisältö kasvaa liian suureksi */
+            max-height: 100px;
         }
 
         .color-row {
@@ -142,17 +153,16 @@
 
         <canvas id="gameCanvas" width="400" height="400"></canvas>
         <div id="controls">
-            <button class="control-button" id="up">↑</button>
-        </div>
-        <div id="controls">
-            <button class="control-button" id="left">←</button>
-            <button class="control-button" id="right">→</button>
-        </div>
-        <div id="controls">
-            <button class="control-button" id="down">↓</button>
-        </div>
-        <div id="controls">
+            <div>
+                <button class="control-button" id="up">↑</button>
+            </div>
+            <div>
+                <button class="control-button" id="left">←</button>
+                <button class="control-button" id="down">↓</button>
+                <button class="control-button" id="right">→</button>
+            </div>
             <button id="pause-button">PAUSE</button>
+            <button id="restart-button">ALOITA ALUSTA</button>
         </div>
         <div id="eaten-letters"></div>
     </div>
@@ -286,6 +296,21 @@
             return array;
         }
 
+        function resetGame() {
+            clearInterval(game);
+            snake = [{x: 9 * box, y: 10 * box}];
+            direction = null;
+            letters = words.flatMap((word, index) => word.split('').map(letter => ({ letter: letter.toUpperCase(), color: colors[index] })));
+            letters = shuffleArray(letters);
+            food = {
+                x: Math.floor(Math.random() * 20) * box,
+                y: Math.floor(Math.random() * 20) * box,
+                letter: letters.length > 0 ? letters.pop() : { letter: '', color: '#000000' }
+            };
+            eatenLettersContainer.innerHTML = '';
+            game = setInterval(drawGame, 200);
+        }
+
         document.getElementById('up').addEventListener('click', (e) => {
             e.preventDefault();
             setDirection('UP');
@@ -310,6 +335,8 @@
             isPaused = !isPaused;
             document.getElementById('pause-button').textContent = isPaused ? 'JATKA' : 'PAUSE';
         });
+
+        document.getElementById('restart-button').addEventListener('click', resetGame);
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft' && direction !== 'RIGHT') {
