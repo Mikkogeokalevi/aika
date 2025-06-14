@@ -14,6 +14,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            touch-action: none;
         }
 
         .game-container {
@@ -24,6 +25,8 @@
             border-radius: 12px;
             box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
             max-width: 95%;
+            display: flex;
+            flex-direction: column;
         }
 
         .header-container {
@@ -64,11 +67,12 @@
             justify-content: center;
             align-items: center;
             margin-top: 10px;
+            position: relative;
         }
 
         .controls {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
         }
 
@@ -86,10 +90,35 @@
             align-items: center;
             cursor: pointer;
             box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+            position: absolute;
         }
 
         .control-button:active {
             background-color: #45a049;
+        }
+
+        #up-button {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #down-button {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #left-button {
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        #right-button {
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         #pause-button {
@@ -103,7 +132,8 @@
             border-radius: 10px;
             cursor: pointer;
             box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
-            margin-right: 10px;
+            position: absolute;
+            left: 10px;
         }
 
         #pause-button:active {
@@ -121,7 +151,8 @@
             border-radius: 10px;
             cursor: pointer;
             box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
-            margin-left: 10px;
+            position: absolute;
+            right: 10px;
         }
 
         #restart-button:active {
@@ -168,12 +199,10 @@
         <div class="controls-container">
             <button id="pause-button">PAUSE</button>
             <div class="controls">
-                <button class="control-button" id="up">↑</button>
-                <div>
-                    <button class="control-button" id="left">←</button>
-                    <button class="control-button" id="down">↓</button>
-                    <button class="control-button" id="right">→</button>
-                </div>
+                <button class="control-button" id="up-button">↑</button>
+                <button class="control-button" id="left-button">←</button>
+                <button class="control-button" id="right-button">→</button>
+                <button class="control-button" id="down-button">↓</button>
             </div>
             <button id="restart-button">ALOITA ALUSTA</button>
         </div>
@@ -203,6 +232,42 @@
 
         let game = null;
         let isPaused = false;
+
+        // Touch controls
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        canvas.addEventListener('touchstart', function(e) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, false);
+
+        canvas.addEventListener('touchmove', function(e) {
+            if (!e.touches[0]) return;
+            let touchEndX = e.touches[0].clientX;
+            let touchEndY = e.touches[0].clientY;
+
+            let diffX = touchStartX - touchEndX;
+            let diffY = touchStartY - touchEndY;
+
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                if (diffX > 0) {
+                    setDirection('LEFT');
+                } else {
+                    setDirection('RIGHT');
+                }
+            } else {
+                if (diffY > 0) {
+                    setDirection('UP');
+                } else {
+                    setDirection('DOWN');
+                }
+            }
+
+            touchStartX = touchEndX;
+            touchStartY = touchEndY;
+            e.preventDefault();
+        }, false);
 
         function drawGame() {
             if (isPaused) return;
@@ -324,22 +389,22 @@
             game = setInterval(drawGame, 200);
         }
 
-        document.getElementById('up').addEventListener('click', (e) => {
+        document.getElementById('up-button').addEventListener('click', (e) => {
             e.preventDefault();
             setDirection('UP');
         });
 
-        document.getElementById('left').addEventListener('click', (e) => {
+        document.getElementById('left-button').addEventListener('click', (e) => {
             e.preventDefault();
             setDirection('LEFT');
         });
 
-        document.getElementById('right').addEventListener('click', (e) => {
+        document.getElementById('right-button').addEventListener('click', (e) => {
             e.preventDefault();
             setDirection('RIGHT');
         });
 
-        document.getElementById('down').addEventListener('click', (e) => {
+        document.getElementById('down-button').addEventListener('click', (e) => {
             e.preventDefault();
             setDirection('DOWN');
         });
