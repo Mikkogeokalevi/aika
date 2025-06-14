@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>1 Kirjain Matopeli</title>
+    <title>Kirjain Matopeli</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
         body {
@@ -13,6 +13,7 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
         .game-container {
@@ -22,10 +23,7 @@
             border: 3px solid #36451C;
             border-radius: 12px;
             box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
-            max-width: 450px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
+            max-width: 95%;
         }
 
         .header-container {
@@ -59,13 +57,18 @@
             margin: 0 auto;
             border-radius: 10px;
             background-color: white;
-            flex-grow: 1;
         }
 
-        #controls {
+        .controls-container {
             display: flex;
             justify-content: center;
+            align-items: center;
             margin-top: 10px;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
             align-items: center;
         }
 
@@ -100,6 +103,11 @@
             border-radius: 10px;
             cursor: pointer;
             box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+            margin-right: 10px;
+        }
+
+        #pause-button:active {
+            background-color: #d32f2f;
         }
 
         #restart-button {
@@ -113,14 +121,19 @@
             border-radius: 10px;
             cursor: pointer;
             box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+            margin-left: 10px;
         }
 
-        #eaten-letters {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+        #restart-button:active {
+            background-color: #0b7dda;
+        }
+
+        #eaten-letters-container {
             margin-top: 10px;
             max-height: 100px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 5px;
         }
 
         .color-row {
@@ -152,25 +165,25 @@
         </div>
 
         <canvas id="gameCanvas" width="400" height="400"></canvas>
-        <div id="controls">
-            <div>
-                <button class="control-button" id="up">↑</button>
-            </div>
-            <div>
-                <button class="control-button" id="left">←</button>
-                <button class="control-button" id="down">↓</button>
-                <button class="control-button" id="right">→</button>
-            </div>
+        <div class="controls-container">
             <button id="pause-button">PAUSE</button>
+            <div class="controls">
+                <button class="control-button" id="up">↑</button>
+                <div>
+                    <button class="control-button" id="left">←</button>
+                    <button class="control-button" id="down">↓</button>
+                    <button class="control-button" id="right">→</button>
+                </div>
+            </div>
             <button id="restart-button">ALOITA ALUSTA</button>
         </div>
-        <div id="eaten-letters"></div>
+        <div id="eaten-letters-container"></div>
     </div>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        const eatenLettersContainer = document.getElementById('eaten-letters');
+        const eatenLettersContainer = document.getElementById('eaten-letters-container');
 
         const box = 20;
         let snake = [{x: 9 * box, y: 10 * box}];
