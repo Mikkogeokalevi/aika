@@ -23,10 +23,10 @@
             border: 3px solid #36451C;
             border-radius: 12px;
             box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
-            max-width: 95%;
+            max-width: 450px;
+            width: 90%;
             display: flex;
             flex-direction: column;
-            width: 100%;
             box-sizing: border-box;
         }
 
@@ -64,6 +64,7 @@
             width: 100%;
             max-width: 400px;
             height: 400px;
+            touch-action: none;
         }
 
         .buttons-container {
@@ -211,12 +212,14 @@
         let touchStartY = 0;
 
         canvas.addEventListener('touchstart', function(e) {
+            e.preventDefault();
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
         }, false);
 
         canvas.addEventListener('touchmove', function(e) {
             if (!e.touches[0]) return;
+            e.preventDefault();
             let touchEndX = e.touches[0].clientX;
             let touchEndY = e.touches[0].clientY;
 
@@ -239,7 +242,6 @@
 
             touchStartX = touchEndX;
             touchStartY = touchEndY;
-            e.preventDefault();
         }, false);
 
         function generateFood() {
