@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitButton = document.getElementById('submit-button');
     const congratulationsMessage = document.getElementById('congratulations-message');
     
-    // Uudet elementit info-modaalia varten
     const infoButton = document.getElementById('info-button');
     const infoModal = document.getElementById('info-modal');
     const closeButton = document.querySelector('.close-button');
@@ -17,29 +16,28 @@ document.addEventListener('DOMContentLoaded', function() {
     let snake = [{x: 9 * box, y: 10 * box}];
     let direction = null;
     let lives = 3;
-    let lettersEatenCount = 0; // UUSI: Laskuri syötyille kirjaimille
-    let bomb = null; // UUSI: Pommi-olio
+    let lettersEatenCount = 0;
+    let bomb = null;
+    // UUSI: Pommi-hymiöt
+    const bombEmojis = ['😈', '❌', '💣']; 
 
-    // Sanat ja värit – pidä nämä samassa järjestyksessä kuin haluat niiden näkyvän!
     const wordsConfig = [
-        { word: "Kirjasto", color: "#FF5733" }, // Oranssinpunainen
-        { word: "virkailijan", color: "#33FF57" }, // Vihreä
-        { word: "perjantai", color: "#3357FF" }, // Sininen
-        { word: "on", color: "#FFFF00" },       // Uusi sana, keltainen
-        { word: "työn", color: "#8A2BE2" },     // Uusi sana, sinivioletti
-        { word: "täyteinen", color: "#FF1493" } // Uusi sana, syvän vaaleanpunainen
+        { word: "Kirjasto", color: "#FF5733" }, 
+        { word: "virkailijan", color: "#33FF57" }, 
+        { word: "perjantai", color: "#3357FF" }, 
+        { word: "on", color: "#FFFF00" },       
+        { word: "työn", color: "#8A2BE2" },     
+        { word: "täyteinen", color: "#FF1493" } 
     ];
-    // Päivitetty oikea vastaus sisältäen uudet sanat
     const correctAnswer = "kirjastovirkailijanperjantaiontyöntäyteinen"; 
 
     const snakeGrowthWords = ["MIKKO", "KALEVIN", "MATO"];
 
-    // Muodosta alkuperäiset kirjaimet syötäviksi ja tallenna alkuperäinen indeksi
     let letters = wordsConfig.flatMap((item, wordOriginalIndex) =>
         shuffleWord(item.word.toUpperCase()).split('').map(letter => ({
             letter: letter,
             color: item.color,
-            wordOriginalIndex: wordOriginalIndex // Lisää alkuperäisen sanan indeksi
+            wordOriginalIndex: wordOriginalIndex 
         }))
     );
 
@@ -48,45 +46,40 @@ document.addEventListener('DOMContentLoaded', function() {
     let isPaused = false;
     let snakeHeadImage = new Image();
 
-    // Kuvanlatauspaikka: varmista, että mato_paa.jpg on samassa kansiossa!
     snakeHeadImage.src = 'mato_paa.jpg'; 
 
-    snakeHeadImage.onload = startGame; // Käynnistä peli, kun kuva latautuu onnistuneesti
-    snakeHeadImage.onerror = () => { // Käynnistä peli, vaikka kuvan lataus epäonnistuisi
+    snakeHeadImage.onload = startGame; 
+    snakeHeadImage.onerror = () => { 
         console.error("Failed to load snake head image. Starting game with fallback.");
         startGame();
     };
 
-    // Tallennetaan referenssit luotuihin color-row-elementteihin
     const colorRows = [];
 
-    // Funktio luo ja järjestää sanarivit valmiiksi
     function setupEatenLettersContainer() {
-        eatenLettersContainer.innerHTML = ''; // Tyhjennä vanha sisältö
-        colorRows.length = 0; // Tyhjennä vanhat referenssit
+        eatenLettersContainer.innerHTML = ''; 
+        colorRows.length = 0; 
 
         wordsConfig.forEach((item, index) => {
             const colorRow = document.createElement('div');
             colorRow.className = 'color-row';
-            colorRow.setAttribute('data-color', item.color); // Tarvitaan edelleen tyylitykseen
-            colorRow.setAttribute('data-word-index', index); // Tunnistaa rivin alkuperäisen sanan perusteella
+            colorRow.setAttribute('data-color', item.color);
+            colorRow.setAttribute('data-word-index', index);
             eatenLettersContainer.appendChild(colorRow);
-            colorRows.push(colorRow); // Tallenna referenssi
+            colorRows.push(colorRow); 
         });
     }
 
-    // Funktio päivittää sydämet
     function updateLivesDisplay() {
-        livesHeartsElement.innerHTML = ''; // Tyhjennä vanhat sydämet
+        livesHeartsElement.innerHTML = ''; 
         for (let i = 0; i < lives; i++) {
             const heart = document.createElement('span');
             heart.className = 'heart-icon';
-            heart.textContent = '❤️'; // Sydänmerkki
+            heart.textContent = '❤️'; 
             livesHeartsElement.appendChild(heart);
         }
     }
 
-    // Funktio generoi vapaan sijainnin kentältä
     function getRandomPosition() {
         let x, y;
         let collisionDetected;
@@ -95,18 +88,15 @@ document.addEventListener('DOMContentLoaded', function() {
             x = Math.floor(Math.random() * (canvas.width / box)) * box;
             y = Math.floor(Math.random() * (canvas.height / box)) * box;
 
-            // Tarkista, ettei sijainti mene käärmeen päälle
             for (let i = 0; i < snake.length; i++) {
                 if (x === snake[i].x && y === snake[i].y) {
                     collisionDetected = true;
                     break;
                 }
             }
-            // Tarkista, ettei sijainti mene ruoan päälle (jos ruoka on jo olemassa)
             if (!collisionDetected && food && x === food.x && y === food.y) {
                 collisionDetected = true;
             }
-            // Tarkista, ettei sijainti mene pommin päälle (jos pommi on jo olemassa)
             if (!collisionDetected && bomb && x === bomb.x && y === bomb.y) {
                 collisionDetected = true;
             }
@@ -115,17 +105,16 @@ document.addEventListener('DOMContentLoaded', function() {
         return { x, y };
     }
 
-    // Generoi ruokaa jäljellä olevista kirjaimista
     function generateFood() {
         const availableLetters = letters.filter(l => l.letter !== '');
         if (availableLetters.length === 0) {
-            return null; // Kaikki kirjaimet syöty
+            return null; 
         }
 
         const randomIndex = Math.floor(Math.random() * availableLetters.length);
         const selectedLetter = availableLetters[randomIndex];
 
-        const pos = getRandomPosition(); // Käytä uutta funktiota vapaan paikan löytämiseen
+        const pos = getRandomPosition(); 
         return {
             x: pos.x,
             y: pos.y,
@@ -135,17 +124,18 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    // Generoi pommin
+    // UUSI: Generoi pommin satunnaisella hymiöllä
     function generateBomb() {
-        const pos = getRandomPosition(); // Käytä uutta funktiota vapaan paikan löytämiseen
+        const pos = getRandomPosition();
+        const randomEmoji = bombEmojis[Math.floor(Math.random() * bombEmojis.length)];
         return {
             x: pos.x,
             y: pos.y,
-            type: 'bomb'
+            type: 'bomb',
+            emoji: randomEmoji // Tallenna käytettävä hymiö
         };
     }
 
-    // Funktio pelin käynnistämiseen
     function startGame() {
         if (!game) { 
             game = setInterval(drawGame, 200);
@@ -241,16 +231,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Piirrä pommi
         if (bomb) {
-            ctx.fillStyle = 'black'; // Pommin väri
+            ctx.fillStyle = 'black'; // Pommin taustaväri
             ctx.beginPath();
             ctx.roundRect(bomb.x, bomb.y, box, box, 10);
             ctx.fill();
 
-            ctx.fillStyle = 'red'; // Tekstin väri pommissa
-            ctx.font = 'bold 16px Arial';
+            ctx.font = 'bold 20px Arial'; // Suurempi fonttikoko hymiölle
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText('💣', bomb.x + box / 2, bomb.y + box / 2); // Pommi-emoji
+            ctx.fillText(bomb.emoji, bomb.x + box / 2, bomb.y + box / 2); // Piirrä hymiö
         }
 
         let snakeX = snake[0].x;
@@ -261,7 +250,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (direction === 'RIGHT') snakeX += box;
         if (direction === 'DOWN') snakeY += box;
 
-        // TÄRKEÄ MUUTOS: Tarkista törmäys ensin pommiin, sitten ruokaan
         // Tarkista pommiin osuma
         if (bomb && snakeX === bomb.x && snakeY === bomb.y) {
             lives--;
@@ -302,13 +290,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 letters.splice(indexToRemove, 1);
             }
 
-            lettersEatenCount++; // Kasvata syötyjen kirjainten määrää
+            lettersEatenCount++; 
 
             // Jos 10 kirjainta on syöty ja joka 5. kirjain sen jälkeen, generoi pommi
             if (lettersEatenCount >= 10 && (lettersEatenCount % 5 === 0)) {
                 bomb = generateBomb();
             } else {
-                bomb = null; // Varmista, ettei pommi ole paikalla, jos ei pitäisi
+                bomb = null; 
             }
 
             food = generateFood();
@@ -342,7 +330,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Käärmeen liikkuminen reunojen yli
         if (snakeX < 0) snakeX = canvas.width - box;
         if (snakeY < 0) snakeY = canvas.height - box;
         if (snakeX >= canvas.width) snakeX = 0;
@@ -378,8 +365,8 @@ document.addEventListener('DOMContentLoaded', function() {
         snake = [{x: 9 * box, y: 10 * box}];
         direction = null;
         lives = 3;
-        lettersEatenCount = 0; // Nollaa laskuri
-        bomb = null; // Nollaa pommi
+        lettersEatenCount = 0; 
+        bomb = null; 
         updateLivesDisplay(); 
 
         letters = wordsConfig.flatMap((item, wordOriginalIndex) =>
@@ -424,7 +411,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Info-modaalin tapahtumankäsittelijät
     infoButton.addEventListener('click', () => {
         infoModal.style.display = 'flex'; 
         if (game) { 
@@ -440,7 +426,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Sulje modaali, jos käyttäjä klikkaa modaalin ulkopuolelle
     window.addEventListener('click', (event) => {
         if (event.target === infoModal) {
             infoModal.style.display = 'none';
