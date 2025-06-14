@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>1 Kirjain Matopeli</title>
+    <title>Kirjain Matopeli</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
         body {
@@ -62,78 +62,23 @@
             background-color: white;
         }
 
-        .controls-container {
+        .buttons-container {
             display: flex;
             justify-content: center;
-            align-items: center;
             margin-top: 10px;
-            position: relative;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .control-button {
-            width: 40px;
-            height: 40px;
-            margin: 3px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
-            position: absolute;
-        }
-
-        .control-button:active {
-            background-color: #45a049;
-        }
-
-        #up-button {
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        #down-button {
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        #left-button {
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        #right-button {
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
+            gap: 10px;
         }
 
         #pause-button {
-            width: 60px;
+            width: 100px;
             height: 40px;
-            margin: 3px;
-            font-size: 12px;
+            font-size: 14px;
             background-color: #f44336;
             color: white;
             border: none;
             border-radius: 10px;
             cursor: pointer;
             box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
-            position: absolute;
-            left: 10px;
         }
 
         #pause-button:active {
@@ -143,16 +88,13 @@
         #restart-button {
             width: 100px;
             height: 40px;
-            margin: 3px;
-            font-size: 12px;
+            font-size: 14px;
             background-color: #2196F3;
             color: white;
             border: none;
             border-radius: 10px;
             cursor: pointer;
             box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
-            position: absolute;
-            right: 10px;
         }
 
         #restart-button:active {
@@ -196,14 +138,8 @@
         </div>
 
         <canvas id="gameCanvas" width="400" height="400"></canvas>
-        <div class="controls-container">
+        <div class="buttons-container">
             <button id="pause-button">PAUSE</button>
-            <div class="controls">
-                <button class="control-button" id="up-button">↑</button>
-                <button class="control-button" id="left-button">←</button>
-                <button class="control-button" id="right-button">→</button>
-                <button class="control-button" id="down-button">↓</button>
-            </div>
             <button id="restart-button">ALOITA ALUSTA</button>
         </div>
         <div id="eaten-letters-container"></div>
@@ -388,26 +324,6 @@
             eatenLettersContainer.innerHTML = '';
             game = setInterval(drawGame, 200);
         }
-
-        document.getElementById('up-button').addEventListener('click', (e) => {
-            e.preventDefault();
-            setDirection('UP');
-        });
-
-        document.getElementById('left-button').addEventListener('click', (e) => {
-            e.preventDefault();
-            setDirection('LEFT');
-        });
-
-        document.getElementById('right-button').addEventListener('click', (e) => {
-            e.preventDefault();
-            setDirection('RIGHT');
-        });
-
-        document.getElementById('down-button').addEventListener('click', (e) => {
-            e.preventDefault();
-            setDirection('DOWN');
-        });
 
         document.getElementById('pause-button').addEventListener('click', () => {
             isPaused = !isPaused;
