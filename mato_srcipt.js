@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', function() {
         { word: "Kirjasto", color: "#FF5733" }, // Oranssinpunainen
         { word: "virkailijan", color: "#33FF57" }, // Vihreä
         { word: "perjantai", color: "#3357FF" }, // Sininen
-        { word: "on", color: "#FFFF00" }, // Uusi sana, keltainen
-        { word: "työn", color: "#8A2BE2" }, // Uusi sana, sinivioletti
+        { word: "on", color: "#FFFF00" },       // Uusi sana, keltainen
+        { word: "työn", color: "#8A2BE2" },     // Uusi sana, sinivioletti
         { word: "täyteinen", color: "#FF1493" } // Uusi sana, syvän vaaleanpunainen
     ];
     // Päivitetty oikea vastaus sisältäen uudet sanat
@@ -41,14 +41,40 @@ document.addEventListener('DOMContentLoaded', function() {
     let isPaused = false;
     let snakeHeadImage = new Image();
 
-    // Uusi kuvanlatauspaikka
-    snakeHeadImage.src = 'mato_paa.png'; 
+    // Kuvanlatauspaikka päivitetty .jpg-päätteeksi
+    snakeHeadImage.src = 'mato_paa.jpg'; 
 
     snakeHeadImage.onload = startGame; // Käynnistä peli, kun kuva latautuu onnistuneesti
     snakeHeadImage.onerror = () => { // Käynnistä peli, vaikka kuvan lataus epäonnistuisi
         console.error("Failed to load snake head image. Starting game with fallback.");
         startGame();
     };
+
+    // Tallennetaan referenssit luotuihin color-row-elementteihin
+    const colorRows = [];
+
+    // Funktio luo ja järjestää sanarivit valmiiksi
+    function setupEatenLettersContainer() {
+        eatenLettersContainer.innerHTML = ''; // Tyhjennä vanha sisältö
+        colorRows.length = 0; // Tyhjennä vanhat referenssit
+
+        wordsConfig.forEach((item, index) => {
+            const colorRow = document.createElement('div');
+            colorRow.className = 'color-row';
+            colorRow.setAttribute('data-color', item.color); // Tarvitaan edelleen tyylitykseen
+            colorRow.setAttribute('data-word-index', index); // Tunnistaa rivin alkuperäisen sanan perusteella
+            eatenLettersContainer.appendChild(colorRow);
+            colorRows.push(colorRow); // Tallenna referenssi
+        });
+    }
+
+    // Funktio pelin käynnistämiseen
+    function startGame() {
+        if (!game) { // Käynnistä vain, jos peli ei ole jo käynnissä
+            game = setInterval(drawGame, 200);
+            food = generateFood(); // Generoi ensimmäinen ruoka, kun peli käynnistyy
+        }
+    }
 
     let touchStartX = 0;
     let touchStartY = 0;
