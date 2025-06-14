@@ -10,6 +10,8 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            overflow-y: hidden; /* Estetään sivun vieritys pystysuunnassa */
+            height: 100vh; /* Koko näytön korkeus */
         }
 
         .game-container {
@@ -20,6 +22,8 @@
             border-radius: 12px;
             box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
             max-width: 450px;
+            height: calc(100vh - 30px); /* Varmistetaan, että kontti ei kasva sivun ulkopuolelle */
+            overflow-y: auto; /* Lisätään vieritys vain pelikonttiin */
         }
 
         .header-container {
@@ -104,6 +108,8 @@
             flex-direction: column;
             justify-content: center;
             margin-top: 10px;
+            max-height: 100px; /* Rajoitetaan korkeus */
+            overflow-y: auto; /* Lisätään vieritys, jos sisältö kasvaa liian suureksi */
         }
 
         .color-row {
