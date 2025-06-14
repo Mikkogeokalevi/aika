@@ -4,25 +4,50 @@
     <title>Kirjain Matopeli</title>
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #4CAF50;
+        }
+
         canvas {
-            border: 1px solid black;
+            border: 2px solid #4CAF50;
             display: block;
             margin: 0 auto;
+            border-radius: 10px;
         }
+
         #controls {
             display: flex;
             justify-content: center;
             margin-top: 20px;
         }
+
         .control-button {
-            width: 60px;
-            height: 60px;
-            margin: 10px;
-            font-size: 24px;
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            font-size: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .control-button:active {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
+    <h1>Kirjain Matopeli</h1>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
     <div id="controls">
         <button class="control-button" id="up">↑</button>
@@ -52,22 +77,20 @@
         };
 
         function drawGame() {
-            // Piirrä pelialue
             ctx.fillStyle = 'white';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Piirrä käärme
             for (let i = 0; i < snake.length; i++) {
-                ctx.fillStyle = i === 0 ? 'green' : 'lightgreen';
+                ctx.fillStyle = i === 0 ? '#4CAF50' : '#8BC34A';
                 ctx.fillRect(snake[i].x, snake[i].y, box, box);
-
                 ctx.strokeStyle = 'white';
                 ctx.strokeRect(snake[i].x, snake[i].y, box, box);
             }
 
-            // Piirrä ruoka (kirjain)
-            ctx.fillStyle = 'red';
-            ctx.fillRect(food.x, food.y, box, box);
+            ctx.fillStyle = '#F44336';
+            ctx.beginPath();
+            ctx.roundRect(food.x, food.y, box, box, 10);
+            ctx.fill();
 
             ctx.fillStyle = 'white';
             ctx.font = '16px Arial';
@@ -75,7 +98,6 @@
             ctx.textBaseline = 'middle';
             ctx.fillText(food.letter, food.x + box / 2, food.y + box / 2);
 
-            // Käärmeen pää ja ruoka
             let snakeX = snake[0].x;
             let snakeY = snake[0].y;
 
@@ -84,9 +106,7 @@
             if (direction === 'RIGHT') snakeX += box;
             if (direction === 'DOWN') snakeY += box;
 
-            // Törmäyksen tarkistus
             if (snakeX === food.x && snakeY === food.y) {
-                // Käärme syö ruokaa
                 messageIndex = (messageIndex + 1) % message.length;
                 food = {
                     x: Math.floor(Math.random() * 20) * box,
@@ -94,24 +114,20 @@
                     letter: message[messageIndex]
                 };
             } else {
-                // Poista käärmeen häntä
                 snake.pop();
             }
 
-            // Lisää uusi pää
             let newHead = {
                 x: snakeX,
                 y: snakeY
             };
 
-            // Tarkista törmäys itseensä
             if (collision(newHead, snake)) {
                 clearInterval(game);
                 alert('Peli päättyi!');
                 return;
             }
 
-            // Reunojen läpäisy
             if (snakeX < 0) snakeX = canvas.width - box;
             if (snakeY < 0) snakeY = canvas.height - box;
             if (snakeX >= canvas.width) snakeX = 0;
@@ -173,7 +189,7 @@
             }
         });
 
-        let game = setInterval(drawGame, 200); // Hidastettu nopeus
+        let game = setInterval(drawGame, 200);
     </script>
 </body>
 </html>
