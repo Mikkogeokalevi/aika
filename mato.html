@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kirjain Matopeli</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 0 auto;
+        }
+        #controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .control-button {
+            width: 60px;
+            height: 60px;
+            margin: 10px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div id="controls">
+        <button class="control-button" id="up">↑</button>
+    </div>
+    <div id="controls">
+        <button class="control-button" id="left">←</button>
+        <button class="control-button" id="right">→</button>
+    </div>
+    <div id="controls">
+        <button class="control-button" id="down">↓</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const box = 20;
+        let snake = [{x: 9 * box, y: 10 * box}];
+        let direction = null;
+        let food = {
+            x: Math.floor(Math.random() * 20) * box,
+            y: Math.floor(Math.random() * 20) * box,
+            letter: String.fromCharCode(65 + Math.floor(Math.random() * 26))
+        };
+
+        function drawGame() {
+            // Piirrä pelialue
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Piirrä käärme
+            for (let i = 0; i < snake.length; i++) {
+                ctx.fillStyle = i === 0 ? 'green' : 'lightgreen';
+                ctx.fillRect(snake[i].x, snake[i].y, box, box);
+
+                ctx.strokeStyle = 'white';
+                ctx.strokeRect(snake[i].x, snake[i].y, box, box);
+            }
+
+            // Piirrä ruoka (kirjain)
+            ctx.fillStyle = 'red';
+            ctx.fillRect(food.x, food.y, box, box);
+
+            ctx.fillStyle = 'white';
+            ctx.font = '20px Arial';
+            ctx.fillText(food.letter, food.x + box / 3, food.y + box / 1.5);
+
+            // Käärmeen pää ja ruoka
+            let snakeX = snake[0].x;
+            let snakeY = snake[0].y;
+
+            if (direction === 'LEFT') snakeX -= box;
+            if (direction === 'UP') snakeY -= box;
+            if (direction === 'RIGHT') snakeX += box;
+            if (direction === 'DOWN') snakeY += box;
+
+            // Törmäyksen tarkistus
+            if (snakeX === food.x && snakeY === food.y) {
+                // Käärme syö ruokaa
+                food = {
+                    x: Math.floor(Math.random() * 20) * box,
+                    y: Math.floor(Math.random() * 20) * box,
+                    letter: String.fromCharCode(65 + Math.floor(Math.random() * 26))
+                };
+            } else {
+                // Poista käärmeen häntä
+                snake.pop();
+            }
+
+            // Lisää uusi pää
+            let newHead = {
+                x: snakeX,
+                y: snakeY
+            };
+
+            // Tarkista törmäys itseensä
+            if (collision(newHead, snake)) {
+                clearInterval(game);
+                alert('Peli päättyi!');
+                return;
+            }
+
+            // Reunojen läpäisy
+            if (snakeX < 0) snakeX = canvas.width - box;
+            if (snakeY < 0) snakeY = canvas.height - box;
+            if (snakeX >= canvas.width) snakeX = 0;
+            if (snakeY >= canvas.height) snakeY = 0;
+
+            snake.unshift({x: snakeX, y: snakeY});
+        }
+
+        function collision(head, array) {
+            for (let i = 0; i < array.length; i++) {
+                if (head.x === array[i].x && head.y === array[i].y) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function setDirection(dir) {
+            if (dir === 'LEFT' && direction !== 'RIGHT') {
+                direction = 'LEFT';
+            } else if (dir === 'UP' && direction !== 'DOWN') {
+                direction = 'UP';
+            } else if (dir === 'RIGHT' && direction !== 'LEFT') {
+                direction = 'RIGHT';
+            } else if (dir === 'DOWN' && direction !== 'UP') {
+                direction = 'DOWN';
+            }
+        }
+
+        document.getElementById('up').addEventListener('click', (e) => {
+            e.preventDefault();
+            setDirection('UP');
+        });
+
+        document.getElementById('left').addEventListener('click', (e) => {
+            e.preventDefault();
+            setDirection('LEFT');
+        });
+
+        document.getElementById('right').addEventListener('click', (e) => {
+            e.preventDefault();
+            setDirection('RIGHT');
+        });
+
+        document.getElementById('down').addEventListener('click', (e) => {
+            e.preventDefault();
+            setDirection('DOWN');
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && direction !== 'RIGHT') {
+                direction = 'LEFT';
+            } else if (e.key === 'ArrowUp' && direction !== 'DOWN') {
+                direction = 'UP';
+            } else if (e.key === 'ArrowRight' && direction !== 'LEFT') {
+                direction = 'RIGHT';
+            } else if (e.key === 'ArrowDown' && direction !== 'UP') {
+                direction = 'DOWN';
+            }
+        });
+
+        let game = setInterval(drawGame, 200); // Hidastettu nopeus
+    </script>
+</body>
+</html>
