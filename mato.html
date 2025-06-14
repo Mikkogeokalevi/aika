@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Kirjain Matopeli</title>
+    <title>1 Kirjain Matopeli</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
         body {
@@ -134,6 +134,18 @@
             font-size: 1.2em;
             color: #90EE90;
         }
+
+        #info-container {
+            margin-top: 10px;
+            display: none;
+        }
+
+        #answer-input {
+            margin-top: 10px;
+            padding: 8px;
+            width: 100%;
+            max-width: 300px;
+        }
     </style>
 </head>
 <body>
@@ -153,6 +165,11 @@
             <button id="restart-button">ALOITA ALUSTA</button>
         </div>
         <div id="eaten-letters-container"></div>
+        <div id="info-container">
+            <p>Kaikki kirjaimet on nyt syöty, järjestä kirjaimet värin sisällä sanoiksi ja kirjoita saamasi sanat yhdyssanana (ilman välilyöntejä) alla olevaan kenttään:</p>
+            <input type="text" id="answer-input" placeholder="Kirjoita yhdyssana tähän">
+            <button id="submit-button">Tarkista</button>
+        </div>
     </div>
 
     <script>
@@ -160,6 +177,9 @@
         const ctx = canvas.getContext('2d');
         const eatenLettersContainer = document.getElementById('eaten-letters-container');
         const livesElement = document.getElementById('lives');
+        const infoContainer = document.getElementById('info-container');
+        const answerInput = document.getElementById('answer-input');
+        const submitButton = document.getElementById('submit-button');
 
         const box = 20;
         let snake = [{x: 9 * box, y: 10 * box}];
@@ -168,6 +188,7 @@
 
         const words = ["Kirjasto", "virkailijan", "perjantai", "ehtoo", "kaffee", "kupposen", "kaatumis", "onnettomuus", "suoja"];
         const colors = ["#FF5733", "#33FF57", "#3357FF", "#F3FF33", "#FF33F3", "#33FFF3", "#8A33FF", "#FF338A", "#33FF8A"];
+        const correctAnswer = "Kirjastovirkailijanperjantaiehtookaffeekupposenkaatumisonnettomuussuoja";
 
         let letters = words.flatMap((word, index) => word.split('').map(letter => ({ letter: letter.toUpperCase(), color: colors[index] })));
         letters = shuffleArray(letters);
@@ -180,6 +201,8 @@
 
         let game = null;
         let isPaused = false;
+        let snakeHeadImage = new Image();
+        snakeHeadImage.src = 'https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png';
 
         // Touch controls
         let touchStartX = 0;
@@ -224,10 +247,14 @@
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             for (let i = 0; i < snake.length; i++) {
-                ctx.fillStyle = i === 0 ? '#4CAF50' : '#8BC34A';
-                ctx.fillRect(snake[i].x, snake[i].y, box, box);
-                ctx.strokeStyle = 'white';
-                ctx.strokeRect(snake[i].x, snake[i].y, box, box);
+                if (i === 0) {
+                    ctx.drawImage(snakeHeadImage, snake[i].x, snake[i].y, box, box);
+                } else {
+                    ctx.fillStyle = '#8BC34A';
+                    ctx.fillRect(snake[i].x, snake[i].y, box, box);
+                    ctx.strokeStyle = 'white';
+                    ctx.strokeRect(snake[i].x, snake[i].y, box, box);
+                }
             }
 
             ctx.fillStyle = food.letter.color;
@@ -270,6 +297,11 @@
                     y: Math.floor(Math.random() * 20) * box,
                     letter: letters.length > 0 ? letters.pop() : { letter: '', color: '#000000' }
                 };
+
+                if (letters.length === 0) {
+                    clearInterval(game);
+                    infoContainer.style.display = 'block';
+                }
             } else {
                 snake.pop();
             }
@@ -288,7 +320,6 @@
                     return;
                 } else {
                     alert(`Törmäys! Sinulla on vielä ${lives} elämää jäljellä.`);
-                    // Reset snake position but keep eaten letters
                     snake = [{x: 9 * box, y: 10 * box}];
                     direction = null;
                 }
@@ -345,6 +376,7 @@
                 letter: letters.length > 0 ? letters.pop() : { letter: '', color: '#000000' }
             };
             eatenLettersContainer.innerHTML = '';
+            infoContainer.style.display = 'none';
             game = setInterval(drawGame, 200);
         }
 
@@ -354,6 +386,14 @@
         });
 
         document.getElementById('restart-button').addEventListener('click', resetGame);
+
+        submitButton.addEventListener('click', () => {
+            if (answerInput.value === correctAnswer) {
+                alert(`Onnea! "${correctAnswer}" oli oikein! Chekkeri hyväksyy seuraavan lauseen: SateenJälkeenOnPoutaSää`);
+            } else {
+                alert('Väärä vastaus. Yritä uudelleen.');
+            }
+        });
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft' && direction !== 'RIGHT') {
