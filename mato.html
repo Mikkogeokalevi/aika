@@ -6,11 +6,19 @@
     <style>
         body {
             text-align: center;
-            font-family: Arial, sans-serif;
+            font-family: Georgia, serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
         }
 
-        h1 {
-            color: #4CAF50;
+        .header {
+            padding: 10px;
+            margin: 15px 0;
+            background-color: #556B2F;
+            border: 3px solid #36451C;
+            border-radius: 12px;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
         }
 
         canvas {
@@ -18,6 +26,7 @@
             display: block;
             margin: 0 auto;
             border-radius: 10px;
+            background-color: white;
         }
 
         #controls {
@@ -39,6 +48,7 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
         }
 
         .control-button:active {
@@ -47,7 +57,13 @@
     </style>
 </head>
 <body>
-    <h1>Kirjain Matopeli</h1>
+    <div class="header">
+        <p style="text-align:center; margin-bottom:15px;">
+            <img src="https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png" alt="Mikkokalevin logo" style="width:120px; height:120px; border:2px solid #90EE90; border-radius:50%; display:inline-block; vertical-align:middle; box-shadow:1px 1px 3px rgba(0,0,0,0.4); background-color:#556B2F; padding:3px;" />
+        </p>
+        <h1 style="color:#90EE90; text-shadow:1px 1px 2px rgba(0,0,0,0.6);">Kirjain Matopeli</h1>
+    </div>
+
     <canvas id="gameCanvas" width="400" height="400"></canvas>
     <div id="controls">
         <button class="control-button" id="up">↑</button>
