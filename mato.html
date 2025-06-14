@@ -73,6 +73,26 @@
         #pause-button:active {
             background-color: #d32f2f;
         }
+
+        #eaten-letters {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .eaten-letter {
+            width: 30px;
+            height: 30px;
+            margin: 2px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -96,22 +116,28 @@
         <div id="controls">
             <button id="pause-button">PAUSE</button>
         </div>
+        <div id="eaten-letters"></div>
     </div>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
+        const eatenLettersContainer = document.getElementById('eaten-letters');
 
         const box = 20;
         let snake = [{x: 9 * box, y: 10 * box}];
         let direction = null;
-        let message = "Kirjastovirkailijanperjantaiehtookaffeekupponen";
-        let messageIndex = 0;
+
+        const words = ["Kirjasto", "virkailijan", "perjantai", "ehtoo", "kaffee", "kupposen", "kaatumis", "onnettomuus", "suoja"];
+        const colors = ["#FF5733", "#33FF57", "#3357FF", "#F3FF33", "#FF33F3", "#33FFF3", "#8A33FF", "#FF338A", "#33FF8A"];
+
+        let letters = words.flatMap((word, index) => word.split('').map(letter => ({ letter: letter.toUpperCase(), color: colors[index] })));
+        letters = shuffleArray(letters);
 
         let food = {
             x: Math.floor(Math.random() * 20) * box,
             y: Math.floor(Math.random() * 20) * box,
-            letter: message[messageIndex].toUpperCase()
+            letter: letters.length > 0 ? letters.pop() : { letter: '', color: '#000000' }
         };
 
         let game = null;
@@ -130,7 +156,7 @@
                 ctx.strokeRect(snake[i].x, snake[i].y, box, box);
             }
 
-            ctx.fillStyle = '#F44336';
+            ctx.fillStyle = food.letter.color;
             ctx.beginPath();
             ctx.roundRect(food.x, food.y, box, box, 10);
             ctx.fill();
@@ -139,7 +165,7 @@
             ctx.font = '16px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(food.letter, food.x + box / 2, food.y + box / 2);
+            ctx.fillText(food.letter.letter, food.x + box / 2, food.y + box / 2);
 
             let snakeX = snake[0].x;
             let snakeY = snake[0].y;
@@ -150,11 +176,16 @@
             if (direction === 'DOWN') snakeY += box;
 
             if (snakeX === food.x && snakeY === food.y) {
-                messageIndex = (messageIndex + 1) % message.length;
+                const eatenLetterDiv = document.createElement('div');
+                eatenLetterDiv.className = 'eaten-letter';
+                eatenLetterDiv.style.backgroundColor = food.letter.color;
+                eatenLetterDiv.textContent = food.letter.letter;
+                eatenLettersContainer.appendChild(eatenLetterDiv);
+
                 food = {
                     x: Math.floor(Math.random() * 20) * box,
                     y: Math.floor(Math.random() * 20) * box,
-                    letter: message[messageIndex].toUpperCase()
+                    letter: letters.length > 0 ? letters.pop() : { letter: '', color: '#000000' }
                 };
             } else {
                 snake.pop();
@@ -198,6 +229,14 @@
             } else if (dir === 'DOWN' && direction !== 'UP') {
                 direction = 'DOWN';
             }
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
         }
 
         document.getElementById('up').addEventListener('click', (e) => {
