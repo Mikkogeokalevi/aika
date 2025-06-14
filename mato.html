@@ -15,10 +15,8 @@
         <canvas id="gameCanvas" width="400" height="400"></canvas>
         <div class="buttons-container">
             <button id="pause-button">PAUSE</button>
-            <button id="restart-button">ALOITA ALUSTA</button>
-            <div class="lives-container">
-                ❤️ <span id="lives">3</span>
-            </div>
+            <button id="restart-button">ALUSTA</button> <div class="lives-container">
+                <span id="lives-hearts"></span> </div>
             <button id="info-button">!</button> 
         </div>
         <div id="eaten-letters-container"></div>
@@ -34,15 +32,17 @@
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <h2>Ohjeet Mato Mysteeriin</h2>
-            <h3>Tietokoneella:</h3>
+            <h3>Kannettavalla:</h3>
             <ul>
                 <li>Käytä **nuolinäppäimiä** (ylös, alas, vasen, oikea) madon liikuttamiseen.</li>
-                <li>Nappulat: **PAUSE** (pysäyttää/jatkaa peliä), **ALOITA ALUSTA** (käynnistää uuden pelin).</li>
+                <li>Nappulat: **PAUSE** (pysäyttää/jatkaa peliä), **ALUSTA** (käynnistää uuden pelin).</li>
+                <li>Palkissa näkyvät sydämet ❤️❤️❤️ kertovat jäljellä olevien elämien määrän. Peli päättyy, kun kaikki sydämet ovat kadonneet.</li>
             </ul>
             <h3>Kännykällä:</h3>
             <ul>
                 <li>Ohjaa matoa pyyhkäisemällä sormella ruudulla siihen suuntaan, johon haluat madon liikkuvan (ylös, alas, vasen, oikea).</li>
                 <li>**Vältä sormen pitämistä jatkuvasti näytössä.** Pyyhkäisy tekee yhden liikkeen, ja jatkuva kosketus voi aiheuttaa tahattomia suunnanmuutoksia ja törmäyksiä.</li>
+                <li>Palkissa näkyvät sydämet ❤️❤️❤️ kertovat jäljellä olevien elämien määrän. Peli päättyy, kun kaikki sydämet ovat kadonneet.</li>
             </ul>
             <p>Tavoitteena on syödä kaikki kirjaimet ja muodostaa niistä oikea yhdyssana! Onnea matkaan!</p>
         </div>
