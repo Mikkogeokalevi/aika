@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Kirjain Matopeli</title>
-    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
         body {
             text-align: center;
@@ -12,13 +12,14 @@
             padding: 0;
         }
 
-        .header {
+        .game-container {
             padding: 10px;
-            margin: 15px 0;
+            margin: 15px auto;
             background-color: #556B2F;
             border: 3px solid #36451C;
             border-radius: 12px;
             box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
+            max-width: 450px;
         }
 
         canvas {
@@ -32,7 +33,8 @@
         #controls {
             display: flex;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 10px;
+            flex-wrap: wrap;
         }
 
         .control-button {
@@ -74,26 +76,26 @@
     </style>
 </head>
 <body>
-    <div class="header">
+    <div class="game-container">
         <p style="text-align:center; margin-bottom:15px;">
             <img src="https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png" alt="Mikkokalevin logo" style="width:120px; height:120px; border:2px solid #90EE90; border-radius:50%; display:inline-block; vertical-align:middle; box-shadow:1px 1px 3px rgba(0,0,0,0.4); background-color:#556B2F; padding:3px;" />
         </p>
         <h1 style="color:#90EE90; text-shadow:1px 1px 2px rgba(0,0,0,0.6);">Kirjain Matopeli</h1>
-    </div>
 
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <div id="controls">
-        <button class="control-button" id="up">↑</button>
-    </div>
-    <div id="controls">
-        <button class="control-button" id="left">←</button>
-        <button class="control-button" id="right">→</button>
-    </div>
-    <div id="controls">
-        <button class="control-button" id="down">↓</button>
-    </div>
-    <div id="controls">
-        <button id="pause-button">PAUSE</button>
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <div id="controls">
+            <button class="control-button" id="up">↑</button>
+        </div>
+        <div id="controls">
+            <button class="control-button" id="left">←</button>
+            <button class="control-button" id="right">→</button>
+        </div>
+        <div id="controls">
+            <button class="control-button" id="down">↓</button>
+        </div>
+        <div id="controls">
+            <button id="pause-button">PAUSE</button>
+        </div>
     </div>
 
     <script>
@@ -104,7 +106,7 @@
         let snake = [{x: 9 * box, y: 10 * box}];
         let direction = null;
         let message = "Kirjastovirkailijanperjantaiehtookaffeekupponen";
-        let messageIndex = -1; // Start from -1 to have the first ball empty
+        let messageIndex = -1;
 
         let food = {
             x: Math.floor(Math.random() * 20) * box,
