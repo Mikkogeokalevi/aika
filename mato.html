@@ -128,6 +128,12 @@
             font-weight: bold;
             box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
         }
+
+        .lives-container {
+            margin-top: 10px;
+            font-size: 1.2em;
+            color: #90EE90;
+        }
     </style>
 </head>
 <body>
@@ -135,6 +141,10 @@
         <div class="header-container">
             <img src="https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png" alt="Mikkokalevin logo" class="logo">
             <h1>Kirjain Matopeli</h1>
+        </div>
+
+        <div class="lives-container">
+            Elämät: <span id="lives">3</span>
         </div>
 
         <canvas id="gameCanvas" width="400" height="400"></canvas>
@@ -149,10 +159,12 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const eatenLettersContainer = document.getElementById('eaten-letters-container');
+        const livesElement = document.getElementById('lives');
 
         const box = 20;
         let snake = [{x: 9 * box, y: 10 * box}];
         let direction = null;
+        let lives = 3;
 
         const words = ["Kirjasto", "virkailijan", "perjantai", "ehtoo", "kaffee", "kupposen", "kaatumis", "onnettomuus", "suoja"];
         const colors = ["#FF5733", "#33FF57", "#3357FF", "#F3FF33", "#FF33F3", "#33FFF3", "#8A33FF", "#FF338A", "#33FF8A"];
@@ -268,9 +280,18 @@
             };
 
             if (collision(newHead, snake)) {
-                clearInterval(game);
-                alert('Peli päättyi!');
-                return;
+                lives--;
+                livesElement.textContent = lives;
+                if (lives <= 0) {
+                    clearInterval(game);
+                    alert('Peli päättyi! Kaikki elämät käytetty.');
+                    return;
+                } else {
+                    alert(`Törmäys! Sinulla on vielä ${lives} elämää jäljellä.`);
+                    // Reset snake position but keep eaten letters
+                    snake = [{x: 9 * box, y: 10 * box}];
+                    direction = null;
+                }
             }
 
             if (snakeX < 0) snakeX = canvas.width - box;
@@ -314,6 +335,8 @@
             clearInterval(game);
             snake = [{x: 9 * box, y: 10 * box}];
             direction = null;
+            lives = 3;
+            livesElement.textContent = lives;
             letters = words.flatMap((word, index) => word.split('').map(letter => ({ letter: letter.toUpperCase(), color: colors[index] })));
             letters = shuffleArray(letters);
             food = {
