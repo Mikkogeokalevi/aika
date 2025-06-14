@@ -54,6 +54,23 @@
         .control-button:active {
             background-color: #45a049;
         }
+
+        #pause-button {
+            width: 80px;
+            height: 50px;
+            margin: 5px;
+            font-size: 16px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        #pause-button:active {
+            background-color: #d32f2f;
+        }
     </style>
 </head>
 <body>
@@ -75,6 +92,9 @@
     <div id="controls">
         <button class="control-button" id="down">↓</button>
     </div>
+    <div id="controls">
+        <button id="pause-button">PAUSE</button>
+    </div>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -84,15 +104,20 @@
         let snake = [{x: 9 * box, y: 10 * box}];
         let direction = null;
         let message = "Kirjastovirkailijanperjantaiehtookaffeekupponen";
-        let messageIndex = 0;
+        let messageIndex = -1; // Start from -1 to have the first ball empty
 
         let food = {
             x: Math.floor(Math.random() * 20) * box,
             y: Math.floor(Math.random() * 20) * box,
-            letter: message[messageIndex]
+            letter: ''
         };
 
+        let game = null;
+        let isPaused = false;
+
         function drawGame() {
+            if (isPaused) return;
+
             ctx.fillStyle = 'white';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -127,7 +152,7 @@
                 food = {
                     x: Math.floor(Math.random() * 20) * box,
                     y: Math.floor(Math.random() * 20) * box,
-                    letter: message[messageIndex]
+                    letter: message[messageIndex].toUpperCase()
                 };
             } else {
                 snake.pop();
@@ -193,6 +218,11 @@
             setDirection('DOWN');
         });
 
+        document.getElementById('pause-button').addEventListener('click', () => {
+            isPaused = !isPaused;
+            document.getElementById('pause-button').textContent = isPaused ? 'JATKA' : 'PAUSE';
+        });
+
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft' && direction !== 'RIGHT') {
                 direction = 'LEFT';
@@ -205,7 +235,7 @@
             }
         });
 
-        let game = setInterval(drawGame, 200);
+        game = setInterval(drawGame, 200);
     </script>
 </body>
 </html>
