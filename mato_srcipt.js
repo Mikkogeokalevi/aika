@@ -28,10 +28,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let isPaused = false;
     let snakeHeadImage = new Image();
 
-    snakeHeadImage.onload = function() {
-        game = setInterval(drawGame, 200);
-    };
+    // Set the image source
     snakeHeadImage.src = 'https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png';
+
+    // Start the game interval immediately
+    game = setInterval(drawGame, 200);
 
     let touchStartX = 0;
     let touchStartY = 0;
@@ -96,7 +97,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         for (let i = 0; i < snake.length; i++) {
             if (i === 0) {
-                ctx.drawImage(snakeHeadImage, snake[i].x, snake[i].y, box, box);
+                // Only draw the image if it has loaded
+                if (snakeHeadImage.complete && snakeHeadImage.naturalHeight !== 0) {
+                    ctx.drawImage(snakeHeadImage, snake[i].x, snake[i].y, box, box);
+                } else {
+                    // Fallback if image not loaded, draw a green square
+                    ctx.fillStyle = '#8BC34A';
+                    ctx.fillRect(snake[i].x, snake[i].y, box, box);
+                }
             } else if (i <= snakeGrowthWords.join('').length) {
                 const letterIndex = (i - 1) % snakeGrowthWords.join('').length;
                 ctx.fillStyle = '#8BC34A';
