@@ -26,6 +26,10 @@ let food = generateFood();
 let game = null;
 let isPaused = false;
 let snakeHeadImage = new Image();
+
+snakeHeadImage.onload = function() {
+    game = setInterval(drawGame, 200);
+};
 snakeHeadImage.src = 'https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png';
 
 let touchStartX = 0;
@@ -251,5 +255,3 @@ document.addEventListener('keydown', (e) => {
         direction = 'DOWN';
     }
 });
-
-game = setInterval(drawGame, 200);
