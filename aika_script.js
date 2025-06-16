@@ -94,10 +94,10 @@ function selectRandomQuestions() {
 }
 
 function getTimeForQuestion(index) {
-    if (index < 5) return 20;       // Kysymykset 1-5
-    if (index < 10) return 15;      // Kysymykset 6-10
-    if (index < 20) return 10;      // Kysymykset 11-15
-    return 7;                       // Kysymykset 16-25
+    if (index < 5) return 25       // Kysymykset 1-5
+    if (index < 10) return 20;      // Kysymykset 6-10
+    if (index < 20) return 15;      // Kysymykset 11-15
+    return 10;                       // Kysymykset 16-25
 }
 
 function loadQuestion() {
