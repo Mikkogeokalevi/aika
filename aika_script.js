@@ -1,12 +1,8 @@
 // Tähän listaan voit lisätä niin monta kysymystä kuin haluat.
 // Peli valitsee näistä satunnaisesti 25 kappaletta.
 // Jokaisella kysymyksellä voi olla oma kuva ja tyyppi (monivalinta tai teksti).
-// Huom: Monivalintakysymysten (multiple-choice) aika muutetaan dynaamisesti pelin logiikassa.
 const allQuestions = [
-    { question: "Mikä on Suomen pääkaupunki?", options: ["A. Tampere", "B. Helsinki", "C. Turku"], answer: "B", type: "multiple-choice" },
-    { question: "Paljonko on kaksi plus kaksi?", options: [], answer: "4", type: "text" },
-    { question: "Mikä on kuvassa näkyvä ruumiin osa?", image: "01.jpg", options: [], answer: "jalka", type: "text" },
-    { question: "Mitä ovat kuvassa näkyvät rakennukset?", image: "02.jpg", options: ["A. mummonmökkejä", "B. luxus huviloita", "C. kerrostaloja"], answer: "A", type: "multiple-choice" },
+    // TÄSTÄ ON POISTETTU 4 ENSIMMÄISTÄ KYSYMYSTÄ PYHINNÖN MUKAISESTI
     { question: "Mikä on maailman syvin järvi?", options: ["A. Kaspianmeri", "B. Tanganjikajärvi", "C. Baikaljärvi"], answer: "C", type: "multiple-choice" },
     { question: "Minkä värinen on kirahvin kieli?", options: ["A. Punainen", "B. Musta", "C. Vaaleanpunainen"], answer: "B", type: "multiple-choice" },
     { question: "Mikä on Australian pääkaupunki?", options: ["A. Sydney", "B. Canberra", "C. Melbourne"], answer: "B", type: "multiple-choice" },
@@ -63,7 +59,7 @@ const allQuestions = [
     { question: "Mikä on Italian pääkaupunki?", options: ["A. Milano", "B. Rooma", "C. Venetsia"], answer: "B", type: "multiple-choice" },
     { question: "Mitä eläintä pidetään 'viidakon kuninkaana'?", options: ["A. Tiikeri", "B. Leijona", "C. Gorilla"], answer: "B", type: "multiple-choice" },
     { question: "Mitä mittayksikköä käytetään mittaamaan sähkövastusta?", options: ["A. Voltti", "B. Ampeeri", "C. Ohmi"], answer: "C", type: "multiple-choice" },
-    { question: "Mikä on Välimeren suurin saari?", options: ["A. Sardinia", "B. Kypros", "C. Sisilia"], answer: "C", "type": "multiple-choice" },
+    { question: "Mikä on Välimeren suurin saari?", options: ["A. Sardinia", "B. Kypros", "C. Sisilia"], answer: "C", type: "multiple-choice" },
     { question: "Kuka näytteli pääosaa 'Forrest Gump' -elokuvassa?", options: ["A. Brad Pitt", "B. Tom Hanks", "C. Leonardo DiCaprio"], answer: "B", type: "multiple-choice" },
     { question: "Mikä on Espanjan kansallistanssi?", options: ["A. Tango", "B. Valssi", "C. Flamenco"], answer: "C", type: "multiple-choice" },
     { question: "Montako pelaajaa on kentällä per joukkue jääkiekko-ottelun alkaessa?", options: ["A. 5", "B. 6", "C. 7"], answer: "B", type: "multiple-choice" },
@@ -88,10 +84,28 @@ function startGame() {
     loadQuestion();
 }
 
+// UUSI, PARANNETTU FUNKTIO KYSYMYSTEN SEKOITTAMISEEN
 function selectRandomQuestions() {
-    // Sekoita kaikki kysymykset ja valitse niistä 25
-    questions = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0, TOTAL_QUESTIONS);
+    // Luodaan kopio alkuperäisestä kysymyslistasta, jotta emme muokkaa sitä
+    let shuffled = [...allQuestions];
+    let currentIndex = shuffled.length;
+    let randomIndex;
+
+    // Käydään lista läpi lopusta alkuun (Fisher-Yates shuffle)
+    while (currentIndex !== 0) {
+        // Valitaan satunnainen jäljellä oleva elementti
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // Vaihdetaan nykyisen elementin ja satunnaisen elementin paikkaa
+        [shuffled[currentIndex], shuffled[randomIndex]] = [
+            shuffled[randomIndex], shuffled[currentIndex]];
+    }
+    
+    // Otetaan sekoitetusta listasta 25 ensimmäistä kysymystä peliä varten
+    questions = shuffled.slice(0, TOTAL_QUESTIONS);
 }
+
 
 function getTimeForQuestion(index) {
     if (index < 5) return 25       // Kysymykset 1-5
@@ -166,8 +180,9 @@ function loadQuestion() {
 
     // Aseta aika kysymyksen indeksin mukaan
     timeLeft = getTimeForQuestion(currentQuestionIndex);
+    // Tekstikysymyksille voidaan antaa enemmän aikaa tarvittaessa
     if(question.type === 'text') {
-        timeLeft = Math.max(timeLeft, 15); // Tekstikysymyksille vähintään 15s
+        timeLeft = Math.max(timeLeft, 15); // Annetaan tekstikysymyksille vähintään 15s
     }
 
     document.getElementById("time").textContent = timeLeft;
