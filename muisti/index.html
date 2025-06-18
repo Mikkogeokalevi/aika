@@ -12,41 +12,44 @@
             <img src="https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png" alt="Mikkokalevin logo" class="logo-image" />
         </div>
         <h1>Geokätkö-muistipeli</h1>
-        <div class="game-info">
-            <p>Taso: <span id="level-display">1</span> / <span id="total-levels"></span></p>
-            <p>Aika jäljellä: <span id="timer-display">10:00</span></p>
-            <p>Parit löydetty: <span id="matched-pairs-display">0</span></p>
-            <p>Liikkeet: <span id="moves-display">0</span></p>
-            <p class="hidden-sentence-reveal">Vihje: <span id="revealed-sentence-part"></span></p>
-            <p class="bonus-word-reveal hidden" id="bonus-word-reveal">Bonus-sana: <span id="bonus-word-display"></span></p> </div>
-
-        <div class="power-ups">
-            <h3>Käytä vihjeitä (kerran per peli):</h3>
-            <button id="power-up-reveal-all" class="power-up-button" data-power-up="reveal-all">🔍 Kaikki näkyviin (5s)</button>
-            <button id="power-up-reveal-pair" class="power-up-button" data-power-up="reveal-pair">🗺️ Paljasta pari</button>
-            <button id="power-up-add-time" class="power-up-button" data-power-up="add-time">⏱️ +30s aikaa</button>
-        </div>
         
-        <div id="game-board" class="game-board">
-            </div>
-        <div class="game-message" id="game-message"></div>
-
-        <div class="hidden-sentence-full" id="hidden-sentence-full">
-            <h2>Kokonaisvihje:</h2>
-            <p id="full-sentence-display"></p>
-            <p class="bonus-sentence-intro hidden">Koko bonuslause on:</p>
-            <p id="bonus-sentence-display" class="hidden"></p>
-
-            <div class="final-puzzle-area hidden" id="final-puzzle-area">
-                <h3>Anna bonuslause:</h3>
-                <input type="text" id="bonus-sentence-input" placeholder="Kirjoita bonuslause tähän">
-                <button id="check-bonus-sentence-button">Tarkista</button>
-                <p id="final-clue-display" class="final-clue hidden"></p>
+        <div class="container">
+            <div class="game-info">
+                <p>Taso: <span id="level-display">1</span> / <span id="total-levels"></span></p>
+                <p>Aika jäljellä: <span id="timer-display">10:00</span></p>
+                <p>Parit löydetty: <span id="matched-pairs-display">0</span></p>
+                <p>Liikkeet: <span id="moves-display">0</span></p>
+                <p class="hidden-sentence-reveal">Vihje: <span id="revealed-sentence-part"></span></p>
+                <p class="bonus-word-reveal hidden" id="bonus-word-reveal">Bonus-sana: <span id="bonus-word-display"></span></p> 
             </div>
 
-            <button id="restart-button" class="hidden">Aloita Uudelleen</button>
-        </div>
-    </div>
+            <div class="power-ups">
+                <h3>Käytä vihjeitä (kerran per peli):</h3>
+                <button id="power-up-reveal-all" class="power-up-button" data-power-up="reveal-all">🔍 Kaikki näkyviin (5s)</button>
+                <button id="power-up-reveal-pair" class="power-up-button" data-power-up="reveal-pair">🗺️ Paljasta pari</button>
+                <button id="power-up-add-time" class="power-up-button" data-power-up="add-time">⏱️ +30s aikaa</button>
+            </div>
+            
+            <div id="game-board" class="game-board">
+            </div>
+            <div class="game-message" id="game-message"></div>
+
+            <div class="hidden-sentence-full" id="hidden-sentence-full">
+                <h2>Kokonaisvihje:</h2>
+                <p id="full-sentence-display"></p>
+                <p class="bonus-sentence-intro hidden">Koko bonuslause on:</p>
+                <p id="bonus-sentence-display" class="hidden"></p>
+
+                <div class="final-puzzle-area hidden" id="final-puzzle-area">
+                    <h3>Anna bonuslause:</h3>
+                    <input type="text" id="bonus-sentence-input" placeholder="Kirjoita bonuslause tähän">
+                    <button id="check-bonus-sentence-button">Tarkista</button>
+                    <p id="final-clue-display" class="final-clue hidden"></p>
+                </div>
+
+                <button id="restart-button" class="hidden">Aloita Uudelleen</button>
+            </div>
+        </div> </div>
     <script src="script.js"></script>
 </body>
 </html>
