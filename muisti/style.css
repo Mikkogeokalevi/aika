@@ -1,7 +1,8 @@
+/* Yleiset body-tyylit */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
-    flex-direction: column; /* Keskittää sisällön pystysuunnassa */
+    flex-direction: column; /* Järjestele sisältö pystysuunnassa */
     justify-content: flex-start; /* Sisältö alkaa ylhäältä */
     align-items: center; /* Keskittää sisällön vaakasuunnassa */
     min-height: 100vh;
@@ -12,49 +13,124 @@ body {
     box-sizing: border-box; /* Sisällytä padding leveyteen */
 }
 
-.game-container {
-    /* Tämä voi olla tausta container, jos halutaan logon olevan sen yläpuolella, mutta sisältö on container-divissä */
-    width: 100%;
-    max-width: 900px; /* Estää liian leveäksi menemisen */
+/* UUSI: Pääkontainer, joka antaa sen vihreän laatikon ulkoasun */
+.main-content-wrapper {
+    padding: 10px;
+    margin: 15px 0;
+    background-color: #556B2F; /* Tummempi vihreä tausta */
+    border: 3px solid #36451C; /* Tummanvihreä reuna */
+    border-radius: 12px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
+    max-width: 900px; /* Maksimileveys */
+    width: 100%; /* Ottaa kaiken käytettävissä olevan leveyden */
+    box-sizing: border-box; /* Sisällytä padding ja border leveyteen */
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; /* Keskittää sisällön vaakasuunnassa */
 }
 
-.header-logo {
-    margin-bottom: 20px; /* Tilaa logon alle */
+/* Sisäinen tekstin alue, joka vastaa aiemman pätkän sisäistä diviä */
+.header-content,
+.intro-text,
+.outro-text,
+.attention-box {
+    color: #F8F8F8;
+    font-family: 'Georgia', serif;
+    line-height: 1.8;
+    text-align: justify;
+    padding: 10px;
+    font-size: 1.1em;
+    width: 100%; /* Ottaa kaiken leveyden wrapperissa */
+    box-sizing: border-box;
+}
+
+/* Logon tyylit */
+.logo-wrapper {
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 .logo-image {
-    max-width: 150px; /* Säädä logon kokoa tarvittaessa */
-    height: auto;
+    width: 120px;
+    height: 120px;
+    border: 2px solid #90EE90; /* Vaaleampi vihreä reuna */
+    border-radius: 50%; /* Pyöreä muoto */
+    display: inline-block;
+    vertical-align: middle;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+    background-color: #556B2F; /* Sama taustaväri kuin päälaatikolla */
+    padding: 3px;
 }
 
-.container { /* Tämä on nyt pelin pääsisältöalue */
-    background-color: #2B2B2B;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+/* Otsikkotekstin tyylit */
+.title-text {
+    color: #90EE90;
     text-align: center;
-    max-width: 900px; /* Suurempi maksimileveys, sama kuin game-container, jotta keskittyy */
-    width: 100%; /* Ottaa kaiken käytettävissä olevan leveyden */
-    border: 2px solid #00FF00; /* Vihreä kehys */
-    /* UUSI: Varmistetaan, että container on responsiivinen */
-    box-sizing: border-box; /* Sisällytä padding ja border leveyteen */
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+    font-size: 1.6em;
+    letter-spacing: 0.5px;
 }
 
-h1 {
+/* Tekstikappaleiden fonttikoko */
+.intro-text span,
+.outro-text span { /* Nämä eivät ole spanneja enää HTML:ssä, mutta jätän säännön jos palautat ne */
+    color: #FFFFFF !important; /* Varmistaa valkoisen värin */
+    font-size: 1.2em !important;
+}
+
+/* Huomio-laatikon tyylit */
+.attention-box {
+    background-color: #36451C; /* Tummempi vihreä tausta */
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 30px;
+    text-align: center;
+    border: 1px dashed #90EE90; /* Katkoviiva reuna */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Palataan perusfonttiin */
+}
+
+.attention-title {
+    color: #FFD700 !important; /* Kulta */
+    font-size: 1.1em !important;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.attention-text {
+    color: #FFFFFF !important;
+    font-size: 1.0em !important;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+/* UUSI: Varsinaisen pelin ympäröivä wrapper */
+.game-area-wrapper {
+    background-color: #2B2B2B; /* Sama kuin aiempi .container tausta */
+    padding: 20px; /* Hieman vähemmän paddingia, kuin päälaatikossa */
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3); /* Pienempi varjo kuin päälaatikolla */
+    text-align: center;
+    width: 100%; /* Ottaa kaiken käytettävissä olevan leveyden pääwrapperissa */
+    border: 2px solid #00FF00; /* Vihreä reuna */
+    margin-top: 30px; /* Tilaa edelliseen sisältöön */
+    box-sizing: border-box;
+}
+
+/* Pelin otsikko */
+.game-area-wrapper h1 {
     color: #00FF00;
     margin-bottom: 20px;
     text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
-    font-size: 2.5em; /* Suurempi fonttikoko */
+    font-size: 2.2em; /* Hieman pienempi kuin yleinen h1, jotta sopii paremmin */
 }
 
-/* Pelin infotiedot (taso, aika jne.) */
+/* Pelin infotiedot (taso, aika yms.) */
 .game-info {
     display: flex;
     justify-content: space-around;
-    flex-wrap: wrap; /* Sallii rivinvaihdon pienillä näytöillä */
+    flex-wrap: wrap;
     margin-bottom: 20px;
     padding: 10px;
     background-color: rgba(0, 0, 0, 0.2);
@@ -72,36 +148,90 @@ h1 {
     align-items: center;
     gap: 5px;
     font-size: 1.1em;
-    white-space: nowrap; /* Estää tekstin rivittymisen */
-    /* UUSI: Lisätään flex-basis, jotta elementit jakavat tilaa järkevästi */
-    flex-basis: auto; /* Antaa elementin päättää oman leveytensä, mutta sallii kutistumisen */
-    min-width: 100px; /* Varmistaa minimileveyden */
-    text-align: center; /* Keskittää tekstin p-elementin sisällä */
+    white-space: nowrap;
+    flex-basis: auto; /* Antaa elementin päättää oman leveytensä */
+    min-width: 90px; /* Pienempi minimileveys, jotta mahtuu paremmin riville */
+    text-align: center;
+}
+
+/* Power-up -painikkeet */
+.power-ups {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #36451C;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.power-ups h3 {
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #90EE90;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+    font-size: 1.3em;
+}
+
+.power-up-button {
+    background-color: #556B2F;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    flex-grow: 1;
+    min-width: 80px;
+    max-width: 140px; /* Kasvatettu max-leveyttä, jotta teksti mahtuu paremmin */
+}
+
+.power-up-button:hover:not(:disabled) {
+    background-color: #6B8E23;
+    transform: translateY(-1px);
+}
+
+.power-up-button:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.power-up-button:disabled {
+    background-color: #4A5C2B;
+    color: #B0B0B0;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
 /* Pelilauta ja kortit */
 #game-board {
     display: grid;
-    /* Päivitetään grid-säännöt. Käytetään "auto-fit" ja "minmax" jotta kortit skaalautuvat. */
-    /* Maksimileveys kortille on rajoitettu, jotta ne eivät kasva liian isoiksi kun kortteja on vähän. */
-    grid-template-columns: repeat(auto-fit, minmax(80px, 120px)); /* Säädetyt min/max-koot korteille */
-    justify-content: center; /* Keskittää kortit vaakasuunnassa */
-    gap: 15px; /* Suurempi rako korttien välillä */
-    padding: 20px;
-    background-color: rgba(0, 0, 0, 0.3); /* Taustaväri "vihreä laatikko" -efektiä varten */
+    /* Korttien koko on nyt pienempi ja sironpi */
+    grid-template-columns: repeat(auto-fit, minmax(70px, 90px)); /* Entistä sirommat kortit oletuksena */
+    justify-content: center;
+    gap: 12px; /* Hieman pienempi rako */
+    padding: 18px;
+    background-color: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
-    border: 1px solid #00FF00; /* Vihreä kehys */
+    border: 1px solid #00FF00;
     margin-bottom: 20px;
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3); /* Varjoefekti */
-    /* UUSI: Varmistetaan, että min-height on tarpeeksi suuri, jotta laatikko näkyy tyhjänäkin */
-    min-height: 200px; /* Varmista, että laatikko näkyy aina */
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+    min-height: 180px; /* Hieman pienempi minimikorkeus */
 }
 
 .card {
-    width: 100%; /* Kortti täyttää sarakkeen */
-    padding-bottom: 100%; /* Suhde 1:1, tekee kortista neliön */
+    width: 100%;
+    padding-bottom: 100%;
     position: relative;
-    perspective: 1000px; /* 3D-efektiä varten */
+    perspective: 1000px;
     cursor: pointer;
 }
 
@@ -127,37 +257,35 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2.5em; /* Kortin symbolin koko */
+    font-size: 2.2em; /* Kortin symbolin koko, pienempi */
     font-weight: bold;
     border-radius: 8px;
 }
 
 .card-front {
-    background-color: #556B2F; /* Tummempi vihreä */
+    background-color: #556B2F;
     color: #F8F8F8;
 }
 
 .card-back {
-    background-color: #90EE90; /* Vaaleampi vihreä */
-    color: #36451C; /* Tummempi tekstiväri */
+    background-color: #90EE90;
+    color: #36451C;
     transform: rotateY(180deg);
 }
 
 .card.matched .card-back {
-    background-color: #4CAF50; /* Matchatun kortin väri */
+    background-color: #4CAF50;
 }
 
-/* Tila, kun kaikki kortit paljastetaan väliaikaisesti */
 .card.flipped.no-click {
-    pointer-events: none !important; /* Estää klikkaukset kokonaan */
+    pointer-events: none !important;
 }
-
 
 #game-message {
     margin: 20px 0;
     font-size: 1.4em;
-    color: #FFD700; /* Kulta */
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+    color: #FFD700;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 #revealed-sentence-part {
@@ -165,7 +293,7 @@ h1 {
     font-size: 1.3em;
     color: #90EE90;
     font-style: italic;
-    min-height: 1.5em; /* Varmista, että tila varataan */
+    min-height: 1.5em;
 }
 
 #restart-button {
@@ -179,7 +307,7 @@ h1 {
     font-weight: bold;
     text-transform: uppercase;
     margin-top: 20px;
-    box-shadow: 3px 3px 8px rgba(0,0,0,0.5);
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
     transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
@@ -194,64 +322,6 @@ h1 {
 
 .hidden {
     display: none;
-}
-
-/* Power-up -painikkeet */
-.power-ups {
-    margin-top: 25px;
-    margin-bottom: 25px;
-    background-color: rgba(0,0,0,0.2);
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #36451C;
-    display: flex;
-    flex-wrap: wrap; /* Salli rivinvaihdot pienemmillä näytöillä */
-    justify-content: center;
-    gap: 10px; /* Väli painikkeiden välillä */
-}
-
-.power-ups h3 {
-    width: 100%; /* Vie koko leveyden */
-    margin-top: 0;
-    margin-bottom: 15px;
-    color: #90EE90;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
-    font-size: 1.3em;
-}
-
-/* Power-up -painikkeiden perusmuotoilu */
-.power-up-button {
-    background-color: #556B2F; /* Tummempi vihreä */
-    color: white;
-    border: none;
-    padding: 8px 12px; /* Pienempi padding */
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9em; /* Pienempi fonttikoko */
-    font-weight: bold;
-    text-transform: uppercase;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
-    transition: background-color 0.3s ease, transform 0.1s ease;
-    flex-grow: 1; /* Salli nappien kasvaa täyttämään tilaa */
-    min-width: 80px; /* Minimi leveys mobiilinäytöillä */
-    max-width: 120px; /* Maksimi leveys, estää liiallisen venymisen */
-}
-
-.power-up-button:hover:not(:disabled) {
-    background-color: #6B8E23; /* Vaaleampi hover-väri */
-    transform: translateY(-1px);
-}
-
-.power-up-button:active:not(:disabled) {
-    transform: translateY(0);
-    box-shadow: 1px 1px 3px rgba(0,0,0,0.6);
-}
-
-.power-up-button:disabled {
-    background-color: #4A5C2B; /* Harmaampi/himmeämpi kun disabled */
-    color: #B0B0B0;
-    cursor: not-allowed;
-    box-shadow: none;
 }
 
 /* Bonus-sanan ja lopullisen arvoituksen tyylit */
@@ -286,7 +356,7 @@ h1 {
     width: 80%;
     padding: 10px;
     margin-bottom: 15px;
-    border: 1px solid #00FF00; /* Vihreä kehys */
+    border: 1px solid #00FF00;
     border-radius: 5px;
     background-color: #333;
     color: #F8F8F8;
@@ -323,21 +393,39 @@ h1 {
 #final-clue-display {
     margin-top: 20px;
     font-size: 1.2em;
-    color: #FFD700; /* Kulta */
+    color: #FFD700;
     font-weight: bold;
-    min-height: 1.5em; /* Varmista tila */
+    min-height: 1.5em;
 }
 
 /* Responsiivisuus pienemmille näytöille */
 @media (max-width: 768px) {
-    .container {
+    .main-content-wrapper {
+        padding: 8px; /* Pienempi padding */
+        margin: 10px 0;
+    }
+    .header-content,
+    .intro-text,
+    .outro-text,
+    .attention-box {
+        padding: 8px;
+        font-size: 1em;
+    }
+    .title-text {
+        font-size: 1.4em;
+    }
+    .logo-image {
+        width: 100px;
+        height: 100px;
+    }
+
+    .game-area-wrapper {
         padding: 15px;
+        margin-top: 20px;
     }
-
-    h1 {
-        font-size: 2em;
+    .game-area-wrapper h1 {
+        font-size: 1.8em;
     }
-
     .game-info {
         flex-direction: column; /* Pinota tiedot pystyyn */
         gap: 5px;
@@ -345,21 +433,20 @@ h1 {
 
     .game-info p {
         justify-content: flex-start; /* Tasaa vasemmalle pienillä näytöillä */
-        font-size: 1em;
-        /* UUSI: Pakotetaan 50% leveys, jotta mahtuu kaksi riville */
-        flex-basis: calc(50% - 10px); /* 2 elementtiä riville + gapin huomiointi */
-        justify-content: center; /* Keskittää sisältöä, jos tilaa on */
+        font-size: 0.9em;
+        flex-basis: calc(50% - 10px); /* Kaksi elementtiä riville */
+        white-space: normal; /* Salli rivinvaihto */
     }
 
     #game-board {
-        gap: 10px; /* Pienempi rako korttien välillä */
-        padding: 15px;
+        gap: 8px;
+        padding: 10px;
         /* Korttien kokoa säädetään minmax-arvoilla, jotta ne pysyvät järkevän kokoisina */
-        grid-template-columns: repeat(auto-fit, minmax(60px, 90px)); /* Entistä pienemmät kortit mobiilissa */
+        grid-template-columns: repeat(auto-fit, minmax(55px, 85px)); /* Entistä pienemmät kortit mobiilissa */
     }
 
     .card-front, .card-back {
-        font-size: 1.8em; /* Pienempi kortin symbolin koko */
+        font-size: 1.6em; /* Pienempi kortin symbolin koko */
     }
 
     .power-ups {
@@ -368,9 +455,9 @@ h1 {
     }
 
     .power-up-button {
-        font-size: 0.8em; /* Vielä pienempi fontti pienillä näytöillä */
-        padding: 6px 10px; /* Vielä pienempi padding */
-        min-width: unset; /* Poista minimileveys jotta mahtuu paremmin */
+        font-size: 0.8em;
+        padding: 6px 10px;
+        min-width: unset;
         flex-basis: calc(50% - 10px); /* 2 nappia riville pienemmillä näytöillä */
     }
 
@@ -391,20 +478,18 @@ h1 {
 }
 
 @media (max-width: 480px) {
-    h1 {
-        font-size: 1.8em;
-    }
-
     .game-info p {
         flex-basis: 100%; /* Yksi elementti per rivi */
         justify-content: center;
     }
-
-    .card-front, .card-back {
-        font-size: 1.8em;
+    #game-board {
+        grid-template-columns: repeat(auto-fit, minmax(45px, 70px));
+        gap: 5px;
     }
-
+    .card-front, .card-back {
+        font-size: 1.4em;
+    }
     .power-up-button {
-        flex-basis: 100%; /* Yksi nappi riville kaikkein pienimmillä näytöillä */
+        flex-basis: 100%; /* Yksi nappi riville */
     }
 }
