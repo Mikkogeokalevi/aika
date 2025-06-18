@@ -29,40 +29,50 @@ h1 {
     font-size: 2.5em; /* Suurempi fonttikoko */
 }
 
+/* Pelin infotiedot (taso, aika jne.) */
 .game-info {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-around; /* Jakaa tilaa tasaisesti */
+    flex-wrap: wrap; /* Sallii rivinvaihdon pienillä näytöillä */
     margin-bottom: 20px;
     padding: 10px;
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     border: 1px solid #00FF00;
+    align-items: center; /* Keskittää pystyyn */
+    gap: 10px; /* Väli info-elementtien välillä */
 }
 
 .game-info p {
-    margin: 5px 0;
+    margin: 0; /* Poista oletusmarginaalit */
     color: #F8F8F8;
     display: flex; /* Joustava laatikko */
     justify-content: center; /* Keskittää sisällön */
     align-items: center;
-    gap: 5px; /* Pientä rakoa elementtien väliin */
+    gap: 5px; /* Pientä rakoa elementtien välille */
     font-size: 1.1em;
+    white-space: nowrap; /* Estä tekstin rivittyminen */
 }
 
+/* Pelilauta ja kortit */
 #game-board {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Kortit mukautuvat paremmin */
+    /* Päivitetään grid-säännöt. Käytetään "auto-fit" ja "minmax" jotta kortit skaalautuvat. */
+    /* Maksimileveys kortille on rajoitettu, jotta ne eivät kasva liian isoiksi kun kortteja on vähän. */
+    grid-template-columns: repeat(auto-fit, minmax(80px, 120px)); /* Säädetyt min/max-koot korteille */
+    justify-content: center; /* Keskittää kortit vaakasuunnassa */
     gap: 15px; /* Suurempi rako korttien välillä */
     padding: 20px;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.3); /* Taustaväri "vihreä laatikko" -efektiä varten */
     border-radius: 8px;
-    border: 1px solid #00FF00;
+    border: 1px solid #00FF00; /* Vihreä kehys */
     margin-bottom: 20px;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3); /* Varjoefekti */
 }
 
 .card {
     width: 100%; /* Kortti täyttää sarakkeen */
-    padding-bottom: 100%; /* Suhde 1:1 */
+    padding-bottom: 100%; /* Suhde 1:1, tekee kortista neliön */
     position: relative;
     perspective: 1000px; /* 3D-efektiä varten */
     cursor: pointer;
@@ -197,7 +207,7 @@ h1 {
     transition: background-color 0.3s ease, transform 0.1s ease;
     flex-grow: 1; /* Salli nappien kasvaa täyttämään tilaa */
     min-width: 80px; /* Minimi leveys mobiilinäytöillä */
-    max-width: 120px; /* Maksimi leveys */
+    max-width: 120px; /* Maksimi leveys, estää liiallisen venymisen */
 }
 
 .power-up-button:hover:not(:disabled) {
@@ -249,7 +259,7 @@ h1 {
     width: 80%;
     padding: 10px;
     margin-bottom: 15px;
-    border: 1px solid #00FF00;
+    border: 1px solid #00FF00; /* Vihreä kehys */
     border-radius: 5px;
     background-color: #333;
     color: #F8F8F8;
@@ -314,10 +324,12 @@ h1 {
     #game-board {
         gap: 10px; /* Pienempi rako korttien välillä */
         padding: 15px;
+        /* Korttien kokoa säädetään minmax-arvoilla, jotta ne pysyvät järkevän kokoisina */
+        grid-template-columns: repeat(auto-fit, minmax(60px, 90px)); /* Entistä pienemmät kortit mobiilissa */
     }
 
     .card-front, .card-back {
-        font-size: 2em; /* Pienempi kortin symbolin koko */
+        font-size: 1.8em; /* Pienempi kortin symbolin koko */
     }
 
     .power-ups {
