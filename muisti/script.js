@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Perus-elementit
     const gameBoard = document.getElementById('game-board');
     const levelDisplay = document.getElementById('level-display');
     const totalLevelsDisplay = document.getElementById('total-levels');
@@ -6,14 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const matchedPairsDisplay = document.getElementById('matched-pairs-display');
     const movesDisplay = document.getElementById('moves-display');
     const gameMessage = document.getElementById('game-message');
-    const revealedSentencePart = document.getElementById('revealed-sentence-part');
-    const hiddenSentenceFull = document.getElementById('hidden-sentence-full');
-    const fullSentenceDisplay = document.getElementById('full-sentence-display');
     const restartButton = document.getElementById('restart-button');
-    const bonusWordReveal = document.getElementById('bonus-word-reveal');
-    const bonusWordDisplay = document.getElementById('bonus-word-display');
-    const bonusSentenceDisplay = document.getElementById('bonus-sentence-display'); 
-    const bonusSentenceIntro = document.querySelector('.bonus-sentence-intro');
+
+    // Lopputehtävän elementit
+    const finalPuzzleContainer = document.getElementById('final-puzzle-container');
     const finalPuzzleArea = document.getElementById('final-puzzle-area');
     const bonusSentenceInput = document.getElementById('bonus-sentence-input');
     const checkBonusSentenceButton = document.getElementById('check-bonus-sentence-button');
@@ -24,38 +21,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const powerUpRevealPairBtn = document.getElementById('power-up-reveal-pair');
     const powerUpAddTimeBtn = document.getElementById('power-up-add-time');
 
+    // Pelin tilamuuttujat
     let cards = [];
     let flippedCards = [];
     let matchedPairs = 0;
     let moves = 0;
     let timer;
-    let timeLeft = 600; // 10 minuuttia (600 sekuntia) koko peliin
+    let timeLeft = 600; // 10 minuuttia
     let currentLevel = 1;
-    let gameActive = false; // Estää klikkaukset, kun peli ei ole aktiivinen
-    let timerStarted = false; // Seuraa, onko ajastin käynnistetty
-    let sentencePartsFound = []; // Kerätyt vihjelauseen osat
-    let bonusWords = []; // Kerätyt bonus-sanat (yksi per taso)
-    let powerUpsUsed = { // Seuraa, onko power-up käytetty (kerran koko pelissä)
-        'reveal-all': false,
-        'reveal-pair': false,
-        'add-time': false
-    };
+    let gameActive = false;
+    let timerStarted = false;
+    let collectedBonusWords = [];
+    let powerUpsUsed = {};
 
-    // Määritä tasot, korttien symbolit, parien määrä ja vihjesanat
+    // Määritä tasot, korttien symbolit ja bonussanat
     const levelConfigs = [
-        { level: 1, pairs: 4, symbols: ['🌲', '🧭', '📍', '🔑'], hintPart: 'Piilotettu aarre on ' }, // 4 paria = 8 korttia
-        { level: 2, pairs: 6, symbols: ['☀️', '🌧️', '⚡', '🌈', '🌙', '⭐'], hintPart: 'syvällä maan povessa,' }, // 6 paria = 12 korttia
-        { level: 3, pairs: 8, symbols: ['🔥', '💧', '🌬️', '⛰️', '🌊', '🌾', '🌸', '🍂'], hintPart: 'jossa menneisyys kohtaa ' }, // 8 paria = 16 korttia
-        { level: 4, pairs: 10, symbols: ['🦊', '🐻', '🦉', '🐺', '🦌', '🐇', '🐿️', '🦢', '🦅', '🐟'], hintPart: 'tulevaisuuden arvoituksen. ' }, // 10 paria = 20 korttia
-        { level: 5, pairs: 12, symbols: ['🏰', '🗼', '🗽', '🗿', '⛩️', '🏟️', '🏛️', '⛪', '🕌', '🕍', '🌉', '🛕'], hintPart: 'Ratkaise palapeli, ' }, // 12 paria = 24 korttia
-        { level: 6, pairs: 14, symbols: ['🚀', '🌌', '🌠', '🛰️', '👽', '🪐', '💫', '☄️', '🌑', '🌕', '🧑‍🚀', '✨', '🌍', '🧑‍🔬'], hintPart: 'niin kätkö aukeaa!' } // 14 paria = 28 korttia
+        { level: 1, pairs: 4, symbols: ['🌲', '🧭', '📍', '🔑'], bonusWord: 'koira' },
+        { level: 2, pairs: 6, symbols: ['☀️', '🌧️', '⚡', '🌈', '🌙', '⭐'], bonusWord: 'kissa' },
+        { level: 3, pairs: 8, symbols: ['🔥', '💧', '🌬️', '⛰️', '🌊', '🌾', '🌸', '🍂'], bonusWord: 'lintu' },
+        { level: 4, pairs: 10, symbols: ['🦊', '🐻', '🦉', '🐺', '🦌', '🐇', '🐿️', '🦢', '🦅', '🐟'], bonusWord: 'puu' },
+        { level: 5, pairs: 12, symbols: ['🏰', '🗼', '🗽', '🗿', '⛩️', '🏟️', '🏛️', '⛪', '🕌', '🕍', '🌉', '🛕'], bonusWord: 'talo' },
+        { level: 6, pairs: 14, symbols: ['🚀', '🌌', '🌠', '🛰️', '👽', '🪐', '💫', '☄️', '🌑', '🌕', '🧑‍🚀', '✨', '🌍', '🧑‍🔬'], bonusWord: 'auto' }
     ];
 
-    const bonusWordList = [
-        "koira", "kissa", "lintu", "puu", "talo", "auto", "kirja", "valo", "vesi", "tuli", "aika", "peli", "koodi", "meri", "metsä"
-    ]; 
-
-    const finalBonusSentenceInput = "geokätköilyonraivostuttavanihanaharrastus";
+    // Muodosta oikea vastauslause ja loppuvihje dynaamisesti
+    const finalBonusSentence = levelConfigs.map(config => config.bonusWord).join(' ');
     const finalClueText = "Lause meni oikein, hienoa! Tässä on sinulle chekkeriin kelpaava lause: geokätköilyonraivostuttavanihanaharrastus";
 
     totalLevelsDisplay.textContent = levelConfigs.length;
@@ -74,67 +64,51 @@ document.addEventListener('DOMContentLoaded', () => {
         moves = 0;
         flippedCards = [];
         cards = [];
-        gameActive = false; // Estä klikkaukset alussa
-        timerStarted = false; // Resetoi ajastimen tila
+        gameActive = false;
 
         updateDisplay();
-        stopTimer(); // Pysäytä vanha ajastin, jos se oli käynnissä
         gameMessage.textContent = 'Aloita peli klikkaamalla korttia!';
         
-        hiddenSentenceFull.classList.add('hidden'); // Piilota koko bonuslauseen alue
-        finalPuzzleArea.classList.add('hidden');
+        finalPuzzleContainer.classList.add('hidden');
+        finalPuzzleArea.classList.remove('hidden'); // Varmista, että itse alue näkyy, kun container tulee näkyviin
         finalClueDisplay.classList.add('hidden');
         restartButton.classList.add('hidden');
-        bonusWordReveal.classList.add('hidden');
+        bonusSentenceInput.value = ''; // Tyhjennä input-kenttä
+        checkBonusSentenceButton.disabled = false; // Aktivoi nappi
 
-        // Resetoi power-upit ja ajastimen aika VAIN, jos peli aloitetaan kokonaan alusta (taso 1)
         if (level === 1) { 
-            powerUpsUsed = {
-                'reveal-all': false,
-                'reveal-pair': false,
-                'add-time': false
-            };
+            powerUpsUsed = { 'reveal-all': false, 'reveal-pair': false, 'add-time': false };
             powerUpRevealAllBtn.disabled = false;
             powerUpRevealPairBtn.disabled = false;
             powerUpAddTimeBtn.disabled = false;
 
-            timeLeft = 600; // Resetoi ajastin vain, jos aloitetaan peli alusta
-            updateTimerDisplay(); // Päivitä ajastinnäyttö heti
-            sentencePartsFound = [];
-            bonusWords = [];
+            timeLeft = 600;
+            timerStarted = false;
+            stopTimer(); // Pysäytetään mahdollinen vanha ajastin
+            updateTimerDisplay();
+            collectedBonusWords = [];
         } else {
-            // Jos siirrytään seuraavalle tasolle, power-up -nappien tila säilyy
             powerUpRevealAllBtn.disabled = powerUpsUsed['reveal-all'];
             powerUpRevealPairBtn.disabled = powerUpsUsed['reveal-pair'];
             powerUpAddTimeBtn.disabled = powerUpsUsed['add-time'];
         }
 
         createBoard();
-        // Ajastin käynnistetään nyt flipCard-funktiossa ensimmäisen kortin klikkauksen yhteydessä
     }
 
     function createBoard() {
         gameBoard.innerHTML = '';
         const levelConfig = levelConfigs[currentLevel - 1];
         levelDisplay.textContent = currentLevel;
-
-        let symbolsForCurrentLevel = [];
-        for (let i = 0; i < levelConfig.pairs; i++) {
-            symbolsForCurrentLevel.push(levelConfig.symbols[i % levelConfig.symbols.length]);
-        }
         
         let cardValues = [];
-        symbolsForCurrentLevel.forEach(symbol => {
+        levelConfig.symbols.forEach(symbol => {
             cardValues.push(symbol, symbol);
         });
 
         cardValues = shuffle(cardValues);
         
-        // Emme enää tarvitse numColumns-laskentaa, koska CSS määrää 4 saraketta.
-        // gameBoard.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`; 
-
         cards = [];
-
         cardValues.forEach((value, index) => {
             const card = document.createElement('div');
             card.classList.add('card');
@@ -160,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             card.addEventListener('click', () => flipCard(card));
         });
-        gameActive = true; // Peli aktivoituu, kun kortit on luotu
+        gameActive = true;
     }
 
     function flipCard(card) {
@@ -179,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDisplay();
 
         if (flippedCards.length === 2) {
-            gameActive = false; // Estä uudet klikkaukset tarkistuksen ajaksi
+            gameActive = false;
             setTimeout(checkForMatch, 1000);
         }
     }
@@ -193,12 +167,9 @@ document.addEventListener('DOMContentLoaded', () => {
             card1.classList.add('matched');
             card2.classList.add('matched');
             matchedPairs++;
-            
             gameMessage.textContent = 'Pari löytyi!';
-
             card1.style.pointerEvents = 'none';
             card2.style.pointerEvents = 'none';
-
         } else {
             gameMessage.textContent = 'Ei osunut, yritä uudelleen.';
             setTimeout(() => {
@@ -208,42 +179,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         flippedCards = [];
-        gameActive = true; // Salli klikkaukset taas tarkistuksen jälkeen
+        gameActive = true;
 
         if (matchedPairs * 2 === cards.length) {
-            stopTimer();
-            
             const levelConfig = levelConfigs[currentLevel - 1];
-            if (levelConfig.hintPart && !sentencePartsFound.includes(levelConfig.hintPart)) {
-                sentencePartsFound.push(levelConfig.hintPart);
-            }
-
-            if (bonusWords.length < levelConfigs.length) {
-                let randomBonusWord;
-                do {
-                    randomBonusWord = bonusWordList[Math.floor(Math.random() * bonusWordList.length)];
-                } while (bonusWords.includes(randomBonusWord) && bonusWords.length < bonusWordList.length);
-                
-                if (!bonusWords.includes(randomBonusWord)) {
-                    bonusWords.push(randomBonusWord);
-                } else if (bonusWords.length < bonusWordList.length) {
-                     for (let i = 0; i < bonusWordList.length; i++) {
-                        const word = bonusWordList[i];
-                        if (!bonusWords.includes(word)) {
-                            bonusWords.push(word);
-                            break;
-                        }
-                    }
-                }
-            }
-            
-            revealedSentencePart.textContent = sentencePartsFound.join('');
-            bonusWordDisplay.textContent = bonusWords.join(' ');
-            bonusWordReveal.classList.remove('hidden');
+            const bonusWord = levelConfig.bonusWord;
+            collectedBonusWords.push(bonusWord);
 
             if (currentLevel < levelConfigs.length) {
-                gameMessage.textContent = `Taso ${currentLevel} läpäisty! Siirrytään seuraavalle...`;
-                setTimeout(nextLevel, 2000);
+                gameMessage.textContent = `Taso ${currentLevel} läpäisty! Bonussana: ${bonusWord}`;
+                setTimeout(nextLevel, 3000); // Näytä sana 3 sekuntia
             } else {
                 gameMessage.textContent = 'Onneksi olkoon! Löysit kaikki kätköt!';
                 showFinalClue();
@@ -253,32 +198,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function activatePowerUp(type) {
-        if (powerUpsUsed[type]) {
-            return;
-        }
-
+        if (powerUpsUsed[type]) return;
         powerUpsUsed[type] = true;
         gameMessage.textContent = '';
-
         let buttonToDisable;
+
         if (type === 'reveal-all') {
             buttonToDisable = powerUpRevealAllBtn;
             gameMessage.textContent = 'Kaikki kortit näkyviin 5 sekunnin ajaksi!';
             cards.forEach(card => card.classList.add('flipped', 'no-click'));
             setTimeout(() => {
                 cards.forEach(card => {
-                    if (!card.classList.contains('matched')) {
-                        card.classList.remove('flipped');
-                    }
+                    if (!card.classList.contains('matched')) card.classList.remove('flipped');
                     card.classList.remove('no-click');
                 });
                 gameMessage.textContent = '';
             }, 5000);
+
         } else if (type === 'reveal-pair') {
             buttonToDisable = powerUpRevealPairBtn;
             gameMessage.textContent = 'Paljastetaan yksi pari!';
             let found = false;
-            for (let i = 0; i < cards.length; i++) {
+            for (let i = 0; i < cards.length && !found; i++) {
                 const card1 = cards[i];
                 if (!card1.classList.contains('matched') && !card1.classList.contains('flipped')) {
                     for (let j = i + 1; j < cards.length; j++) {
@@ -294,58 +235,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                 }
-                if (found) break;
             }
-            if (matchedPairs * 2 === cards.length) {
-                stopTimer();
-                const levelConfig = levelConfigs[currentLevel - 1];
-                if (levelConfig.hintPart && !sentencePartsFound.includes(levelConfig.hintPart)) {
-                    sentencePartsFound.push(levelConfig.hintPart);
-                }
-                if (bonusWords.length < levelConfigs.length) {
-                    let randomBonusWord;
-                    do {
-                        randomBonusWord = bonusWordList[Math.floor(Math.random() * bonusWordList.length)];
-                    } while (bonusWords.includes(randomBonusWord) && bonusWords.length < bonusWordList.length);
-                    if (!bonusWords.includes(randomBonusWord)) {
-                        bonusWords.push(randomBonusWord);
-                    } else if (bonusWords.length < bonusWordList.length) {
-                         for (let i = 0; i < bonusWordList.length; i++) {
-                            const word = bonusWordList[i];
-                            if (!bonusWords.includes(word)) {
-                                bonusWords.push(word);
-                                break;
-                            }
-                        }
-                    }
-                }
-                revealedSentencePart.textContent = sentencePartsFound.join('');
-                bonusWordDisplay.textContent = bonusWords.join(' ');
-                bonusWordReveal.classList.remove('hidden');
-
-                if (currentLevel < levelConfigs.length) {
-                    gameMessage.textContent = `Taso ${currentLevel} läpäisty! Siirrytään seuraavalle...`;
-                    setTimeout(nextLevel, 2000);
-                } else {
-                    gameMessage.textContent = 'Onneksi olkoon! Löysit kaikki kätköt!';
-                    showFinalClue();
-                }
-            }
+            if (matchedPairs * 2 === cards.length) checkForMatch(); // Tarkista, loppuiko taso
             updateDisplay();
+
         } else if (type === 'add-time') {
             buttonToDisable = powerUpAddTimeBtn;
             gameMessage.textContent = 'Lisäaikaa +30 sekuntia!';
             timeLeft += 30;
+            updateTimerDisplay();
         }
         
-        if (buttonToDisable) {
-            buttonToDisable.disabled = true;
-        }
+        if (buttonToDisable) buttonToDisable.disabled = true;
     }
 
     function startTimer() {
         updateTimerDisplay();
-
         timer = setInterval(() => {
             timeLeft--;
             updateTimerDisplay();
@@ -354,6 +259,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 gameActive = false;
                 gameMessage.textContent = 'Aika loppui! Peli ohi.';
                 restartButton.classList.remove('hidden');
+                finalPuzzleContainer.classList.remove('hidden'); // Näytä myös loppualue
+                finalPuzzleArea.classList.add('hidden'); // Mutta piilota itse tehtävä
             }
         }, 1000);
     }
@@ -375,52 +282,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function nextLevel() {
         currentLevel++;
-        if (currentLevel <= levelConfigs.length) {
-            initializeGame(currentLevel); // Kutsu initializeGame, joka luo uuden laudan ja resetoi tason tilan
-            gameActive = true; // Salli klikkaukset uudella tasolla
-        } else {
-            gameMessage.textContent = 'Onneksi olkoon! Olet läpäissyt kaikki tasot!';
-            showFinalClue();
-        }
+        initializeGame(currentLevel);
     }
 
     function showFinalClue() {
-        hiddenSentenceFull.classList.remove('hidden'); // Näytä kokonaisvihje-alue
-        fullSentenceDisplay.textContent = sentencePartsFound.join('');
-
-        if (bonusWords.length > 0) {
-            bonusSentenceIntro.classList.remove('hidden');
-            bonusWordDisplay.textContent = bonusWords.join(' ');
-            bonusWordReveal.classList.remove('hidden');
-        } else {
-            bonusSentenceIntro.classList.add('hidden');
-            bonusWordReveal.classList.add('hidden');
-        }
-
-        finalPuzzleArea.classList.remove('hidden');
+        finalPuzzleContainer.classList.remove('hidden');
         restartButton.classList.remove('hidden');
     }
 
     checkBonusSentenceButton.addEventListener('click', () => {
-        const userInput = bonusSentenceInput.value.trim();
-        if (userInput.toLowerCase() === finalBonusSentenceInput.toLowerCase()) {
+        const userInput = bonusSentenceInput.value.trim().toLowerCase();
+        if (userInput === finalBonusSentence.toLowerCase()) {
             finalClueDisplay.textContent = finalClueText;
             finalClueDisplay.classList.remove('hidden');
             gameMessage.textContent = 'Oikein! Ratkaisit mysteerin!';
             checkBonusSentenceButton.disabled = true;
         } else {
-            finalClueDisplay.textContent = 'Väärin, yritä uudelleen.';
+            finalClueDisplay.textContent = 'Väärin, yritä uudelleen. Tarkista sanat ja niiden järjestys.';
             finalClueDisplay.classList.remove('hidden');
         }
     });
 
-    restartButton.addEventListener('click', () => {
-        initializeGame(1);
-    });
-
+    restartButton.addEventListener('click', () => initializeGame(1));
     powerUpRevealAllBtn.addEventListener('click', () => activatePowerUp('reveal-all'));
     powerUpRevealPairBtn.addEventListener('click', () => activatePowerUp('reveal-pair'));
     powerUpAddTimeBtn.addEventListener('click', () => activatePowerUp('add-time'));
 
+    // Aloita peli
     initializeGame(1);
 });
