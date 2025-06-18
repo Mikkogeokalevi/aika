@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Perus-elementit 2
+    // Perus-elementit
     const gameBoard = document.getElementById('game-board');
     const levelDisplay = document.getElementById('level-display');
     const totalLevelsDisplay = document.getElementById('total-levels');
@@ -68,11 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDisplay();
         gameMessage.textContent = 'Aloita peli klikkaamalla korttia!';
         
-        // KORJATTU: Piilotetaan elementit suoraan tyylillä
         finalPuzzleContainer.style.display = 'none';
         restartButton.style.display = 'none';
         
-        finalClueDisplay.textContent = ''; // Tyhjennetään vanha vihje
+        finalClueDisplay.textContent = '';
         bonusSentenceInput.value = '';
         checkBonusSentenceButton.disabled = false;
 
@@ -171,16 +170,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         flippedCards = [];
         gameActive = true;
+        
         if (matchedPairs * 2 === cards.length) {
             const levelConfig = levelConfigs[currentLevel - 1];
             const bonusWord = levelConfig.bonusWord;
             collectedBonusWords.push(bonusWord);
+
             if (currentLevel < levelConfigs.length) {
                 gameMessage.textContent = `Taso ${currentLevel} läpäisty! Bonussana: ${bonusWord}`;
                 setTimeout(nextLevel, 3000);
             } else {
-                gameMessage.textContent = 'Onneksi olkoon! Löysit kaikki kätköt!';
-                showFinalClue();
+                // TÄMÄ ON MUUTETTU KOHTA
+                // Näytä ensin viimeinen bonussana
+                gameMessage.textContent = `Taso ${currentLevel} läpäisty! Bonussana: ${bonusWord}`;
+                
+                // Odota 3 sekuntia ennen lopputehtävän näyttämistä
+                setTimeout(() => {
+                    gameMessage.textContent = 'Onneksi olkoon! Löysit kaikki kätköt!';
+                    showFinalClue();
+                }, 3000);
             }
         }
         updateDisplay();
@@ -243,7 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 stopTimer();
                 gameActive = false;
                 gameMessage.textContent = 'Aika loppui! Peli ohi.';
-                // KORJATTU: Näytetään vain restart-nappi suoraan tyylillä
                 restartButton.style.display = 'block';
             }
         }, 1000);
@@ -270,7 +277,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showFinalClue() {
-        // KORJATTU: Näytetään elementit suoraan tyylillä
         finalPuzzleContainer.style.display = 'flex';
         restartButton.style.display = 'block';
     }
@@ -279,12 +285,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const userInput = bonusSentenceInput.value.trim().toLowerCase();
         if (userInput === finalBonusSentence.toLowerCase()) {
             finalClueDisplay.textContent = finalClueText;
-            finalClueDisplay.style.display = 'block'; // Varmistetaan näkyvyys
+            finalClueDisplay.style.display = 'block';
             gameMessage.textContent = 'Oikein! Ratkaisit mysteerin!';
             checkBonusSentenceButton.disabled = true;
         } else {
             finalClueDisplay.textContent = 'Väärin, yritä uudelleen. Tarkista sanat ja niiden järjestys.';
-            finalClueDisplay.style.display = 'block'; // Varmistetaan näkyvyys
+            finalClueDisplay.style.display = 'block';
         }
     });
 
