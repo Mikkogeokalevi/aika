@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkBonusSentenceButton = document.getElementById('check-bonus-sentence-button');
     const finalClueDisplay = document.getElementById('final-clue-display');
 
-    // Power-up napit ww
+    // Power-up napit
     const powerUpRevealAllBtn = document.getElementById('power-up-reveal-all');
     const powerUpRevealPairBtn = document.getElementById('power-up-reveal-pair');
     const powerUpAddTimeBtn = document.getElementById('power-up-add-time');
@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let timeLeft = 600; // 10 minuuttia (600 sekuntia) koko peliin
     let currentLevel = 1;
     let gameActive = false; // Estää klikkaukset, kun peli ei ole aktiivinen
+    let timerStarted = false; // Uusi: Seuraa, onko ajastin käynnistetty
     let sentencePartsFound = [];
     let bonusWords = []; // Tallenna bonus sanat tähän
     let powerUpsUsed = {
@@ -78,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sentencePartsFound = [];
         bonusWords = [];
         gameActive = false; // Estä klikkaukset alussa
+        timerStarted = false; // Uusi: Resetoi ajastimen tila
         updateDisplay();
         stopTimer(); // Pysäytä vanha ajastin, jos se oli käynnissä
         gameMessage.textContent = 'Aloita peli klikkaamalla korttia!';
@@ -93,7 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
         powerUpRevealAllBtn.disabled = false;
         powerUpRevealPairBtn.disabled = false;
         powerUpAddTimeBtn.disabled = false;
-        // Huom: powerUpsUsed resetoidaan vain, jos peli aloitetaan kokonaan alusta (initializeGame(1))
+        
+        // Resetoi power-upit ja ajastimen aika vain, jos peli aloitetaan kokonaan alusta (taso 1)
         if (level === 1) { 
             powerUpsUsed = {
                 'reveal-all': false,
@@ -101,10 +104,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 'add-time': false
             };
             timeLeft = 600; // Resetoi ajastin vain, jos aloitetaan peli alusta
+            updateTimerDisplay(); // Päivitä ajastinnäyttö heti
         }
 
         createBoard();
-        // Ajastin käynnistetään vain kerran DOMContentLoaded-kuuntelijassa pelin alussa
+        // Ajastin käynnistetään nyt flipCard-funktiossa ensimmäisen klikkauksen yhteydessä
     }
 
     // Luo pelilauta
@@ -117,7 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let bonusCardsIncluded = 0;
 
         // Lisää bonuskorttien symbolit, jos niitä ei ole käytetty ja tilaa on
-        // Huomaa: Nämä korvaavat 'normaaleja' kortteja, jotta total pairs pysyy levelConfig.pairs -määrässä.
+        // Huomaa: Nämä KORVAAVAT yhden tason perussymbolin paikan.
+        // Nämä varmistavat, että total pairs pysyy levelConfig.pairs -määrässä.
         if (!powerUpsUsed['reveal-all']) {
             symbolsForCurrentLevel.push('🔬');
             bonusCardsIncluded++;
@@ -151,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cardValues = shuffle(cardValues); // Sekoita kortit
         
         // Aseta ruudukko dynaamisesti korttien määrän mukaan
-        const numColumns = Math.ceil(Math.sqrt(cardValues.length)); // Esim. 8 kortille sqrt(8) = 2.8 -> 3 saraketta
+        const numColumns = Math.ceil(Math.sqrt(cardValues.length));
         gameBoard.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`;
 
         cards = []; // Tyhjennä vanhat kortit
@@ -190,6 +195,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return; // Estä klikkaukset, jos peli ei ole aktiivinen, kaksi korttia jo käännetty tai kortti on jo käännetty/löydetty
         }
 
+        // KÄYNNISTÄ AJASTIN TÄSSÄ, VAIN KERRAN ENSIMMÄISELLÄ KLIKKAUKSELLA
+        if (!timerStarted) {
+            startTimer();
+            timerStarted = true;
+        }
+
         card.classList.add('flipped');
         flippedCards.push(card);
         moves++;
@@ -213,6 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card2.classList.add('matched');
             matchedPairs++;
 
+            // Käsittele bonuskortit VAIN jos löydetty symboli on power-up
             handleSpecialCard(value1); // Käsittele bonuskortit, jos kyseessä on bonuskortti
 
             gameMessage.textContent = 'Pari löytyi!';
@@ -235,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Tarkista, onko kaikki parit löydetty (sisältäen myös bonuskortit)
         if (matchedPairs * 2 === cards.length) { // Tarkista, onko kaikki kortit käännetty
-            stopTimer();
+            stopTimer(); // Pysäytä ajastin hetkeksi tasonvaihdon ajaksi
             if (currentLevel < levelConfigs.length) {
                 gameMessage.textContent = `Taso ${currentLevel} läpäisty! Siirrytään seuraavalle...`;
                 setTimeout(nextLevel, 2000);
@@ -247,9 +259,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDisplay();
     }
 
-    // Käsittele bonuskortit
+    // Käsittele korttien löytyminen (lisää vihjeitä tai aktivoi power-upeja)
     function handleSpecialCard(symbol) {
-        // Tässä käytetään symbolia suoraan, koska se on jo "löydetty" korttiparista
+        // Tarkista, onko löydetty symboli jokin power-up -korteista
         if (symbol === '🔬') {
             activatePowerUp('reveal-all');
         } else if (symbol === '🗺️') {
@@ -257,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (symbol === '⏱️') {
             activatePowerUp('add-time');
         } else {
-            // Normaali kortti, lisää vihjeosa ja bonus-sana
+            // Jos symboli EI ole power-up, se on normaali kortti
             const levelConfig = levelConfigs[currentLevel - 1];
             if (levelConfig.hintPart && !sentencePartsFound.includes(levelConfig.hintPart)) {
                 sentencePartsFound.push(levelConfig.hintPart);
@@ -316,11 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             card1.classList.add('flipped', 'matched');
                             card2.classList.add('flipped', 'matched');
                             matchedPairs++; // Lisää parin löytyminen
-                            // Käynnistä power-upin "normaali" kortin käsittely, jos se on vihjekortti
-                            // (Varmista, ettei tämä aiheuta loopia, jos symboli on '🔬', '🗺️', '⏱️')
-                            if (card1.dataset.value !== '🔬' && card1.dataset.value !== '🗺️' && card1.dataset.value !== '⏱️') {
-                                handleSpecialCard(card1.dataset.value);
-                            }
+                            // ÄLÄ kutsu handleSpecialCardia tässä, jotta ei synny silmukkaa tai vahinkoaktivoitumista
                             card1.style.pointerEvents = 'none'; // Estä klikkaukset löydetyille korteille
                             card2.style.pointerEvents = 'none';
                             found = true;
@@ -387,11 +395,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Siirry seuraavalle tasolle
     function nextLevel() {
-        stopTimer(); // Pysäytä ajastin hetkeksi tasonvaihdon ajaksi
+        // Nyt initializeGame() hoitaa kaiken tason vaihtoon liittyvän nollauksen.
         currentLevel++;
         if (currentLevel <= levelConfigs.length) {
-            initializeGame(currentLevel); // Kutsu initializeGame, joka luo uuden laudan
-            startTimer(); // Jatka ajastinta
+            initializeGame(currentLevel); // Kutsu initializeGame, joka luo uuden laudan ja resetoi tason tilan
+            // Ajastin jatkaa juoksemistaan, koska sitä ei stopattu tässä funktiossa
         } else {
             // Kaikki tasot läpäisty, näytä loppuvihje
             gameMessage.textContent = 'Onneksi olkoon! Olet läpäissyt kaikki tasot!';
@@ -433,8 +441,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Aloita peli uudelleen
     restartButton.addEventListener('click', () => {
-        initializeGame(1); // Aloita ensimmäisestä tasosta
-        startTimer(); // Käynnistä ajastin uudelleen (nollautuu initializeGamessa)
+        initializeGame(1); // Aloita ensimmäisestä tasosta (nollaa kaiken, myös ajastimen)
+        // startTimer() kutsutaan initializeGame-funktion sisällä, jos se alkaa tasolta 1
+        // TAI, se alkaa kun ensimmäinen kortti klikataan
     });
 
     // Lisää kuuntelijat power-up -napeille
@@ -444,5 +453,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Aloita peli ensimmäisellä tasolla, kun sivu latautuu
     initializeGame(1);
-    startTimer(); // Käynnistä ajastin TÄSSÄ, kun peli latautuu ensimmäisen kerran
+    // Ajastin käynnistyy nyt vasta ensimmäisen kortin klikkauksella flipCard-funktiossa
 });
