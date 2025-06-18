@@ -70,11 +70,11 @@ document.addEventListener('DOMContentLoaded', () => {
         gameMessage.textContent = 'Aloita peli klikkaamalla korttia!';
         
         finalPuzzleContainer.classList.add('hidden');
-        finalPuzzleArea.classList.remove('hidden'); // Varmista, että itse alue näkyy, kun container tulee näkyviin
+        finalPuzzleArea.classList.remove('hidden');
         finalClueDisplay.classList.add('hidden');
         restartButton.classList.add('hidden');
-        bonusSentenceInput.value = ''; // Tyhjennä input-kenttä
-        checkBonusSentenceButton.disabled = false; // Aktivoi nappi
+        bonusSentenceInput.value = '';
+        checkBonusSentenceButton.disabled = false;
 
         if (level === 1) { 
             powerUpsUsed = { 'reveal-all': false, 'reveal-pair': false, 'add-time': false };
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             timeLeft = 600;
             timerStarted = false;
-            stopTimer(); // Pysäytetään mahdollinen vanha ajastin
+            stopTimer();
             updateTimerDisplay();
             collectedBonusWords = [];
         } else {
@@ -259,8 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 gameActive = false;
                 gameMessage.textContent = 'Aika loppui! Peli ohi.';
                 restartButton.classList.remove('hidden');
-                finalPuzzleContainer.classList.remove('hidden'); // Näytä myös loppualue
-                finalPuzzleArea.classList.add('hidden'); // Mutta piilota itse tehtävä
+                // Lopputehtävä-aluetta EI näytetä tässä, vain uudelleenkäynnistysnappi.
             }
         }, 1000);
     }
