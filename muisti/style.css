@@ -2,7 +2,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Muutettu flex-start, jotta sisältö alkaa ylhäältä */
+    align-items: flex-start; /* Muutettu flex000-start, jotta sisältö alkaa ylhäältä */
     min-height: 100vh;
     background: linear-gradient(to bottom right, #1A1A1A, #333333);
     color: #F8F8F8;
