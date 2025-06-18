@@ -1,8 +1,9 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Muutettu flex000-start, jotta sisältö alkaa ylhäältä */
+    flex-direction: column; /* Keskittää sisällön pystysuunnassa */
+    justify-content: flex-start; /* Sisältö alkaa ylhäältä */
+    align-items: center; /* Keskittää sisällön vaakasuunnassa */
     min-height: 100vh;
     background: linear-gradient(to bottom right, #1A1A1A, #333333);
     color: #F8F8F8;
@@ -11,15 +12,35 @@ body {
     box-sizing: border-box; /* Sisällytä padding leveyteen */
 }
 
-.container {
+.game-container {
+    /* Tämä voi olla tausta container, jos halutaan logon olevan sen yläpuolella, mutta sisältö on container-divissä */
+    width: 100%;
+    max-width: 900px; /* Estää liian leveäksi menemisen */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header-logo {
+    margin-bottom: 20px; /* Tilaa logon alle */
+}
+
+.logo-image {
+    max-width: 150px; /* Säädä logon kokoa tarvittaessa */
+    height: auto;
+}
+
+.container { /* Tämä on nyt pelin pääsisältöalue */
     background-color: #2B2B2B;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
     text-align: center;
-    max-width: 900px; /* Suurempi maksimileveys */
-    width: 100%;
-    border: 2px solid #00FF00;
+    max-width: 900px; /* Suurempi maksimileveys, sama kuin game-container, jotta keskittyy */
+    width: 100%; /* Ottaa kaiken käytettävissä olevan leveyden */
+    border: 2px solid #00FF00; /* Vihreä kehys */
+    /* UUSI: Varmistetaan, että container on responsiivinen */
+    box-sizing: border-box; /* Sisällytä padding ja border leveyteen */
 }
 
 h1 {
@@ -32,26 +53,30 @@ h1 {
 /* Pelin infotiedot (taso, aika jne.) */
 .game-info {
     display: flex;
-    justify-content: space-around; /* Jakaa tilaa tasaisesti */
+    justify-content: space-around;
     flex-wrap: wrap; /* Sallii rivinvaihdon pienillä näytöillä */
     margin-bottom: 20px;
     padding: 10px;
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     border: 1px solid #00FF00;
-    align-items: center; /* Keskittää pystyyn */
-    gap: 10px; /* Väli info-elementtien välillä */
+    align-items: center;
+    gap: 10px;
 }
 
 .game-info p {
-    margin: 0; /* Poista oletusmarginaalit */
+    margin: 0;
     color: #F8F8F8;
-    display: flex; /* Joustava laatikko */
-    justify-content: center; /* Keskittää sisällön */
+    display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 5px; /* Pientä rakoa elementtien välille */
+    gap: 5px;
     font-size: 1.1em;
-    white-space: nowrap; /* Estä tekstin rivittyminen */
+    white-space: nowrap; /* Estää tekstin rivittymisen */
+    /* UUSI: Lisätään flex-basis, jotta elementit jakavat tilaa järkevästi */
+    flex-basis: auto; /* Antaa elementin päättää oman leveytensä, mutta sallii kutistumisen */
+    min-width: 100px; /* Varmistaa minimileveyden */
+    text-align: center; /* Keskittää tekstin p-elementin sisällä */
 }
 
 /* Pelilauta ja kortit */
@@ -68,6 +93,8 @@ h1 {
     border: 1px solid #00FF00; /* Vihreä kehys */
     margin-bottom: 20px;
     box-shadow: 0 0 15px rgba(0, 255, 0, 0.3); /* Varjoefekti */
+    /* UUSI: Varmistetaan, että min-height on tarpeeksi suuri, jotta laatikko näkyy tyhjänäkin */
+    min-height: 200px; /* Varmista, että laatikko näkyy aina */
 }
 
 .card {
@@ -319,6 +346,9 @@ h1 {
     .game-info p {
         justify-content: flex-start; /* Tasaa vasemmalle pienillä näytöillä */
         font-size: 1em;
+        /* UUSI: Pakotetaan 50% leveys, jotta mahtuu kaksi riville */
+        flex-basis: calc(50% - 10px); /* 2 elementtiä riville + gapin huomiointi */
+        justify-content: center; /* Keskittää sisältöä, jos tilaa on */
     }
 
     #game-board {
@@ -363,6 +393,11 @@ h1 {
 @media (max-width: 480px) {
     h1 {
         font-size: 1.8em;
+    }
+
+    .game-info p {
+        flex-basis: 100%; /* Yksi elementti per rivi */
+        justify-content: center;
     }
 
     .card-front, .card-back {
