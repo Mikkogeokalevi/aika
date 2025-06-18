@@ -17,8 +17,6 @@
             <p>Aika jäljellä: <span id="timer-display">10:00</span></p>
             <p>Parit löydetty: <span id="matched-pairs-display">0</span></p>
             <p>Liikkeet: <span id="moves-display">0</span></p>
-            <p class="hidden-sentence-reveal">Vihje: <span id="revealed-sentence-part"></span></p>
-            <p class="bonus-word-reveal hidden" id="bonus-word-reveal">Bonus-sana: <span id="bonus-word-display"></span></p>
         </div>
 
         <div class="power-ups">
@@ -31,15 +29,11 @@
         <div id="game-board"></div>
         <div class="game-message" id="game-message">Aloita peli klikkaamalla korttia!</div>
 
-        <div class="hidden-sentence-full hidden" id="hidden-sentence-full">
-            <h2>Kokonaisvihje:</h2>
-            <p id="full-sentence-display"></p>
-            <p class="bonus-sentence-intro hidden">Koko bonuslause on:</p>
-            <p id="bonus-sentence-display" class="hidden"></p>
-
-            <div class="final-puzzle-area hidden" id="final-puzzle-area">
-                <h3>Anna bonuslause:</h3>
-                <input type="text" id="bonus-sentence-input" placeholder="Kirjoita bonuslause tähän">
+        <div class="final-puzzle-container hidden" id="final-puzzle-container">
+            <div class="final-puzzle-area" id="final-puzzle-area">
+                <h3>Lopputehtävä</h3>
+                <p>Syötä keräämäsi bonussanat oikeassa järjestyksessä, välilyönnillä erotettuna.</p>
+                <input type="text" id="bonus-sentence-input" placeholder="koira kissa...">
                 <button id="check-bonus-sentence-button">Tarkista</button>
                 <p id="final-clue-display" class="final-clue hidden"></p>
             </div>
