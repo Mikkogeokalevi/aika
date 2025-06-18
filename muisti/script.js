@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stopTimer(); // Pysäytä vanha ajastin, jos se oli käynnissä
         gameMessage.textContent = 'Aloita peli klikkaamalla korttia!';
         
-        hiddenSentenceFull.style.display = 'none';
+        hiddenSentenceFull.classList.add('hidden'); // Piilota koko bonuslauseen alue
         finalPuzzleArea.classList.add('hidden');
         finalClueDisplay.classList.add('hidden');
         restartButton.classList.add('hidden');
@@ -385,7 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showFinalClue() {
-        hiddenSentenceFull.style.display = 'block';
+        hiddenSentenceFull.classList.remove('hidden'); // Näytä kokonaisvihje-alue
         fullSentenceDisplay.textContent = sentencePartsFound.join('');
 
         if (bonusWords.length > 0) {
