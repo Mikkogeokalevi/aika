@@ -21,7 +21,7 @@ body {
     border: 3px solid #36451C; /* Tummanvihreä reuna */
     border-radius: 12px;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
-    max-width: 500px; /* Rajattu maksimileveyttä, jotta se näyttää sirommalta */
+    max-width: 800px; /* Päivitetty maksimileveys */
     width: 100%; /* Ottaa kaiken käytettävissä olevan leveyden */
     box-sizing: border-box;
     display: flex;
@@ -150,30 +150,31 @@ body {
 /* Pelilauta ja kortit */
 #game-board {
     display: grid;
-    /* Aina 4 saraketta. Korttien koko skaalautuu. */
-    grid-template-columns: repeat(4, 1fr); 
-    justify-content: center; /* Keskittää kortit vaakasuunnassa */
-    gap: 15px; /* Rako korttien välillä */
-    padding: 20px;
-    background-color: rgba(0, 0, 0, 0.3); /* Taustaväri "vihreä laatikko" -efektiä varten */
+    /* TÄMÄ ON TÄRKEIN MUUTOS: Asettelu mukautuu automaattisesti */
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    justify-content: center;
+    gap: 10px; /* Pienennetään rakoa hieman mobiililaitteita varten */
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
-    border: 1px solid #00FF00; /* Vihreä kehys */
+    border: 1px solid #00FF00;
     margin-bottom: 20px;
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3); /* Varjoefekti */
-    max-width: 600px; /* Rajoita pelilaudan maksimileveyttä, jotta kortit eivät veny liian isoiksi suurilla näytöillä */
-    margin-left: auto; /* Keskittää laudan vaakasuunnassa */
-    margin-right: auto; /* Keskittää laudan vaakasuunnassa */
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+    max-width: 800px; /* Suurennetaan hieman maksimileveyttä isommille tasoille */
+    width: 100%; /* Varmistetaan, että lauta käyttää saatavilla olevan tilan */
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .card {
-    width: 100%; /* Kortti täyttää sarakkeen */
-    padding-bottom: 100%; /* Suhde 1:1, tekee kortista neliön */
+    width: 100%;
+    padding-bottom: 100%; /* Tämä pitää kortin neliönä, loistava tekniikka! */
     position: relative;
-    perspective: 1000px; /* 3D-efektiä varten */
+    perspective: 1000px;
     cursor: pointer;
-    max-width: 120px; /* Yksittäisen kortin maksimileveys, estää liiallisen suurenemisen */
-    max-height: 120px; /* Yksittäisen kortin maksimikorkeus */
-    margin: 0 auto; /* Keskittää yksittäisen kortin omassa ruudukon solussaan */
+    /* max-width ja max-height poistettu, koska grid-asettelu hoitaa koon */
+    margin: 0 auto;
 }
 
 .card-inner {
@@ -347,7 +348,6 @@ body {
     .game-container {
         padding: 8px;
         margin: 10px 0;
-        max-width: 400px; /* Vielä kapeampi maksimileveys */
     }
     .logo-image {
         width: 80px; /* Pienempi logo */
@@ -369,11 +369,7 @@ body {
         white-space: normal;
     }
 
-    #game-board {
-        gap: 10px; /* Pienempi rako korttien välillä */
-        padding: 15px;
-        grid-template-columns: repeat(4, 1fr); /* Edelleen 4 saraketta */
-    }
+    /* Grid-asettelu hoitaa nyt korttien koon, joten emme tarvitse erityisiä sääntöjä sille täällä */
     .card-front, .card-back {
         font-size: 1.8em;
     }
@@ -410,7 +406,6 @@ body {
 
 @media (max-width: 480px) {
     .game-container {
-        max-width: 320px; /* Kapein asettelu */
         padding: 5px;
     }
     .logo-image {
@@ -426,9 +421,9 @@ body {
         font-size: 0.8em;
     }
     #game-board {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 4px;
-        padding: 8px;
+        /* Pienennetään rakoa ja paddingia entisestään kapeilla näytöillä */
+        gap: 5px;
+        padding: 5px;
     }
     .card-front, .card-back {
         font-size: 1.6em;
