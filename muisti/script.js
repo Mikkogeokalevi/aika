@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkBonusSentenceButton = document.getElementById('check-bonus-sentence-button');
     const finalClueDisplay = document.getElementById('final-clue-display');
 
-    // Power-up napit
+    // Power-up napit ww
     const powerUpRevealAllBtn = document.getElementById('power-up-reveal-all');
     const powerUpRevealPairBtn = document.getElementById('power-up-reveal-pair');
     const powerUpAddTimeBtn = document.getElementById('power-up-add-time');
