@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let matchedPairs = 0;
     let moves = 0;
     let timer;
-    let timeLeft;
+    let timeLeft = 600; // 10 minuuttia (600 sekuntia) koko peliin
     let currentLevel = 1;
     let gameActive = false; // Estää klikkaukset, kun peli ei ole aktiivinen
     let sentencePartsFound = [];
@@ -42,12 +42,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Määritä tasot, korttien symbolit, parien määrä ja vihjesanat
     const levelConfigs = [
-        { level: 1, pairs: 4, symbols: ['🌲', '🧭', '📍', '🔑'], hintPart: 'Piilotettu aarre on ' },
-        { level: 2, pairs: 6, symbols: ['☀️', '🌧️', '⚡', '🌈', '🌙', '⭐'], hintPart: 'syvällä maan povessa,' },
-        { level: 3, pairs: 8, symbols: ['🔥', '💧', '🌬️', '⛰️', '🌊', '🌾', '🌸', '🍂'], hintPart: 'jossa menneisyys kohtaa ' },
-        { level: 4, pairs: 10, symbols: ['🦊', '🐻', '🦉', '🐺', '🦌', '🐇', '🐿️', '🦢', '🦅', '🐟'], hintPart: 'tulevaisuuden arvoituksen. ' },
-        { level: 5, pairs: 12, symbols: ['🏰', '🗼', '🗽', '🗿', '⛩️', '🏟️', '🏛️', '⛪', '🕌', '🕍', '🌉', '🛕'], hintPart: 'Ratkaise palapeli, ' },
-        { level: 6, pairs: 14, symbols: ['🚀', '🌌', '🌠', '🛰️', '👽', '🪐', '💫', '☄️', '🌑', '🌕', '🧑‍🚀', '✨', '🌍', '🧑‍🔬'], hintPart: 'niin kätkö aukeaa!' }
+        { level: 1, pairs: 4, symbols: ['🌲', '🧭', '📍', '🔑'], hintPart: 'Piilotettu aarre on ' }, // 4 paria = 8 korttia
+        { level: 2, pairs: 6, symbols: ['☀️', '🌧️', '⚡', '🌈', '🌙', '⭐'], hintPart: 'syvällä maan povessa,' }, // 6 paria = 12 korttia
+        { level: 3, pairs: 8, symbols: ['🔥', '💧', '🌬️', '⛰️', '🌊', '🌾', '🌸', '🍂'], hintPart: 'jossa menneisyys kohtaa ' }, // 8 paria = 16 korttia
+        { level: 4, pairs: 10, symbols: ['🦊', '🐻', '🦉', '🐺', '🦌', '🐇', '🐿️', '🦢', '🦅', '🐟'], hintPart: 'tulevaisuuden arvoituksen. ' }, // 10 paria = 20 korttia
+        { level: 5, pairs: 12, symbols: ['🏰', '🗼', '🗽', '🗿', '⛩️', '🏟️', '🏛️', '⛪', '🕌', '🕍', '🌉', '🛕'], hintPart: 'Ratkaise palapeli, ' }, // 12 paria = 24 korttia
+        { level: 6, pairs: 14, symbols: ['🚀', '🌌', '🌠', '🛰️', '👽', '🪐', '💫', '☄️', '🌑', '🌕', '🧑‍🚀', '✨', '🌍', '🧑‍🔬'], hintPart: 'niin kätkö aukeaa!' } // 14 paria = 28 korttia
     ];
 
     const bonusWordList = [
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         bonusWords = [];
         gameActive = false; // Estä klikkaukset alussa
         updateDisplay();
-        stopTimer();
+        stopTimer(); // Pysäytä vanha ajastin, jos se oli käynnissä
         gameMessage.textContent = 'Aloita peli klikkaamalla korttia!';
         
         // Piilota bonuslauseen syöttöalue ja viimeinen vihje uudelleenkäynnistyksessä
@@ -89,18 +89,22 @@ document.addEventListener('DOMContentLoaded', () => {
         restartButton.classList.add('hidden');
         bonusWordReveal.classList.add('hidden'); // Piilota bonus-sana näyttö
 
-        // Palauta power-up napit aktiivisiksi
+        // Palauta power-up napit aktiivisiksi ja resetoi käytetyt
         powerUpRevealAllBtn.disabled = false;
         powerUpRevealPairBtn.disabled = false;
         powerUpAddTimeBtn.disabled = false;
-        powerUpsUsed = { // Resetoi käytetyt power-upit
-            'reveal-all': false,
-            'reveal-pair': false,
-            'add-time': false
-        };
+        // Huom: powerUpsUsed resetoidaan vain, jos peli aloitetaan kokonaan alusta (initializeGame(1))
+        if (level === 1) { 
+            powerUpsUsed = {
+                'reveal-all': false,
+                'reveal-pair': false,
+                'add-time': false
+            };
+            timeLeft = 600; // Resetoi ajastin vain, jos aloitetaan peli alusta
+        }
 
         createBoard();
-        startTimer(level);
+        // Ajastin käynnistetään vain kerran DOMContentLoaded-kuuntelijassa pelin alussa
     }
 
     // Luo pelilauta
@@ -109,26 +113,46 @@ document.addEventListener('DOMContentLoaded', () => {
         const levelConfig = levelConfigs[currentLevel - 1];
         levelDisplay.textContent = currentLevel;
 
+        let symbolsForCurrentLevel = [];
+        let bonusCardsIncluded = 0;
+
+        // Lisää bonuskorttien symbolit, jos niitä ei ole käytetty ja tilaa on
+        // Huomaa: Nämä korvaavat 'normaaleja' kortteja, jotta total pairs pysyy levelConfig.pairs -määrässä.
+        if (!powerUpsUsed['reveal-all']) {
+            symbolsForCurrentLevel.push('🔬');
+            bonusCardsIncluded++;
+        }
+        if (!powerUpsUsed['reveal-pair']) {
+            symbolsForCurrentLevel.push('🗺️');
+            bonusCardsIncluded++;
+        }
+        if (!powerUpsUsed['add-time']) {
+            symbolsForCurrentLevel.push('⏱️');
+            bonusCardsIncluded++;
+        }
+
+        // Täytä loput paikat tason perussymboleilla
+        let normalSymbolsNeeded = levelConfig.pairs - bonusCardsIncluded;
+        for (let i = 0; i < normalSymbolsNeeded; i++) {
+            // Varmista, että indeksi ei mene yli levelConfig.symbols -taulukon pituuden
+            // Käytä mod-operaattoria, jotta saadaan toistettua symboleita, jos normalSymbolsNeeded > levelConfig.symbols.length
+            symbolsForCurrentLevel.push(levelConfig.symbols[i % levelConfig.symbols.length]);
+        }
+        
+        // Nyt `symbolsForCurrentLevel` sisältää täsmälleen `levelConfig.pairs` kappaletta *uniikkeja* korttisymboleita,
+        // joista jokaisesta tehdään pari. Bonus-kortit ovat mukana, jos ne ovat käytettävissä.
+
+        // Luodaan varsinaiset parit
         let cardValues = [];
-        // Lisää tason perusparit
-        levelConfig.symbols.forEach(symbol => {
+        symbolsForCurrentLevel.forEach(symbol => {
             cardValues.push(symbol, symbol);
         });
 
-        // Lisää bonuskorttiparit mukaan, jos niitä ei ole käytetty
-        if (!powerUpsUsed['reveal-all']) {
-            cardValues.push('🔬', '🔬');
-        }
-        if (!powerUpsUsed['reveal-pair']) {
-            cardValues.push('🗺️', '🗺️');
-        }
-        if (!powerUpsUsed['add-time']) {
-            cardValues.push('⏱️', '⏱️');
-        }
-        
         cardValues = shuffle(cardValues); // Sekoita kortit
-
-        gameBoard.style.gridTemplateColumns = `repeat(${Math.ceil(Math.sqrt(cardValues.length))}, 1fr)`; // Säädä ruudukkoa dynaamisesti
+        
+        // Aseta ruudukko dynaamisesti korttien määrän mukaan
+        const numColumns = Math.ceil(Math.sqrt(cardValues.length)); // Esim. 8 kortille sqrt(8) = 2.8 -> 3 saraketta
+        gameBoard.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`;
 
         cards = []; // Tyhjennä vanhat kortit
 
@@ -189,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card2.classList.add('matched');
             matchedPairs++;
 
-            handleSpecialCard(value1); // Käsittele bonuskortit
+            handleSpecialCard(value1); // Käsittele bonuskortit, jos kyseessä on bonuskortti
 
             gameMessage.textContent = 'Pari löytyi!';
 
@@ -210,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gameActive = true; // Salli klikkaukset uudelleen
 
         // Tarkista, onko kaikki parit löydetty (sisältäen myös bonuskortit)
-        if (matchedPairs * 2 === cards.length) { // KORJATTU EHTO
+        if (matchedPairs * 2 === cards.length) { // Tarkista, onko kaikki kortit käännetty
             stopTimer();
             if (currentLevel < levelConfigs.length) {
                 gameMessage.textContent = `Taso ${currentLevel} läpäisty! Siirrytään seuraavalle...`;
@@ -225,40 +249,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Käsittele bonuskortit
     function handleSpecialCard(symbol) {
-        switch (symbol) {
-            case '🔬':
-                // Paljasta kaikki kortit 5 sekunnin ajaksi
-                activatePowerUp('🔬');
-                break;
-            case '🗺️':
-                // Paljasta yksi pari
-                activatePowerUp('🗺️');
-                break;
-            case '⏱️':
-                // Lisää 30 sekuntia aikaa
-                activatePowerUp('⏱️');
-                break;
-            default:
-                // Normaali kortti, lisää vihjeosa ja bonus-sana
-                const levelConfig = levelConfigs[currentLevel - 1];
-                if (levelConfig.hintPart && !sentencePartsFound.includes(levelConfig.hintPart)) {
-                    sentencePartsFound.push(levelConfig.hintPart);
-                    revealedSentencePart.textContent = sentencePartsFound.join('');
-                }
+        // Tässä käytetään symbolia suoraan, koska se on jo "löydetty" korttiparista
+        if (symbol === '🔬') {
+            activatePowerUp('reveal-all');
+        } else if (symbol === '🗺️') {
+            activatePowerUp('reveal-pair');
+        } else if (symbol === '⏱️') {
+            activatePowerUp('add-time');
+        } else {
+            // Normaali kortti, lisää vihjeosa ja bonus-sana
+            const levelConfig = levelConfigs[currentLevel - 1];
+            if (levelConfig.hintPart && !sentencePartsFound.includes(levelConfig.hintPart)) {
+                sentencePartsFound.push(levelConfig.hintPart);
+                revealedSentencePart.textContent = sentencePartsFound.join('');
+            }
 
-                // Lisää satunnainen bonus-sana
-                if (bonusWords.length < bonusWordList.length) {
-                    let randomBonusWord;
-                    do {
-                        randomBonusWord = bonusWordList[Math.floor(Math.random() * bonusWordList.length)];
-                    } while (bonusWords.includes(randomBonusWord));
-                    bonusWords.push(randomBonusWord);
-                    bonusWordDisplay.textContent = bonusWords.join(', ');
-                    bonusWordReveal.classList.remove('hidden');
-                }
-                break;
+            // Lisää satunnainen bonus-sana
+            if (bonusWords.length < bonusWordList.length) {
+                let randomBonusWord;
+                do {
+                    randomBonusWord = bonusWordList[Math.floor(Math.random() * bonusWordList.length)];
+                } while (bonusWords.includes(randomBonusWord)); // Varmista, ettei sanaa ole jo lisätty
+                bonusWords.push(randomBonusWord);
+                bonusWordDisplay.textContent = bonusWords.join(', ');
+                bonusWordReveal.classList.remove('hidden'); // Näytä bonus-sana näyttö
+            }
         }
     }
+
 
     // Aktivoi power-upit
     function activatePowerUp(type) {
@@ -270,19 +288,21 @@ document.addEventListener('DOMContentLoaded', () => {
         gameMessage.textContent = ''; // Tyhjennä edellinen viesti
 
         let buttonToDisable;
-        if (type === '🔬') {
+        // Valitse oikea nappi tyypin perusteella ja poista se käytöstä
+        if (type === 'reveal-all') {
             buttonToDisable = powerUpRevealAllBtn;
             gameMessage.textContent = 'Kaikki kortit näkyviin 5 sekunnin ajaksi!';
-            cards.forEach(card => card.classList.add('flipped'));
+            cards.forEach(card => card.classList.add('flipped', 'no-click')); // no-click estää klikkaukset väliaikaisesti
             setTimeout(() => {
                 cards.forEach(card => {
                     if (!card.classList.contains('matched')) {
                         card.classList.remove('flipped');
                     }
+                    card.classList.remove('no-click'); // Poista no-click
                 });
                 gameMessage.textContent = ''; // Tyhjennä viesti
             }, 5000);
-        } else if (type === '🗺️') {
+        } else if (type === 'reveal-pair') {
             buttonToDisable = powerUpRevealPairBtn;
             gameMessage.textContent = 'Paljastetaan yksi pari!';
             let found = false;
@@ -295,10 +315,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (!card2.classList.contains('matched') && !card2.classList.contains('flipped') && card1.dataset.value === card2.dataset.value) {
                             card1.classList.add('flipped', 'matched');
                             card2.classList.add('flipped', 'matched');
-                            matchedPairs++;
+                            matchedPairs++; // Lisää parin löytyminen
                             // Käynnistä power-upin "normaali" kortin käsittely, jos se on vihjekortti
-                            handleSpecialCard(card1.dataset.value);
-                            card1.style.pointerEvents = 'none';
+                            // (Varmista, ettei tämä aiheuta loopia, jos symboli on '🔬', '🗺️', '⏱️')
+                            if (card1.dataset.value !== '🔬' && card1.dataset.value !== '🗺️' && card1.dataset.value !== '⏱️') {
+                                handleSpecialCard(card1.dataset.value);
+                            }
+                            card1.style.pointerEvents = 'none'; // Estä klikkaukset löydetyille korteille
                             card2.style.pointerEvents = 'none';
                             found = true;
                             break;
@@ -307,7 +330,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 if (found) break;
             }
-            if (matchedPairs * 2 === cards.length) { // Tarkista, onko kaikki parit löydetty
+            // Tarkista, onko kaikki parit löydetty power-upin jälkeen
+            if (matchedPairs * 2 === cards.length) {
                 stopTimer();
                 if (currentLevel < levelConfigs.length) {
                     gameMessage.textContent = `Taso ${currentLevel} läpäisty! Siirrytään seuraavalle...`;
@@ -318,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             updateDisplay();
-        } else if (type === '⏱️') {
+        } else if (type === 'add-time') {
             buttonToDisable = powerUpAddTimeBtn;
             gameMessage.textContent = 'Lisäaikaa +30 sekuntia!';
             timeLeft += 30;
@@ -330,19 +354,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Ajastin
-    function startTimer(level) {
-        let initialTime;
-        switch (level) {
-            case 1: initialTime = 120; break; // 2 minuuttia
-            case 2: initialTime = 180; break; // 3 minuuttia
-            case 3: initialTime = 240; break; // 4 minuuttia
-            case 4: initialTime = 300; break; // 5 minuuttia
-            case 5: initialTime = 360; break; // 6 minuuttia
-            case 6: initialTime = 420; break; // 7 minuuttia
-            default: initialTime = 120; // Oletus
-        }
-        timeLeft = initialTime;
-        updateTimerDisplay();
+    function startTimer() { // Ei ota enää 'level' parametria
+        updateTimerDisplay(); // Päivitä näyttö heti
 
         timer = setInterval(() => {
             timeLeft--;
@@ -352,7 +365,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 gameActive = false;
                 gameMessage.textContent = 'Aika loppui! Peli ohi.';
                 restartButton.classList.remove('hidden');
-                // Voit lisätä tähän myös "game over" näytön tai vastaavan
             }
         }, 1000);
     }
@@ -375,10 +387,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Siirry seuraavalle tasolle
     function nextLevel() {
-        stopTimer();
+        stopTimer(); // Pysäytä ajastin hetkeksi tasonvaihdon ajaksi
         currentLevel++;
         if (currentLevel <= levelConfigs.length) {
-            initializeGame(currentLevel);
+            initializeGame(currentLevel); // Kutsu initializeGame, joka luo uuden laudan
+            startTimer(); // Jatka ajastinta
         } else {
             // Kaikki tasot läpäisty, näytä loppuvihje
             gameMessage.textContent = 'Onneksi olkoon! Olet läpäissyt kaikki tasot!';
@@ -421,13 +434,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Aloita peli uudelleen
     restartButton.addEventListener('click', () => {
         initializeGame(1); // Aloita ensimmäisestä tasosta
+        startTimer(); // Käynnistä ajastin uudelleen (nollautuu initializeGamessa)
     });
 
     // Lisää kuuntelijat power-up -napeille
-    powerUpRevealAllBtn.addEventListener('click', () => activatePowerUp('🔬'));
-    powerUpRevealPairBtn.addEventListener('click', () => activatePowerUp('🗺️'));
-    powerUpAddTimeBtn.addEventListener('click', () => activatePowerUp('⏱️'));
+    powerUpRevealAllBtn.addEventListener('click', () => activatePowerUp('reveal-all'));
+    powerUpRevealPairBtn.addEventListener('click', () => activatePowerUp('reveal-pair'));
+    powerUpAddTimeBtn.addEventListener('click', () => activatePowerUp('add-time'));
 
     // Aloita peli ensimmäisellä tasolla, kun sivu latautuu
     initializeGame(1);
+    startTimer(); // Käynnistä ajastin TÄSSÄ, kun peli latautuu ensimmäisen kerran
 });
