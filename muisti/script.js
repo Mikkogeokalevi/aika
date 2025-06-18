@@ -69,10 +69,12 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDisplay();
         gameMessage.textContent = 'Aloita peli klikkaamalla korttia!';
         
+        // Piilota loppuelementit pelin alussa
         finalPuzzleContainer.classList.add('hidden');
-        finalPuzzleArea.classList.remove('hidden');
-        finalClueDisplay.classList.add('hidden');
         restartButton.classList.add('hidden');
+        
+        // Nollaa lopputehtävän tila
+        finalClueDisplay.classList.add('hidden');
         bonusSentenceInput.value = '';
         checkBonusSentenceButton.disabled = false;
 
@@ -259,7 +261,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 gameActive = false;
                 gameMessage.textContent = 'Aika loppui! Peli ohi.';
                 restartButton.classList.remove('hidden');
-                // Lopputehtävä-aluetta EI näytetä tässä, vain uudelleenkäynnistysnappi.
             }
         }, 1000);
     }
