@@ -1,0 +1,319 @@
+/* Yleiset tyylit ja responsiivisuus */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Georgia', serif; /* Käytetään annettua fonttia */
+    background-color: #36451C; /* Tummanvihreä tausta */
+    color: #F8F8F8; /* Vaalea tekstin väri */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Aloitetaan ylhäältä */
+    min-height: 100vh; /* Varmistaa, että body vie koko näkymän korkeuden */
+    box-sizing: border-box; /* Sisältää paddingin ja reunat elementin kokoon */
+    padding: 20px; /* Pientä paddingia reunoille mobiilissa */
+}
+
+.game-container {
+    background-color: #556B2F; /* Samankaltainen tausta kuin esimerkissä */
+    border: 3px solid #36451C; /* Reunan väri */
+    border-radius: 12px;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.6);
+    padding: 20px;
+    margin: 20px auto; /* Keskittää kontainerin ja antaa tilaa ylhäältä/alhaalta */
+    max-width: 90%; /* Maksimileveys, responsiivisuutta varten */
+    width: 600px; /* Optimaalinen leveys työpöydällä */
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Otsikot */
+h1 {
+    color: #90EE90; /* Vaaleanvihreä otsikko */
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+    font-size: 2.2em; /* Isompi otsikko */
+    letter-spacing: 0.5px;
+}
+
+h2 {
+    color: #90EE90;
+    margin-top: 20px;
+    font-size: 1.8em;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+}
+
+/* Logo */
+.header-logo {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.logo-image {
+    width: 100px; /* Hieman pienempi kuin esimerkissä, sopii peliin */
+    height: 100px;
+    border: 2px solid #90EE90;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+    background-color: #556B2F;
+    padding: 3px;
+}
+
+/* Pelin tiedot */
+.game-info {
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    background-color: rgba(0,0,0,0.2); /* Pieni tausta tiedoille */
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #36451C;
+}
+
+.game-info p {
+    margin: 5px 0;
+    color: #F8F8F8;
+}
+
+.game-info span {
+    font-weight: bold;
+    color: #FFD700; /* Kultaiseen sävyyn tiedot */
+}
+
+.hidden-sentence-reveal {
+    margin-top: 15px;
+    font-size: 1.1em;
+    color: #F8F8F8;
+}
+
+#revealed-sentence-part {
+    color: #90EE90; /* Vaaleanvihreä paljastetulle osalle */
+    font-weight: bold;
+}
+
+/* Pelilauta */
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Kortit asettuvat responsiivisesti */
+    gap: 10px;
+    padding: 15px;
+    background-color: #36451C; /* Pelilaudan tausta */
+    border-radius: 8px;
+    border: 1px dashed #90EE90; /* Kuten esimerkissä, "dashed" tyyli */
+    margin-top: 20px;
+    box-shadow: inset 1px 1px 5px rgba(0,0,0,0.4);
+}
+
+/* Yksittäinen kortti */
+.card {
+    width: 100%; /* Kortti ottaa koko käytettävissä olevan leveyden gridissä */
+    padding-bottom: 100%; /* Pitää kortin neliönä */
+    position: relative;
+    background-color: #7a9c59; /* Kortin taustaväri ennen kääntöä */
+    border-radius: 8px;
+    cursor: pointer;
+    perspective: 1000px; /* 3D-efektiä varten */
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+}
+
+.card.flipped {
+    transform: rotateY(180deg);
+}
+
+.card .card-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    border-radius: 8px;
+}
+
+.card .card-front,
+.card .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden; /* Piilottaa elementin kääntöpuolen */
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5em; /* Kortin sisällön koko */
+    color: #36451C; /* Kortin sisällön väri */
+    font-weight: bold;
+}
+
+.card .card-front {
+    background-color: #7a9c59; /* Kortin "selkäpuoli" */
+    border: 2px solid #556B2F;
+}
+
+.card .card-back {
+    background-color: #D3D3D3; /* Kortin "etupuoli" */
+    transform: rotateY(180deg);
+    border: 2px solid #556B2F;
+}
+
+.card.matched .card-front,
+.card.matched .card-back {
+    background-color: #90EE90; /* Vaaleanvihreä väri löydetyille korteille */
+    border: 2px solid #556B2F;
+    transform: rotateY(0deg) !important; /* Varmistaa, että kortti jää "etupuoli" näkyviin */
+    transition: background-color 0.5s ease; /* Animaatio värin muuttumiselle */
+}
+
+/* Jos haluat, että löydetyn kortin sisällön väri muuttuu myös */
+.card.matched .card-back {
+    color: #36451C; /* Tumma teksti vaalealla pohjalla */
+}
+
+/* Varmista, että 'matched' kortteja ei voi enää klikata, vaikka ne olisivatkin näkyvissä */
+.card.matched {
+    pointer-events: none;
+    cursor: default;
+}
+
+
+/* Pelin viestit */
+.game-message {
+    margin-top: 20px;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #FFD700; /* Viestin väri */
+    min-height: 30px; /* Varaa tilaa viestille */
+}
+
+/* Koko piilotetun lauseen näyttö */
+.hidden-sentence-full {
+    background-color: #36451C;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 30px;
+    text-align: center;
+    border: 1px dashed #90EE90;
+    display: none; /* Piilotetaan aluksi */
+}
+
+.hidden-sentence-full p {
+    color: #FFFFFF;
+    font-size: 1.1em;
+    margin: 10px 0;
+}
+
+#full-sentence-display {
+    color: #FFD700; /* Kultaiseen sävyyn koko lause */
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+/* Painike */
+button {
+    background-color: #90EE90; /* Vaaleanvihreä painike */
+    color: #36451C; /* Tumma teksti */
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+}
+
+button:hover {
+    background-color: #A0FFB0; /* Hieman vaaleampi hoverilla */
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+}
+
+.hidden {
+    display: none !important; /* Yleinen luokka piilottamiseen */
+}
+
+/* Responsiiviset säädöt pienemmille näytöille (mobiili) */
+@media (max-width: 768px) {
+    .game-container {
+        padding: 15px;
+        margin: 10px auto;
+        max-width: 95%; /* Enemmän tilaa pienemmillä näytöillä */
+    }
+
+    h1 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    .logo-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .game-board {
+        grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); /* Pienemmät kortit mobiilissa */
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .card .card-front,
+    .card .card-back {
+        font-size: 2em; /* Pienempi kortin symboli */
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+
+    .game-info, .hidden-sentence-reveal, .hidden-sentence-full p {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-container {
+        padding: 10px;
+        margin: 5px auto;
+    }
+
+    h1 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+
+    .logo-image {
+        width: 70px;
+        height: 70px;
+    }
+
+    .game-board {
+        grid-template-columns: repeat(auto-fit, minmax(55px, 1fr)); /* Entistä pienemmät kortit todella pienillä näytöillä */
+        gap: 6px;
+        padding: 8px;
+    }
+
+    .card .card-front,
+    .card .card-back {
+        font-size: 1.8em;
+    }
+}
+
+/* Kortin tila kun sitä ei voi enää klikata (esim. animaation aikana) */
+.card.no-click {
+    pointer-events: none;
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geokätkö-muistipeli</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="header-logo">
+            <img src="https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png" alt="Mikkokalevin logo" class="logo-image" />
+        </div>
+        <h1>Geokätkö-muistipeli</h1>
+        <div class="game-info">
+            <p>Taso: <span id="level-display">1</span></p>
+            <p>Parit löydetty: <span id="matched-pairs-display">0</span></p>
+            <p>Liikkeet: <span id="moves-display">0</span></p>
+            <p class="hidden-sentence-reveal">Lauseen osa: <span id="revealed-sentence-part"></span></p>
+        </div>
+        <div id="game-board" class="game-board">
+            </div>
+        <div class="game-message" id="game-message"></div>
+        <div class="hidden-sentence-full" id="hidden-sentence-full">
+            <h2>Koko lause:</h2>
+            <p id="full-sentence-display"></p>
+            <button id="restart-button" class="hidden">Aloita Uudelleen</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
