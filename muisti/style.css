@@ -13,118 +13,50 @@ body {
     box-sizing: border-box; /* Sisällytä padding leveyteen */
 }
 
-/* UUSI: Pääkontainer, joka antaa sen vihreän laatikon ulkoasun */
-.main-content-wrapper {
-    padding: 10px;
+/* Pääkontainer pelille, vastaa aiempaa "vihreää laatikkoa" */
+.game-container {
+    padding: 10px; /* Pienempi padding kuin aiemmin, jotta sisältö on tiiviimpi */
     margin: 15px 0;
     background-color: #556B2F; /* Tummempi vihreä tausta */
     border: 3px solid #36451C; /* Tummanvihreä reuna */
     border-radius: 12px;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
-    max-width: 900px; /* Maksimileveys */
+    max-width: 500px; /* Rajattu maksimileveyttä, jotta se näyttää sirommalta */
     width: 100%; /* Ottaa kaiken käytettävissä olevan leveyden */
-    box-sizing: border-box; /* Sisällytä padding ja border leveyteen */
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center; /* Keskittää sisällön vaakasuunnassa */
 }
 
-/* Sisäinen tekstin alue, joka vastaa aiemman pätkän sisäistä diviä */
-.header-content,
-.intro-text,
-.outro-text,
-.attention-box {
-    color: #F8F8F8;
-    font-family: 'Georgia', serif;
-    line-height: 1.8;
-    text-align: justify;
-    padding: 10px;
-    font-size: 1.1em;
-    width: 100%; /* Ottaa kaiken leveyden wrapperissa */
-    box-sizing: border-box;
-}
-
-/* Logon tyylit */
-.logo-wrapper {
+/* Logo ja otsikko */
+.header-logo {
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 15px; /* Tilaa otsikkoon */
 }
 
 .logo-image {
-    width: 120px;
-    height: 120px;
+    width: 100px; /* Pienempi koko */
+    height: 100px; /* Pienempi koko */
     border: 2px solid #90EE90; /* Vaaleampi vihreä reuna */
-    border-radius: 50%; /* Pyöreä muoto */
+    border-radius: 50%;
     display: inline-block;
     vertical-align: middle;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
-    background-color: #556B2F; /* Sama taustaväri kuin päälaatikolla */
+    background-color: #556B2F;
     padding: 3px;
 }
 
-/* Otsikkotekstin tyylit */
-.title-text {
-    color: #90EE90;
-    text-align: center;
+.game-container h1 { /* Yleinen otsikko, mutta nyt .game-containerin sisällä */
+    color: #90EE90; /* Vaaleanvihreä */
     margin-top: 0;
     margin-bottom: 20px;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
-    font-size: 1.6em;
+    font-size: 1.8em; /* Pienempi otsikko */
     letter-spacing: 0.5px;
-}
-
-/* Tekstikappaleiden fonttikoko */
-.intro-text span,
-.outro-text span { /* Nämä eivät ole spanneja enää HTML:ssä, mutta jätän säännön jos palautat ne */
-    color: #FFFFFF !important; /* Varmistaa valkoisen värin */
-    font-size: 1.2em !important;
-}
-
-/* Huomio-laatikon tyylit */
-.attention-box {
-    background-color: #36451C; /* Tummempi vihreä tausta */
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 30px;
     text-align: center;
-    border: 1px dashed #90EE90; /* Katkoviiva reuna */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Palataan perusfonttiin */
 }
 
-.attention-title {
-    color: #FFD700 !important; /* Kulta */
-    font-size: 1.1em !important;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.attention-text {
-    color: #FFFFFF !important;
-    font-size: 1.0em !important;
-    margin-top: 0;
-    margin-bottom: 5px;
-}
-
-/* UUSI: Varsinaisen pelin ympäröivä wrapper */
-.game-area-wrapper {
-    background-color: #2B2B2B; /* Sama kuin aiempi .container tausta */
-    padding: 20px; /* Hieman vähemmän paddingia, kuin päälaatikossa */
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3); /* Pienempi varjo kuin päälaatikolla */
-    text-align: center;
-    width: 100%; /* Ottaa kaiken käytettävissä olevan leveyden pääwrapperissa */
-    border: 2px solid #00FF00; /* Vihreä reuna */
-    margin-top: 30px; /* Tilaa edelliseen sisältöön */
-    box-sizing: border-box;
-}
-
-/* Pelin otsikko */
-.game-area-wrapper h1 {
-    color: #00FF00;
-    margin-bottom: 20px;
-    text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
-    font-size: 2.2em; /* Hieman pienempi kuin yleinen h1, jotta sopii paremmin */
-}
 
 /* Pelin infotiedot (taso, aika yms.) */
 .game-info {
@@ -132,12 +64,14 @@ body {
     justify-content: space-around;
     flex-wrap: wrap;
     margin-bottom: 20px;
-    padding: 10px;
+    padding: 8px; /* Hieman pienempi padding */
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     border: 1px solid #00FF00;
     align-items: center;
-    gap: 10px;
+    gap: 8px; /* Pienempi rako */
+    width: calc(100% - 20px); /* Varmista, että se mahtuu paddingin kanssa */
+    box-sizing: border-box;
 }
 
 .game-info p {
@@ -146,52 +80,54 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 5px;
-    font-size: 1.1em;
+    gap: 4px; /* Pienempi rako */
+    font-size: 0.95em; /* Hieman pienempi fontti */
     white-space: nowrap;
-    flex-basis: auto; /* Antaa elementin päättää oman leveytensä */
-    min-width: 90px; /* Pienempi minimileveys, jotta mahtuu paremmin riville */
+    flex-basis: auto;
+    min-width: 80px; /* Pienempi minimileveys */
     text-align: center;
 }
 
 /* Power-up -painikkeet */
 .power-ups {
-    margin-top: 25px;
-    margin-bottom: 25px;
+    margin-top: 20px; /* Pienempi ylämarginaali */
+    margin-bottom: 20px; /* Pienempi alamarginaali */
     background-color: rgba(0, 0, 0, 0.2);
-    padding: 15px;
+    padding: 10px; /* Pienempi padding */
     border-radius: 8px;
     border: 1px solid #36451C;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 8px; /* Pienempi rako */
+    width: calc(100% - 20px); /* Varmista, että se mahtuu paddingin kanssa */
+    box-sizing: border-box;
 }
 
 .power-ups h3 {
     width: 100%;
     margin-top: 0;
-    margin-bottom: 15px;
+    margin-bottom: 12px; /* Pienempi alamarginaali */
     color: #90EE90;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
-    font-size: 1.3em;
+    font-size: 1.2em; /* Pienempi fontti */
 }
 
 .power-up-button {
-    background-color: #556B2F;
+    background-color: #556B2F; /* Tummempi vihreä */
     color: white;
     border: none;
-    padding: 8px 12px;
+    padding: 6px 10px; /* Pienempi padding */
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.9em;
+    font-size: 0.8em; /* Vielä pienempi fontti */
     font-weight: bold;
     text-transform: uppercase;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
     transition: background-color 0.3s ease, transform 0.1s ease;
     flex-grow: 1;
-    min-width: 80px;
-    max-width: 140px; /* Kasvatettu max-leveyttä, jotta teksti mahtuu paremmin */
+    min-width: 70px; /* Pienempi minimileveys */
+    max-width: 120px; /* Pienempi maksimileveys */
 }
 
 .power-up-button:hover:not(:disabled) {
@@ -214,17 +150,19 @@ body {
 /* Pelilauta ja kortit */
 #game-board {
     display: grid;
-    /* Korttien koko on nyt pienempi ja sironpi */
-    grid-template-columns: repeat(auto-fit, minmax(70px, 90px)); /* Entistä sirommat kortit oletuksena */
+    /* Korttien koko on nyt pienempi ja sirompi */
+    grid-template-columns: repeat(auto-fit, minmax(65px, 80px)); /* Entistä sirommat kortit oletuksena */
     justify-content: center;
-    gap: 12px; /* Hieman pienempi rako */
-    padding: 18px;
+    gap: 10px; /* Hieman pienempi rako */
+    padding: 15px; /* Hieman pienempi padding */
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     border: 1px solid #00FF00;
-    margin-bottom: 20px;
+    margin-bottom: 15px; /* Pienempi alamarginaali */
     box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
-    min-height: 180px; /* Hieman pienempi minimikorkeus */
+    min-height: 160px; /* Hieman pienempi minimikorkeus */
+    width: calc(100% - 20px); /* Varmista, että se mahtuu paddingin kanssa */
+    box-sizing: border-box;
 }
 
 .card {
@@ -257,7 +195,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2.2em; /* Kortin symbolin koko, pienempi */
+    font-size: 2em; /* Kortin symbolin koko, pienempi */
     font-weight: bold;
     border-radius: 8px;
 }
@@ -282,31 +220,31 @@ body {
 }
 
 #game-message {
-    margin: 20px 0;
-    font-size: 1.4em;
+    margin: 15px 0; /* Pienempi marginaali */
+    font-size: 1.2em; /* Pienempi fontti */
     color: #FFD700;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 #revealed-sentence-part {
-    margin-top: 15px;
-    font-size: 1.3em;
+    margin-top: 10px; /* Pienempi marginaali */
+    font-size: 1.1em; /* Pienempi fontti */
     color: #90EE90;
     font-style: italic;
-    min-height: 1.5em;
+    min-height: 1.4em; /* Varmista, että tila varataan */
 }
 
 #restart-button {
     background-color: #00FF00;
     color: #333;
     border: none;
-    padding: 12px 25px;
+    padding: 10px 20px; /* Pienempi padding */
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1.2em;
+    font-size: 1.1em; /* Pienempi fontti */
     font-weight: bold;
     text-transform: uppercase;
-    margin-top: 20px;
+    margin-top: 15px; /* Pienempi marginaali */
     box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
     transition: background-color 0.3s ease, transform 0.1s ease;
 }
@@ -326,8 +264,8 @@ body {
 
 /* Bonus-sanan ja lopullisen arvoituksen tyylit */
 .bonus-word-reveal {
-    margin-top: 10px;
-    font-size: 1.2em;
+    margin-top: 8px; /* Pienempi marginaali */
+    font-size: 1.1em; /* Pienempi fontti */
     color: #F8F8F8;
 }
 
@@ -338,29 +276,31 @@ body {
 
 .final-puzzle-area {
     background-color: #36451C;
-    padding: 20px;
+    padding: 15px; /* Pienempi padding */
     border-radius: 8px;
-    margin-top: 30px;
+    margin-top: 25px; /* Pienempi marginaali */
     text-align: center;
     border: 1px dashed #90EE90;
+    width: calc(100% - 20px); /* Varmista, että se mahtuu paddingin kanssa */
+    box-sizing: border-box;
 }
 
 .final-puzzle-area h3 {
     color: #90EE90;
     margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 1.5em;
+    margin-bottom: 12px; /* Pienempi marginaali */
+    font-size: 1.4em; /* Pienempi fontti */
 }
 
 #bonus-sentence-input {
-    width: 80%;
-    padding: 10px;
-    margin-bottom: 15px;
+    width: 90%; /* Suurempi leveys input-kentälle */
+    padding: 8px; /* Pienempi padding */
+    margin-bottom: 12px; /* Pienempi marginaali */
     border: 1px solid #00FF00;
     border-radius: 5px;
     background-color: #333;
     color: #F8F8F8;
-    font-size: 1em;
+    font-size: 0.9em; /* Pienempi fontti */
     text-align: center;
 }
 
@@ -372,10 +312,10 @@ body {
     background-color: #00FF00;
     color: #333;
     border: none;
-    padding: 10px 20px;
+    padding: 8px 15px; /* Pienempi padding */
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 0.9em; /* Pienempi fontti */
     font-weight: bold;
     text-transform: uppercase;
     transition: background-color 0.3s ease;
@@ -391,105 +331,117 @@ body {
 }
 
 #final-clue-display {
-    margin-top: 20px;
-    font-size: 1.2em;
+    margin-top: 15px; /* Pienempi marginaali */
+    font-size: 1.1em; /* Pienempi fontti */
     color: #FFD700;
     font-weight: bold;
-    min-height: 1.5em;
+    min-height: 1.4em; /* Varmista tila */
 }
 
 /* Responsiivisuus pienemmille näytöille */
 @media (max-width: 768px) {
-    .main-content-wrapper {
-        padding: 8px; /* Pienempi padding */
-        margin: 10px 0;
-    }
-    .header-content,
-    .intro-text,
-    .outro-text,
-    .attention-box {
+    .game-container {
         padding: 8px;
-        font-size: 1em;
-    }
-    .title-text {
-        font-size: 1.4em;
+        margin: 10px 0;
+        max-width: 400px; /* Vielä kapeampi maksimileveys */
     }
     .logo-image {
-        width: 100px;
-        height: 100px;
+        width: 80px; /* Pienempi logo */
+        height: 80px;
+    }
+    .game-container h1 {
+        font-size: 1.5em;
     }
 
-    .game-area-wrapper {
-        padding: 15px;
-        margin-top: 20px;
-    }
-    .game-area-wrapper h1 {
-        font-size: 1.8em;
-    }
     .game-info {
-        flex-direction: column; /* Pinota tiedot pystyyn */
+        flex-direction: column;
         gap: 5px;
+        padding: 5px;
     }
-
     .game-info p {
-        justify-content: flex-start; /* Tasaa vasemmalle pienillä näytöillä */
-        font-size: 0.9em;
-        flex-basis: calc(50% - 10px); /* Kaksi elementtiä riville */
-        white-space: normal; /* Salli rivinvaihto */
+        justify-content: flex-start;
+        font-size: 0.85em;
+        flex-basis: calc(50% - 10px);
+        white-space: normal;
     }
 
     #game-board {
-        gap: 8px;
+        gap: 6px;
         padding: 10px;
-        /* Korttien kokoa säädetään minmax-arvoilla, jotta ne pysyvät järkevän kokoisina */
-        grid-template-columns: repeat(auto-fit, minmax(55px, 85px)); /* Entistä pienemmät kortit mobiilissa */
+        grid-template-columns: repeat(auto-fit, minmax(50px, 70px)); /* Vielä pienemmät kortit mobiilissa */
     }
-
     .card-front, .card-back {
-        font-size: 1.6em; /* Pienempi kortin symbolin koko */
+        font-size: 1.8em;
     }
 
     .power-ups {
-        padding: 10px;
-        gap: 8px;
+        padding: 8px;
+        gap: 6px;
     }
-
+    .power-ups h3 {
+        font-size: 1.1em;
+    }
     .power-up-button {
-        font-size: 0.8em;
-        padding: 6px 10px;
-        min-width: unset;
-        flex-basis: calc(50% - 10px); /* 2 nappia riville pienemmillä näytöillä */
+        font-size: 0.7em;
+        padding: 5px 8px;
+        flex-basis: calc(50% - 8px);
     }
-
     #restart-button {
-        padding: 10px 20px;
+        padding: 8px 15px;
         font-size: 1em;
     }
-
+    .final-puzzle-area {
+        padding: 12px;
+    }
     #bonus-sentence-input {
         width: 95%;
-        padding: 8px;
+        padding: 6px;
     }
-
     #check-bonus-sentence-button {
-        padding: 8px 15px;
-        font-size: 0.9em;
+        padding: 6px 12px;
+        font-size: 0.8em;
     }
 }
 
 @media (max-width: 480px) {
+    .game-container {
+        max-width: 320px; /* Kapein asettelu */
+        padding: 5px;
+    }
+    .logo-image {
+        width: 70px;
+        height: 70px;
+    }
+    .game-container h1 {
+        font-size: 1.3em;
+    }
     .game-info p {
-        flex-basis: 100%; /* Yksi elementti per rivi */
+        flex-basis: 100%;
         justify-content: center;
+        font-size: 0.8em;
     }
     #game-board {
-        grid-template-columns: repeat(auto-fit, minmax(45px, 70px));
-        gap: 5px;
+        grid-template-columns: repeat(auto-fit, minmax(40px, 60px));
+        gap: 4px;
+        padding: 8px;
     }
     .card-front, .card-back {
-        font-size: 1.4em;
+        font-size: 1.6em;
     }
     .power-up-button {
-        flex-basis: 100%; /* Yksi nappi riville */
+        flex-basis: 100%;
+        font-size: 0.75em;
+    }
+    #game-message, #revealed-sentence-part, .bonus-word-reveal, #final-clue-display {
+        font-size: 0.9em;
+    }
+    .final-puzzle-area h3 {
+        font-size: 1.2em;
+    }
+    #bonus-sentence-input {
+        font-size: 0.8em;
+    }
+    #check-bonus-sentence-button {
+        font-size: 0.8em;
     }
 }
