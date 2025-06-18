@@ -1,4 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // =================================================================
+    // SALAUKSEN PURKUFUNKTIO
+    // Tämä funktio purkaa salatut merkkijonot.
+    // =================================================================
+    function dekoodaa(str) {
+        // Avain on luku, jolla merkkien arvoa on siirretty.
+        // Samaa avainta on käytettävä kuin salatessa.
+        const avain = 3; 
+        return str.split('').map(c => String.fromCharCode(c.charCodeAt(0) - avain)).join('');
+    }
+
     // Perus-elementit
     const gameBoard = document.getElementById('game-board');
     const levelDisplay = document.getElementById('level-display');
@@ -34,19 +45,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let collectedBonusWords = [];
     let powerUpsUsed = {};
 
-    // Määritä tasot, korttien symbolit ja bonussanat
+    // Määritä tasot, korttien symbolit ja SALATUT bonussanat
     const levelConfigs = [
-        { level: 1, pairs: 4, symbols: ['🌲', '🧭', '📍', '🔑'], bonusWord: 'koira' },
-        { level: 2, pairs: 6, symbols: ['☀️', '🌧️', '⚡', '🌈', '🌙', '⭐'], bonusWord: 'kissa' },
-        { level: 3, pairs: 8, symbols: ['🔥', '💧', '🌬️', '⛰️', '🌊', '🌾', '🌸', '🍂'], bonusWord: 'lintu' },
-        { level: 4, pairs: 10, symbols: ['🦊', '🐻', '🦉', '🐺', '🦌', '🐇', '🐿️', '🦢', '🦅', '🐟'], bonusWord: 'puu' },
-        { level: 5, pairs: 12, symbols: ['🏰', '🗼', '🗽', '🗿', '⛩️', '🏟️', '🏛️', '⛪', '🕌', '🕍', '🌉', '🛕'], bonusWord: 'talo' },
-        { level: 6, pairs: 14, symbols: ['🚀', '🌌', '🌠', '🛰️', '👽', '🪐', '💫', '☄️', '🌑', '🌕', '🧑‍🚀', '✨', '🌍', '🧑‍🔬'], bonusWord: 'auto' }
+        { level: 1, pairs: 4, symbols: ['🌲', '🧭', '📍', '🔑'], bonusWord_encoded: 'nrlud' },
+        { level: 2, pairs: 6, symbols: ['☀️', '🌧️', '⚡', '🌈', '🌙', '⭐'], bonusWord_encoded: 'nlvvd' },
+        { level: 3, pairs: 8, symbols: ['🔥', '💧', '🌬️', '⛰️', '🌊', '🌾', '🌸', '🍂'], bonusWord_encoded: 'olqwx' },
+        { level: 4, pairs: 10, symbols: ['🦊', '🐻', '🦉', '🐺', '🦌', '🐇', '🐿️', '🦢', '🦅', '🐟'], bonusWord_encoded: 'sxx' },
+        { level: 5, pairs: 12, symbols: ['🏰', '🗼', '🗽', '🗿', '⛩️', '🏟️', '🏛️', '⛪', '🕌', '🕍', '🌉', '🛕'], bonusWord_encoded: 'wdor' },
+        { level: 6, pairs: 14, symbols: ['🚀', '🌌', '🌠', '🛰️', '👽', '🪐', '💫', '☄️', '🌑', '🌕', '🧑‍🚀', '✨', '🌍', '🧑‍🔬'], bonusWord_encoded: 'dxwr' }
     ];
 
-    const finalBonusSentence = levelConfigs.map(config => config.bonusWord).join(' ');
-    const finalClueText = "Lause meni oikein, hienoa! Tässä on sinulle chekkeriin kelpaava lause: geokätköilyonraivostuttavanihanaharrastus";
-
+    // SALATTU loppuvihje
+    const finalClueText_encoded = "Odxvh#phql#rlnhlq/#klhqrd=#Wdvvd#rq#vlqxooh#fkhenhullq#nhosddyd#odxvh=#jhrmdwn|loryrqudlyrvwxwwdydqlkdqdkduudvwxv";
+    
     totalLevelsDisplay.textContent = levelConfigs.length;
 
     function shuffle(array) {
@@ -173,18 +184,15 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (matchedPairs * 2 === cards.length) {
             const levelConfig = levelConfigs[currentLevel - 1];
-            const bonusWord = levelConfig.bonusWord;
+            // Dekoodaa bonussana ennen käyttöä
+            const bonusWord = dekoodaa(levelConfig.bonusWord_encoded);
             collectedBonusWords.push(bonusWord);
 
             if (currentLevel < levelConfigs.length) {
                 gameMessage.textContent = `Taso ${currentLevel} läpäisty! Bonussana: ${bonusWord}`;
                 setTimeout(nextLevel, 3000);
             } else {
-                // TÄMÄ ON MUUTETTU KOHTA
-                // Näytä ensin viimeinen bonussana
                 gameMessage.textContent = `Taso ${currentLevel} läpäisty! Bonussana: ${bonusWord}`;
-                
-                // Odota 3 sekuntia ennen lopputehtävän näyttämistä
                 setTimeout(() => {
                     gameMessage.textContent = 'Onneksi olkoon! Löysit kaikki kätköt!';
                     showFinalClue();
@@ -282,9 +290,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     checkBonusSentenceButton.addEventListener('click', () => {
+        // Muodostetaan oikea vastaus dekoodaamalla sanat lennosta
+        const finalBonusSentence = levelConfigs.map(config => dekoodaa(config.bonusWord_encoded)).join(' ');
         const userInput = bonusSentenceInput.value.trim().toLowerCase();
+
         if (userInput === finalBonusSentence.toLowerCase()) {
-            finalClueDisplay.textContent = finalClueText;
+            finalClueDisplay.textContent = dekoodaa(finalClueText_encoded); // Dekoodaa loppuviesti
             finalClueDisplay.style.display = 'block';
             gameMessage.textContent = 'Oikein! Ratkaisit mysteerin!';
             checkBonusSentenceButton.disabled = true;
