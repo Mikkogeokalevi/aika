@@ -150,27 +150,30 @@ body {
 /* Pelilauta ja kortit */
 #game-board {
     display: grid;
-    /* Korttien koko on nyt pienempi ja sirompi */
-    grid-template-columns: repeat(auto-fit, minmax(65px, 80px)); /* Entistä sirommat kortit oletuksena */
-    justify-content: center;
-    gap: 10px; /* Hieman pienempi rako */
-    padding: 15px; /* Hieman pienempi padding */
-    background-color: rgba(0, 0, 0, 0.3);
+    /* Aina 4 saraketta. Korttien koko skaalautuu. */
+    grid-template-columns: repeat(4, 1fr); 
+    justify-content: center; /* Keskittää kortit vaakasuunnassa */
+    gap: 15px; /* Rako korttien välillä */
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.3); /* Taustaväri "vihreä laatikko" -efektiä varten */
     border-radius: 8px;
-    border: 1px solid #00FF00;
-    margin-bottom: 15px; /* Pienempi alamarginaali */
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
-    min-height: 160px; /* Hieman pienempi minimikorkeus */
-    width: calc(100% - 20px); /* Varmista, että se mahtuu paddingin kanssa */
-    box-sizing: border-box;
+    border: 1px solid #00FF00; /* Vihreä kehys */
+    margin-bottom: 20px;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3); /* Varjoefekti */
+    max-width: 600px; /* Rajoita pelilaudan maksimileveyttä, jotta kortit eivät veny liian isoiksi suurilla näytöillä */
+    margin-left: auto; /* Keskittää laudan vaakasuunnassa */
+    margin-right: auto; /* Keskittää laudan vaakasuunnassa */
 }
 
 .card {
-    width: 100%;
-    padding-bottom: 100%;
+    width: 100%; /* Kortti täyttää sarakkeen */
+    padding-bottom: 100%; /* Suhde 1:1, tekee kortista neliön */
     position: relative;
-    perspective: 1000px;
+    perspective: 1000px; /* 3D-efektiä varten */
     cursor: pointer;
+    max-width: 120px; /* Yksittäisen kortin maksimileveys, estää liiallisen suurenemisen */
+    max-height: 120px; /* Yksittäisen kortin maksimikorkeus */
+    margin: 0 auto; /* Keskittää yksittäisen kortin omassa ruudukon solussaan */
 }
 
 .card-inner {
@@ -195,28 +198,29 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2em; /* Kortin symbolin koko, pienempi */
+    font-size: 2.5em; /* Kortin symbolin koko */
     font-weight: bold;
     border-radius: 8px;
 }
 
 .card-front {
-    background-color: #556B2F;
+    background-color: #556B2F; /* Tummempi vihreä */
     color: #F8F8F8;
 }
 
 .card-back {
-    background-color: #90EE90;
-    color: #36451C;
+    background-color: #90EE90; /* Vaaleampi vihreä */
+    color: #36451C; /* Tummempi tekstiväri */
     transform: rotateY(180deg);
 }
 
 .card.matched .card-back {
-    background-color: #4CAF50;
+    background-color: #4CAF50; /* Matchatun kortin väri */
 }
 
+/* Tila, kun kaikki kortit paljastetaan väliaikaisesti */
 .card.flipped.no-click {
-    pointer-events: none !important;
+    pointer-events: none !important; /* Estää klikkaukset kokonaan */
 }
 
 #game-message {
@@ -366,9 +370,9 @@ body {
     }
 
     #game-board {
-        gap: 6px;
-        padding: 10px;
-        grid-template-columns: repeat(auto-fit, minmax(50px, 70px)); /* Vielä pienemmät kortit mobiilissa */
+        gap: 10px; /* Pienempi rako korttien välillä */
+        padding: 15px;
+        grid-template-columns: repeat(4, 1fr); /* Edelleen 4 saraketta */
     }
     .card-front, .card-back {
         font-size: 1.8em;
@@ -384,7 +388,8 @@ body {
     .power-up-button {
         font-size: 0.7em;
         padding: 5px 8px;
-        flex-basis: calc(50% - 8px);
+        min-width: unset;
+        flex-basis: calc(50% - 8px); /* 2 nappia riville pienemmillä näytöillä */
     }
     #restart-button {
         padding: 8px 15px;
@@ -399,7 +404,7 @@ body {
     }
     #check-bonus-sentence-button {
         padding: 6px 12px;
-        font-size: 0.8em;
+        font-size: 0.9em;
     }
 }
 
@@ -421,7 +426,7 @@ body {
         font-size: 0.8em;
     }
     #game-board {
-        grid-template-columns: repeat(auto-fit, minmax(40px, 60px));
+        grid-template-columns: repeat(4, 1fr);
         gap: 4px;
         padding: 8px;
     }
