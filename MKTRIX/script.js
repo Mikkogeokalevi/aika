@@ -8,21 +8,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let gameState = 'AWAITING_NAME';
     let puzzles = [];
 
-    // --- Matrix-efektin koodi ---
+    // --- Matrix-efekti ---
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
-    const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const nums = '0123456789';
-    const alphabet = katakana + latin + nums;
+    const alphabet = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const fontSize = 16;
     const columns = canvas.width / fontSize;
     const rainDrops = [];
-    for (let x = 0; x < columns; x++) {
-        rainDrops[x] = 1;
-    }
+    for (let x = 0; x < columns; x++) { rainDrops[x] = 1; }
 
     function drawMatrix() {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
@@ -75,12 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
         setInputState(true);
     }
     
-    // UUSI: Tekstin korruptoitumisefekti
     async function textCorruptionEffect(text) {
         const chars = 'AZX#@$*!?%/|';
         const lineDiv = document.createElement('div');
         output.appendChild(lineDiv);
-
         for (let i = 0; i < 3; i++) {
             let garbage = '';
             for (let j = 0; j < text.length; j++) {
@@ -92,19 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lineDiv.remove();
     }
 
-
-    function initializePuzzles() {
-        puzzles = [
-            { question: [`\n--- PULMA 1/7: Anagrammi ---`, `Järjestä kirjaimet sanaksi: TORIDAKOINAT`], answer: "koordinaatit", reward: "43°..′..″N ..°..′..″W" },
-            { question: [`\n--- PULMA 2/7: Numeerinen protokolla ---`, `Käännä numerot kirjaimiksi (A=1...): 14-1-22-9-7-15-9-14-20-9`], answer: "navigointi", reward: "43°04′..″N ..°..′..″W" },
-            { type: 'interactive', setup: setupMemoryPuzzle, reward: "43°04′41″N ..°..′..″W" },
-            // UUDET HAASTAVAMMAT PULMAT
-            { question: [`\n--- PULMA 4/7: Kuviopäättely ---`, `Signaalissa on toistuva kuvio. Päättele seuraava osa sekvenssissä:`, `A1-B2-C3`, `D4-E5-F6`, `G7-H8-I9`, `?-?-?`], answer: "j10-k11-l12", reward: "43°04′41″N 79°..′..″W" },
-            { question: [`\n--- PULMA 5/7: Logiikkapulma ---`, `Kolme agenttia (A, B, C) piilotti kukin yhden esineen (Avain, Kartta, Kompassi) eri paikkoihin (Kivi, Kanto, Kuusi). Päättele vihjeiden avulla, minkä esineen agentti C piilotti.`, `Vihje 1: Agentti A ei piilottanut Avainta.`, `Vihje 2: Esine Kiven alla ei ole Kartta.`, `Vihje 3: Agentti B piilotti Kompassin, mutta ei Kuusen alle.` ], answer: "avain", reward: "43°04′41″N 79°04′..″W" },
-            { question: [`\n--- PULMA 6/7: Datamatriisi ---`, `Data-matriisissa on virhe. Etsi poikkeava rivi ja ilmoita sen ENSIMMÄINEN merkki.`, `#-#-O-#-#`, `O-#-#-O-#`, `#-O-#-#-O`, `X-#-O-O-#`, `O-#-O-#-#`], answer: "x", reward: "43°04′41″N 79°04′30″W" },
-            { question: [`\n--- LOPULLINEN HAASTE ---`, `Koordinaatit purettu. Tiedät paikan. Missä olemme?`], answer: "niagaran putouksilla" }
-        ];
-    }
+    // --- TÄSSÄ ON NYT VAIN YKSI OIKEA VERSIO KAIKISTA FUNKTIOISTA ---
     
     async function handleSuccess() {
         setInputState(false);
@@ -112,8 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
         print({html: `<span class="highlight">OIKEA VASTAUS, AGENTTI ${agentName.toUpperCase()}.</span>`});
         currentPuzzle++;
         if (puzzle.reward) await type(`Koordinaatit päivitetty: ${puzzle.reward}`);
-        if (currentPuzzle < puzzles.length) await displayPuzzle();
-        else {
+        if (currentPuzzle < puzzles.length) {
+            await displayPuzzle();
+        } else {
             gameState = 'FINISHED';
             await type("------------------------------------");
             print({html: "<div class='final'>LOISTAVAA! TEHTÄVÄ SUORITETTU!</div>"});
@@ -122,17 +104,87 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function setupMemoryPuzzle() {
-        // ... (tämä osa pysyy samana)
+        clearInteractive();
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let sequence = '';
+        for (let i = 0; i < 6; i++) {
+            sequence += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        puzzles[2].answer = sequence.toLowerCase();
+        
+        await type(`\n--- PULMA 3/7: Muistipeli ---`);
+        await type(`Toista 6-merkkinen aakkosnumeerinen koodi...`);
+        
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        interactiveContainer.innerHTML = `<div style="font-size: 2em; letter-spacing: 0.5em;">${sequence.split('').join(' ')}</div>`;
+        
+        await new Promise(resolve => setTimeout(resolve, 2500));
+        interactiveContainer.innerHTML = `<div style="font-size: 2em; letter-spacing: 0.5em;">█ █ █ █ █ █</div>`;
+        
+        await type(`Syötä koodi. Jos unohdit, kirjoita 'anna uusi koodi'.`);
+        setInputState(true);
+    }
+    
+    async function setupDialPuzzle() {
+        clearInteractive();
+        const now = new Date();
+        const targetValue = now.getMonth() + 1 + now.getDate();
+        puzzles[4].answer = targetValue.toString();
+
+        await type(`\n--- PULMA 5/7: Taajuusmodulaattori ---`);
+        await type(`Järjestelmän kellopulssi on epäsynkassa. Aseta kalibrointitaajuus kuluvan KUUKAUDEN NUMERO + PÄIVÄN NUMERO.`);
+        setInputState(false);
+        interactiveContainer.innerHTML = `
+            <div style="font-size: 2em; margin: 10px;"><span class="dial-button" id="dial-minus">[-]</span> <span id="dial-value" style="margin: 0 20px;">1</span> <span class="dial-button" id="dial-plus">[+]</span></div>
+            <div><span class="dial-button" id="dial-confirm">[VAHVISTA]</span></div>`;
+        let currentValue = 1;
+        document.getElementById('dial-minus').onclick = () => { currentValue--; document.getElementById('dial-value').innerText = currentValue; };
+        document.getElementById('dial-plus').onclick = () => { currentValue++; document.getElementById('dial-value').innerText = currentValue; };
+        document.getElementById('dial-confirm').onclick = () => { (currentValue === targetValue) ? handleSuccess() : handleWrongAnswer(); };
+    }
+    
+    async function setupWirePuzzle() {
+        clearInteractive();
+        await type(`\n--- PULMA 6/7: Purkujärjestelmä ---`);
+        await type(`Tämä vaatii tarkkuutta, agentti ${agentName.toUpperCase()}.`);
+        await type(`Lue ohjeet huolellisesti ja katkaise oikea johto.`);
+        print({html: `<div style="border: 1px solid #90EE90; padding: 5px; margin-top: 10px; text-align: left;"><b>Purkuohjeisto v1.2:</b><br>- Jos punaisia johtoja on enemmän kuin yksi, katkaise keltainen johto.<br>- Jos ei ole keltaista johtoa, katkaise toinen sininen johto.<br>- Muussa tapauksessa katkaise ensimmäinen johto.</div>`});
+        
+        setInputState(false);
+        const wires = [{ c: "sininen", t: "[---SININEN----]" }, { c: "punainen", t: "[---PUNAINEN---]" }, { c: "punainen", t: "[---PUNAINEN---]" }, { c: "sininen", t: "[---SININEN----]" }, { c: "keltainen", t: "[---KELTAINEN--]" }];
+        puzzles[5].answer = "keltainen";
+        
+        wires.forEach(wire => {
+            const el = document.createElement('div');
+            el.className = 'clickable-wire'; el.innerText = wire.t;
+            el.onclick = () => { (wire.c === puzzles[5].answer) ? handleSuccess() : handleWrongAnswer(); };
+            interactiveContainer.appendChild(el);
+        });
     }
 
+    function initializePuzzles() {
+        puzzles = [
+            { question: [`\n--- PULMA 1/7: Anagrammi ---`, `Järjestä kirjaimet sanaksi: TORIDAKOINAT`], answer: "koordinaatit", reward: "43°..′..″N ..°..′..″W" },
+            { question: [`\n--- PULMA 2/7: Numeerinen protokolla ---`, `Käännä numerot kirjaimiksi (A=1...): 14-1-22-9-7-15-9-14-20-9`], answer: "navigointi", reward: "43°04′..″N ..°..′..″W" },
+            { type: 'interactive', setup: setupMemoryPuzzle, reward: "43°04′41″N ..°..′..″W" },
+            { question: [`\n--- PULMA 4/7: Kuviopäättely ---`, `Signaalissa on toistuva kuvio. Päättele seuraava osa sekvenssissä:`, `A1-B2-C3`, `D4-E5-F6`, `G7-H8-I9`, `?-?-?`], answer: "j10-k11-l12", reward: "43°04′41″N 79°..′..″W" },
+            { question: [`\n--- PULMA 5/7: Logiikkapulma ---`, `Kolme agenttia (A, B, C) piilotti kukin yhden esineen (Avain, Kartta, Kompassi). Päättele vihjeiden avulla, minkä esineen agentti C piilotti.`, `Vihje 1: Agentti A ei piilottanut Avainta.`, `Vihje 2: Agentti B piilotti Kompassin.` ], answer: "avain", reward: "43°04′41″N 79°04′..″W" },
+            { type: 'interactive', setup: setupWirePuzzle, reward: "43°04′41″N 79°04′30″W" },
+            { question: [`\n--- LOPULLINEN HAASTE ---`, `Koordinaatit purettu. Tiedät paikan. Missä olemme?`], answer: "niagaran putouksilla" }
+        ];
+    }
+    
     async function displayPuzzle() {
         clearInteractive();
         const puzzle = puzzles[currentPuzzle];
+        
+        // Suoritetaan tekstin korruptoitumisefekti ennen pulman tulostusta
+        await textCorruptionEffect(puzzle.question ? puzzle.question[0] : `PULMA ${currentPuzzle + 1}`);
+
         if (puzzle.type === 'interactive') {
             await puzzle.setup();
         } else {
             for (const line of puzzle.question) {
-                await textCorruptionEffect(line);
                 await type(line);
             }
             setInputState(true);
@@ -153,7 +205,6 @@ document.addEventListener('DOMContentLoaded', () => {
             await new Promise(resolve => setTimeout(resolve, 500));
             await type("Vastaanotetaan signaalia... OK");
             await new Promise(resolve => setTimeout(resolve, 500));
-            // UUSI: Henkilökohtainen valtuutus
             print({html: `GeoAgentti ${agentName.toUpperCase()}... <span class="blinking-text">VALTUUTETTU</span>`});
             await new Promise(resolve => setTimeout(resolve, 2000));
             await type("Ladataan Ällös Operaatio ...");
@@ -195,35 +246,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     main();
-    // Muistipelin koodi puuttuu, lisätään se takaisin.
-    window.setupMemoryPuzzle = setupMemoryPuzzle; // Tehdään globaaliksi, jotta se löytyy
 });
-
-// Lisätään puuttuva muistipelin funktio takaisin (oli pudonnut pois)
-async function setupMemoryPuzzle() {
-    const interactiveContainer = document.getElementById('interactive-container');
-    const output = document.getElementById('output');
-    
-    function setInputState(enabled) { input.disabled = !enabled; if (enabled) input.focus(); }
-    async function type(line) { const speed = 40; const lineDiv = document.createElement('div'); output.appendChild(lineDiv); for (let i = 0; i < line.length; i++) { lineDiv.innerHTML += line.charAt(i); output.scrollTop = output.scrollHeight; await new Promise(resolve => setTimeout(resolve, speed)); } }
-
-    interactiveContainer.innerHTML = '';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let sequence = '';
-    for (let i = 0; i < 6; i++) {
-        sequence += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    window.puzzles[2].answer = sequence.toLowerCase();
-    
-    await type(`\n--- PULMA 3/7: Muistipeli ---`);
-    await type(`Toista 6-merkkinen aakkosnumeerinen koodi...`);
-    
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    interactiveContainer.innerHTML = `<div style="font-size: 2em; letter-spacing: 0.5em;">${sequence.split('').join(' ')}</div>`;
-    
-    await new Promise(resolve => setTimeout(resolve, 2500));
-    interactiveContainer.innerHTML = `<div style="font-size: 2em; letter-spacing: 0.5em;">█ █ █ █ █ █</div>`;
-    
-    await type(`Syötä koodi. Jos unohdit, kirjoita 'anna uusi koodi'.`);
-    setInputState(true);
-}
