@@ -24,7 +24,7 @@ body {
     font-size: 1.0em; 
 }
 
-/* --- GLCARS-tyylit (pienennetty) --- */
+/* --- GLCARS-tyylit --- */
 .glcars-container {
     width: 100%;
     margin-bottom: 20px;
@@ -35,7 +35,7 @@ body {
     display: flex;
     align-items: flex-end;
     justify-content: flex-start;
-    height: 35px; /* Pienennetty */
+    height: 35px;
     background-color: #90EE90;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -43,17 +43,17 @@ body {
 }
 .glcars-title {
     color: #11150C;
-    font-size: 1.2em; /* Pienennetty */
+    font-size: 1.2em;
     padding-right: 20px;
 }
 .glcars-bar-top .glcars-block {
     margin-left: 5px;
-    height: 25px; /* Pienennetty */
+    height: 25px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
 }
-.lcars-wide { min-width: 120px; } /* Pienennetty */
-.lcars-med { min-width: 80px; }  /* Pienennetty */
+.lcars-wide { min-width: 120px; }
+.lcars-med { min-width: 80px; }
 
 .glcars-header {
     display: grid;
@@ -67,11 +67,14 @@ body {
     gap: 5px;
 }
 .glcars-left { justify-content: flex-start; }
-.glcars-right { justify-content: flex-end; }
-
+/* MUUTOS: Korjattu asettelu peilaamaan vasenta laitaa oikein */
+.glcars-right {
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+}
 .glcars-elbow {
-    width: 20px;      /* Pienennetty */
-    height: 70px;     /* Pienennetty */
+    width: 20px;
+    height: 70px;
     background-color: #90EE90;
 }
 .glcars-left .glcars-elbow { border-bottom-left-radius: 10px; }
@@ -80,27 +83,27 @@ body {
 .glcars-v-stack {
     display: flex;
     flex-direction: column;
-    gap: 4px; /* Pienennetty */
+    gap: 4px;
 }
 .glcars-block {
-    padding: 3px 10px; /* Pienennetty */
+    padding: 3px 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.0em; /* Pienennetty */
+    font-size: 1.0em;
     letter-spacing: 1.5px;
     white-space: nowrap;
     overflow: hidden;
 }
 .num-block-1 { background-color: #2A381C; color: #FFD700; }
 .num-block-2 { background-color: #11150C; color: #90EE90; }
-.stub-block-1 { height: 12px; background-color: #2A381C; } /* Pienennetty */
-.stub-block-2 { height: 24px; background-color: #11150C; } /* Pienennetty */
+.stub-block-1 { height: 12px; background-color: #2A381C; }
+.stub-block-2 { height: 24px; background-color: #11150C; }
 
 .glcars-footer {
     display: flex;
     align-items: flex-start;
-    height: 35px; /* Pienennetty */
+    height: 35px;
     background-color: #90EE90;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -109,13 +112,11 @@ body {
     gap: 4px;
 }
 .glcars-footer .glcars-elbow {
-    height: 26px; /* Pienennetty */
+    height: 26px;
     border-radius: 0;
     border-bottom-right-radius: 8px;
 }
-.glcars-footer .glcars-block {
-    height: 26px; /* Pienennetty */
-}
+.glcars-footer .glcars-block { height: 26px; }
 .flex-grow { flex-grow: 1; }
 
 @keyframes lcars-flash { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
@@ -123,14 +124,7 @@ body {
 
 /* --- Muut tyylit --- */
 .logo-container { text-align: center; padding: 0 10px; }
-.logo {
-    width: 85px; /* Pienennetty */
-    height: 85px;
-    border: 2px solid #90EE90;
-    border-radius: 50%;
-    background-color: #3D4F2B;
-    padding: 3px;
-}
+.logo { width: 85px; height: 85px; border: 2px solid #90EE90; border-radius: 50%; background-color: #3D4F2B; padding: 3px; }
 .alaotsikko { color: #90EE90; text-align: center; font-size: 1.3em; margin-top: 25px; }
 .paaotsikko { color: #90EE90; text-align: center; margin-top: 0; margin-bottom: 20px; font-size: 1.6em; }
 .time-circuits-container { background-color: #1a1a1a; border: 2px solid #444; border-radius: 8px; padding: 20px; margin-top: 20px; }
@@ -138,12 +132,25 @@ body {
 
 /* --- Responsiivisuus --- */
 @media (max-width: 768px) {
-    /* MUUTOS: Piilottamisen sijaan pienennetään ja yksinkertaistetaan GLCARS-elementtejä */
-    .glcars-title { font-size: 1em; }
-    .glcars-bar-top, .glcars-footer { height: 25px; }
-    .glcars-bar-top .glcars-block, .glcars-footer .glcars-block { height: 20px; padding: 2px 5px; font-size: 0.8em;}
-    .glcars-elbow { width: 15px; height: 55px; }
-    .glcars-footer .glcars-elbow { height: 20px; }
-    .glcars-v-stack .stub-block-1, .glcars-v-stack .stub-block-2 { display: none; } /* Piilotetaan tyhjät välipalat */
-    .logo { width: 60px; height: 60px; }
+    /* MUUTOS: Pienennetään reilusti mobiilissa, ei piiloteta */
+    .glcars-container { margin-bottom: 15px; }
+    .glcars-title { font-size: 0.7em; padding-right: 10px; }
+    .glcars-bar-top { height: 20px; padding-left: 10px; }
+    .glcars-bar-top .glcars-block { height: 16px; padding: 0 5px; margin-left: 3px;}
+    .lcars-wide { min-width: 60px; }
+    .lcars-med { min-width: 40px; }
+
+    .glcars-header { gap: 3px; }
+    .glcars-elbow { width: 10px; height: 45px; }
+    .glcars-side { gap: 3px; }
+    
+    .glcars-v-stack:nth-of-type(3) { display: none; } /* Piilotetaan uusin lisätty palkki mobiilissa */
+    .glcars-block { font-size: 0.6em; padding: 1px 5px; letter-spacing: 1px; }
+    .stub-block-1 { height: 8px; }
+    .stub-block-2 { height: 16px; }
+    .logo { width: 50px; height: 50px; }
+    
+    .glcars-footer { height: 20px; margin-top: 15px;}
+    .glcars-footer .glcars-elbow { height: 16px; }
+    .glcars-footer .glcars-block { height: 16px; }
 }
