@@ -1,36 +1,38 @@
 /*
     AJAN VARTIJAT - MYSTEERIN SKRIPTI
-    Versio 4.0 - Puhdistettu ja korjattu
+    Versio 5.0 - Puhdistettu ja virheetön
 */
 document.addEventListener('DOMContentLoaded', function() {
 
-    // --- OSA 1: Määritelmät ja muuttujat ---
+    // --- OSA 1: Määritelmät ja vakiot ---
     const OIKEAT_PAIVAMAARAT = ["05.11.1955", "26.10.1985", "21.10.2015"];
     const OIKEA_SEKVENSSI = [27, 32, 12];
     const LOPULLISET_KOORDINAATIT = "N 61° 00.123 E 025° 00.456";
+    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
+    // --- Globaalit muuttujat ---
     let kayttajanSekvenssi = [];
     let valittavaSymboli = null;
-    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
     
-    // DOM-elementtien viittaukset
-    const introSection = document.getElementById('intro-section');
-    const loginSection = document.getElementById('login-section');
-    const missionBriefingSection = document.getElementById('mission-briefing-section');
-    const aikakoneOsio = document.getElementById('aikakone-osio');
-    const stargateOsio = document.getElementById('stargate-osio');
-    const lopputulosOsio = document.getElementById('lopputulos-osio');
+    // --- DOM-elementtien viittaukset ---
+    const elementit = {
+        introSection: document.getElementById('intro-section'),
+        loginSection: document.getElementById('login-section'),
+        missionBriefingSection: document.getElementById('mission-briefing-section'),
+        aikakoneOsio: document.getElementById('aikakone-osio'),
+        stargateOsio: document.getElementById('stargate-osio'),
+        lopputulosOsio: document.getElementById('lopputulos-osio'),
+        loginButton: document.getElementById('login-button'),
+        loginContainer: document.getElementById('login-container'),
+        nicknameInput: document.getElementById('nickname-input'),
+        authSequence: document.getElementById('auth-sequence'),
+        tarkistaNappi: document.getElementById('tarkista-paivamaarat'),
+        confirmButton: document.getElementById('confirm-selection'),
+        cancelButton: document.getElementById('cancel-selection'),
+        modalOverlay: document.getElementById('modal-overlay'),
+        zoomView: document.getElementById('zoom-view')
+    };
     
-    const loginButton = document.getElementById('login-button');
-    const loginContainer = document.getElementById('login-container');
-    const nicknameInput = document.getElementById('nickname-input');
-    const authSequence = document.getElementById('auth-sequence');
-    const tarkistaNappi = document.getElementById('tarkista-paivamaarat');
-    const confirmButton = document.getElementById('confirm-selection');
-    const cancelButton = document.getElementById('cancel-selection');
-    const modalOverlay = document.getElementById('modal-overlay');
-    const zoomView = document.getElementById('zoom-view');
-
     // --- OSA 2: APUFUNKTIOT ---
 
     function generateRandomNumbers(length) {
@@ -42,10 +44,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateLcarsNumbers() {
-        document.getElementById('glcars-num-1').textContent = generateRandomNumbers(4) + ' ' + generateRandomNumbers(2);
-        document.getElementById('glcars-num-2').textContent = generateRandomNumbers(4) + ' ' + generateRandomNumbers(2);
-        document.getElementById('glcars-num-3').textContent = generateRandomNumbers(4) + ' ' + generateRandomNumbers(2);
-        document.getElementById('glcars-num-4').textContent = generateRandomNumbers(4) + ' ' + generateRandomNumbers(2);
+        const num1 = document.getElementById('glcars-num-1');
+        const num2 = document.getElementById('glcars-num-2');
+        const num3 = document.getElementById('glcars-num-3');
+        const num4 = document.getElementById('glcars-num-4');
+        if (num1) num1.textContent = generateRandomNumbers(4) + ' ' + generateRandomNumbers(2);
+        if (num2) num2.textContent = generateRandomNumbers(4) + ' ' + generateRandomNumbers(2);
+        if (num3) num3.textContent = generateRandomNumbers(4) + ' ' + generateRandomNumbers(2);
+        if (num4) num4.textContent = generateRandomNumbers(4) + ' ' + generateRandomNumbers(2);
     }
 
     function naytaVirhe(viesti) {
@@ -68,22 +74,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 i++;
             } else {
                 clearInterval(typing);
-                if (callback) {
-                    setTimeout(callback, 500);
-                }
+                if (callback) setTimeout(callback, 500);
             }
         }, speed);
     }
 
     function toggleZoomView(show = false) {
-        if (show) {
-            modalOverlay.classList.remove('piilotettu');
-            zoomView.classList.remove('piilotettu');
-        } else {
-            modalOverlay.classList.add('piilotettu');
-            zoomView.classList.add('piilotettu');
-            valittavaSymboli = null;
-        }
+        elementit.modalOverlay.classList.toggle('piilotettu', !show);
+        elementit.zoomView.classList.toggle('piilotettu', !show);
+        if (!show) valittavaSymboli = null;
     }
 
     // --- OSA 3: PÄÄLOGIIKKA JA VAIHEET ---
@@ -91,12 +90,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function startIntro() {
         const introText1 = `U.S.S. Enterprise - Komentosillan loki, kapteeni Jean-Luc Picard. Tähtipäivä 47634.4.`;
         const introText2 = `Olemme havainneet vakavan poikkeaman aika-avaruusjatkumossa Omega-sektorissa. Muinainen porttiteknologia, jota paikalliset kutsuivat "Tähtiportiksi", on fuusioitunut primitiivisen, mutta yllättävän tehokkaan aikakoneen jäänteisiin. Syntynyt paradoksi uhkaa repiä todellisuuden rakenteen. Ajallinen päädirektiivi on vaarassa. Yhdistän sinut, lähimmän kenttäagentin, suoraan aluksen päätteeseen.`;
-        const textElement1 = document.getElementById('intro-text-1');
-        const textElement2 = document.getElementById('intro-text-2');
-        typeWriter(textElement1, introText1, 50, () => {
-            typeWriter(textElement2, introText2, 40, () => {
-                loginSection.classList.remove('piilotettu');
-                nicknameInput.focus();
+        typeWriter(document.getElementById('intro-text-1'), introText1, 50, () => {
+            typeWriter(document.getElementById('intro-text-2'), introText2, 40, () => {
+                elementit.loginSection.classList.remove('piilotettu');
+                elementit.nicknameInput.focus();
             });
         });
     }
@@ -118,13 +115,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showMissionBriefing(nickname) {
-        introSection.classList.add('piilotettu');
-        loginSection.classList.add('piilotettu');
-        missionBriefingSection.classList.remove('piilotettu');
+        elementit.introSection.classList.add('piilotettu');
+        elementit.loginSection.classList.add('piilotettu');
+        elementit.missionBriefingSection.classList.remove('piilotettu');
         const missionText = `Kiitos yhteydenotosta, kadetti ${nickname}. Sinun tehtäväsi on kriittinen: sinun on vakautettava portti syöttämällä järjestelmään kolme keskeistä päivämäärää, jotka liittyvät aikakoneen matkoihin. Nämä ajalliset ankkurit stabiloivat jatkumon. Onnistuminen paljastaa symbolisekvenssin portin soittamiseen ja antaa sinulle palkkion sijainnin. Toimi nopeasti. Picard, loppu.`;
-        const missionElement = document.getElementById('mission-text');
-        typeWriter(missionElement, missionText, 30, () => {
-            aikakoneOsio.classList.remove('piilotettu');
+        typeWriter(document.getElementById('mission-text'), missionText, 30, () => {
+            elementit.aikakoneOsio.classList.remove('piilotettu');
         });
     }
 
@@ -138,10 +134,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function tarkistaSekvenssi() {
         if (JSON.stringify(kayttajanSekvenssi) === JSON.stringify(OIKEA_SEKVENSSI)) {
-            missionBriefingSection.classList.add('piilotettu');
-            aikakoneOsio.classList.add('piilotettu');
-            stargateOsio.classList.add('piilotettu');
-            lopputulosOsio.classList.remove('piilotettu');
+            elementit.missionBriefingSection.classList.add('piilotettu');
+            elementit.aikakoneOsio.classList.add('piilotettu');
+            elementit.stargateOsio.classList.add('piilotettu');
+            elementit.lopputulosOsio.classList.remove('piilotettu');
             document.getElementById('event-horizon').classList.add('active');
             document.getElementById('koordinaatit').textContent = LOPULLISET_KOORDINAATIT;
         } else {
@@ -186,18 +182,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- OSA 4: TAPAHTUMANKUUNTELIJAT ---
 
-    loginButton.addEventListener('click', () => {
-        const nickname = nicknameInput.value.trim();
+    elementit.loginButton.addEventListener('click', () => {
+        const nickname = elementit.nicknameInput.value.trim();
         if (nickname === "") {
             alert("Syötä nimimerkki jatkaaksesi.");
             return;
         }
-        loginContainer.classList.add('piilotettu');
-        authSequence.classList.remove('piilotettu');
+        elementit.loginContainer.classList.add('piilotettu');
+        elementit.authSequence.classList.remove('piilotettu');
         runAuthSequence(nickname);
     });
 
-    tarkistaNappi.addEventListener('click', function() {
+    elementit.tarkistaNappi.addEventListener('click', function() {
         const formatNumber = (num) => num.toString().padStart(2, '0');
         const date1 = `${formatNumber(document.getElementById('day1').value)}.${formatNumber(document.getElementById('month1').value)}.${document.getElementById('year1').value}`;
         const date2 = `${formatNumber(document.getElementById('day2').value)}.${formatNumber(document.getElementById('month2').value)}.${document.getElementById('year2').value}`;
@@ -205,16 +201,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const syotetytPaivamaarat = [date1, date2, date3].sort();
         const oikeatJarjestetty = [...OIKEAT_PAIVAMAARAT].sort();
         if (JSON.stringify(syotetytPaivamaarat) === JSON.stringify(oikeatJarjestetty)) {
-            stargateOsio.classList.remove('piilotettu');
-            tarkistaNappi.disabled = true;
-            tarkistaNappi.textContent = "Päivämäärät lukittu";
+            elementit.stargateOsio.classList.remove('piilotettu');
+            elementit.tarkistaNappi.disabled = true;
+            elementit.tarkistaNappi.textContent = "Päivämäärät lukittu";
             luoStargateSymbolit();
         } else {
             naytaVirhe("Päivämäärät eivät täsmää. Tarkista aikakoneen lokitiedot ja yritä uudelleen.");
         }
     });
 
-    confirmButton.addEventListener('click', () => {
+    elementit.confirmButton.addEventListener('click', () => {
         if (valittavaSymboli !== null) {
             const originalSymbol = document.querySelector(`[data-symbol-id='${valittavaSymboli}']`);
             addSymbolToSequence(valittavaSymboli, originalSymbol);
@@ -222,8 +218,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    cancelButton.addEventListener('click', () => toggleZoomView(false));
-    modalOverlay.addEventListener('click', () => toggleZoomView(false));
+    elementit.cancelButton.addEventListener('click', () => toggleZoomView(false));
+    elementit.modalOverlay.addEventListener('click', () => toggleZoomView(false));
     
     // --- OSA 5: KÄYNNISTYS ---
 
