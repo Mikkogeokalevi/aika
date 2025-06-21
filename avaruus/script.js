@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let kayttajanSekvenssi = [];
     let valittavaSymboli = null; 
+
+    // UUSI: Laitetunnistus
+    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
     
     // DOM-elementtien viittaukset
     const tarkistaNappi = document.getElementById('tarkista-paivamaarat');
@@ -34,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => { virheViestiOsio.classList.add('piilotettu'); }, 3000);
     }
 
+    // Ponnahdusikkunan hallinta (vain mobiilille)
     function toggleZoomView(show = false) {
         if (show) {
             modalOverlay.classList.remove('piilotettu');
@@ -42,6 +46,39 @@ document.addEventListener('DOMContentLoaded', function() {
             modalOverlay.classList.add('piilotettu');
             zoomView.classList.add('piilotettu');
             valittavaSymboli = null;
+        }
+    }
+
+    function tarkistaSekvenssi() {
+        if (JSON.stringify(kayttajanSekvenssi) === JSON.stringify(OIKEA_SEKVENSSI)) {
+            aikakoneOsio.classList.add('piilotettu');
+            stargateOsio.classList.add('piilotettu');
+            lopputulosOsio.classList.remove('piilotettu');
+            koordinaatitElementti.textContent = LOPULLISET_KOORDINAATIT;
+            eventHorizon.classList.add('active');
+        } else {
+            naytaVirhe("Virheellinen sekvenssi. Portti nollataan.");
+            kayttajanSekvenssi = [];
+            syoteNaytto.textContent = "";
+            document.querySelectorAll('.stargate-symbol.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+        }
+    }
+
+    // UUSI: Logiikka symbolin lisäämiselle ja tarkistukselle
+    function addSymbolToSequence(symbolId, symbolElement) {
+        if (kayttajanSekvenssi.length >= 3 || kayttajanSekvenssi.includes(symbolId)) return;
+        
+        kayttajanSekvenssi.push(symbolId);
+        syoteNaytto.textContent = kayttajanSekvenssi.join(' - ');
+        
+        if (symbolElement) {
+            symbolElement.classList.add('selected');
+        }
+
+        if (kayttajanSekvenssi.length === 3) {
+            setTimeout(tarkistaSekvenssi, 500);
         }
     }
 
@@ -64,27 +101,26 @@ document.addEventListener('DOMContentLoaded', function() {
             symboliElementti.style.left = `${x}px`;
             symboliElementti.style.top = `${y}px`;
             
-            symboliElementti.addEventListener('click', handleSymbolClick);
-            symboliElementti.addEventListener('touchend', handleSymbolClick);
+            // KORJAUS: Lisätään eri kuuntelija laitteen mukaan
+            if (isTouchDevice) {
+                // Kännykällä kosketus avaa vahvistusikkunan
+                symboliElementti.addEventListener('touchend', (event) => {
+                    event.preventDefault();
+                    if(event.target.classList.contains('selected')) return;
+                    valittavaSymboli = parseInt(event.target.dataset.symbolId);
+                    zoomedSymbol.textContent = valittavaSymboli;
+                    toggleZoomView(true);
+                });
+            } else {
+                // Kannettavalla klikkaus valitsee suoraan
+                symboliElementti.addEventListener('click', (event) => {
+                    if(event.target.classList.contains('selected')) return;
+                    const symbolId = parseInt(event.target.dataset.symbolId);
+                    addSymbolToSequence(symbolId, event.target);
+                });
+            }
             
             stargateContainer.appendChild(symboliElementti);
-        }
-    }
-
-    function tarkistaSekvenssi() {
-        if (JSON.stringify(kayttajanSekvenssi) === JSON.stringify(OIKEA_SEKVENSSI)) {
-            aikakoneOsio.classList.add('piilotettu');
-            stargateOsio.classList.add('piilotettu');
-            lopputulosOsio.classList.remove('piilotettu');
-            koordinaatitElementti.textContent = LOPULLISET_KOORDINAATIT;
-            eventHorizon.classList.add('active');
-        } else {
-            naytaVirhe("Virheellinen sekvenssi. Portti nollataan.");
-            kayttajanSekvenssi = [];
-            syoteNaytto.textContent = "";
-            document.querySelectorAll('.stargate-symbol.selected').forEach(el => {
-                el.classList.remove('selected');
-            });
         }
     }
 
@@ -110,40 +146,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    function handleSymbolClick(event) {
-        event.preventDefault(); 
-        if (kayttajanSekvenssi.length >= 3) return;
-
-        const symboli = event.target;
-        if (symboli.classList.contains('selected')) return;
-
-        valittavaSymboli = parseInt(symboli.dataset.symbolId);
-        zoomedSymbol.textContent = valittavaSymboli;
-
-        // KORJAUS: Pieni viive ponnahdusikkunan näyttämiseen "haamuklikkausten" estämiseksi mobiilissa.
-        setTimeout(() => {
-            toggleZoomView(true);
-        }, 50); 
-    }
-
+    // Vahvistusnapin toiminta (vain mobiilille)
     confirmButton.addEventListener('click', function() {
-        if (valittavaSymboli !== null && kayttajanSekvenssi.length < 3) {
-            kayttajanSekvenssi.push(valittavaSymboli);
-            syoteNaytto.textContent = kayttajanSekvenssi.join(' - ');
-
+        if (valittavaSymboli !== null) {
             const originalSymbol = stargateContainer.querySelector(`[data-symbol-id='${valittavaSymboli}']`);
-            if (originalSymbol) {
-                originalSymbol.classList.add('selected');
-            }
-
+            addSymbolToSequence(valittavaSymboli, originalSymbol);
             toggleZoomView(false);
-
-            if (kayttajanSekvenssi.length === 3) {
-                setTimeout(tarkistaSekvenssi, 500);
-            }
         }
     });
 
+    // Peruutusnappien toiminta (vain mobiilille)
     cancelButton.addEventListener('click', () => toggleZoomView(false));
     modalOverlay.addEventListener('click', () => toggleZoomView(false));
 });
