@@ -6,7 +6,7 @@
     <title>Ajan Vartijat - Geokätkömysteeri</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -23,7 +23,6 @@
 
     <div class="sisalto-laatikko">
         <div class="teksti-alue">
-
             <div class="glcars-container">
                 <div class="glcars-bar-top">
                     <div class="glcars-title">MK-SYSTEMS</div>
@@ -34,102 +33,29 @@
                 <div class="glcars-header">
                     <div class="glcars-side glcars-left">
                         <div class="glcars-elbow"></div>
-                        <div class="glcars-v-stack">
-                            <div class="glcars-block num-block-1" id="glcars-item-3"></div>
-                            <div class="glcars-block stub-block-1"></div>
-                        </div>
-                        <div class="glcars-v-stack">
-                           <div class="glcars-block num-block-2" id="glcars-item-4"></div>
-                           <div class="glcars-block stub-block-2"></div>
-                        </div>
-                         <div class="glcars-v-stack">
-                            <div class="glcars-block stub-block-1" style="height: 28px"></div>
-                            <div class="glcars-block num-block-1" id="glcars-item-9"></div>
-                        </div>
+                        <div class="glcars-v-stack"><div class="glcars-block num-block-1" id="glcars-item-3"></div><div class="glcars-block stub-block-1"></div></div>
+                        <div class="glcars-v-stack"><div class="glcars-block num-block-2" id="glcars-item-4"></div><div class="glcars-block stub-block-2"></div></div>
+                        <div class="glcars-v-stack"><div class="glcars-block stub-block-1" style="height: 28px"></div><div class="glcars-block num-block-1" id="glcars-item-9"></div></div>
                     </div>
-                    
-                    <div class="logo-container">
-                        <img src="https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png" alt="Geokätköily Logo" class="logo" />
-                    </div>
-
+                    <div class="logo-container"><img src="https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png" alt="Geokätköily Logo" class="logo" /></div>
                     <div class="glcars-side glcars-right">
                         <div class="glcars-elbow"></div>
-                        <div class="glcars-v-stack">
-                            <div class="glcars-block num-block-1" id="glcars-item-5"></div>
-                            <div class="glcars-block stub-block-1"></div>
-                        </div>
-                        <div class="glcars-v-stack">
-                           <div class="glcars-block num-block-2" id="glcars-item-6"></div>
-                           <div class="glcars-block stub-block-2"></div>
-                        </div>
-                        <div class="glcars-v-stack">
-                            <div class="glcars-block stub-block-1" style="height: 28px"></div>
-                            <div class="glcars-block num-block-1" id="glcars-item-10"></div>
-                        </div>
+                        <div class="glcars-v-stack"><div class="glcars-block num-block-1" id="glcars-item-5"></div><div class="glcars-block stub-block-1"></div></div>
+                        <div class="glcars-v-stack"><div class="glcars-block num-block-2" id="glcars-item-6"></div><div class="glcars-block stub-block-2"></div></div>
+                        <div class="glcars-v-stack"><div class="glcars-block stub-block-1" style="height: 28px"></div><div class="glcars-block num-block-1" id="glcars-item-10"></div></div>
                     </div>
                 </div>
             </div>
-            
-            <div id="intro-section">
-                <p id="intro-text-1"></p>
-                <p id="intro-text-2" class="leipateksti"></p>
-            </div>
-
-            <div id="login-section" class="piilotettu">
-                <h4 class="alaotsikko" id="login-heading"></h4>
-                <div id="login-container" class="piilotettu">
-                    <p>Syötä tunnisteesi, kadetti.</p>
-                    <input type="text" id="nickname-input" placeholder="Geokätköilynimimerkki">
-                    <button id="login-button" class="toiminto-nappi">Yhdistä</button>
-                </div>
-                <div id="auth-sequence" class="piilotettu">
-                    <p id="auth-text"></p>
-                </div>
-            </div>
-            
-            <div id="mission-briefing-section" class="piilotettu">
-                 <h3 class="paaotsikko">— Tehtävänanto: Ajan Vartijat —</h3>
-                 <p id="mission-text" class="leipateksti"></p>
-            </div>
-
-            <div id="aikakone-osio" class="time-circuits-container piilotettu">
-                <h4 class="alaotsikko">Syötä kalibrointipäivämäärät</h4>
-                <div class="time-circuit-display color-red"><div class="circuit-label-top">MENNEISYYDEN KAIKU</div><div class="circuit-inputs"><div><span>PP</span><input type="number" id="day1" class="time-circuit-input" min="1" max="31"></div><div><span>KK</span><input type="number" id="month1" class="time-circuit-input" min="1" max="12"></div><div><span>VVVV</span><input type="number" id="year1" class="time-circuit-input" min="0"></div></div><div class="circuit-label-bottom">MÄÄRÄNPÄÄ</div></div>
-                <div class="time-circuit-display color-green"><div class="circuit-label-top">KOHTALON HETKI</div><div class="circuit-inputs"><div><span>PP</span><input type="number" id="day2" class="time-circuit-input" min="1" max="31"></div><div><span>KK</span><input type="number" id="month2" class="time-circuit-input" min="1" max="12"></div><div><span>VVVV</span><input type="number" id="year2" class="time-circuit-input" min="0"></div></div><div class="circuit-label-bottom">NYKYHETKI</div></div>
-                <div class="time-circuit-display color-yellow"><div class="circuit-label-top">TULEVAISUUDEN VISIO</div><div class="circuit-inputs"><div><span>PP</span><input type="number" id="day3" class="time-circuit-input" min="1" max="31"></div><div><span>KK</span><input type="number" id="month3" class="time-circuit-input" min="1" max="12"></div><div><span>VVVV</span><input type="number" id="year3" class="time-circuit-input" min="0"></div></div><div class="circuit-label-bottom">VIIMEKSI LÄHDETTY</div></div>
-                <button id="tarkista-paivamaarat" class="toiminto-nappi">Lukitse päivämäärät</button>
-            </div>
-
-            <div id="stargate-osio" class="piilotettu">
-                <h4 class="alaotsikko">Soita Tähtiportti</h4>
-                <p class="vihje-teksti">Päivämäärien numeroiden summa paljastaa oikeat symbolit. Esimerkiksi 01.01.2000 -> 1+1+2 = 4. Valitse kolme symbolia oikeassa järjestyksessä.</p>
-                <div id="stargate-container">
-                    <div id="event-horizon"></div>
-                </div>
-                <p id="syote-naytto">Valitut symbolit: <span id="symboli-jono"></span></p>
-            </div>
-            
-            <div id="lopputulos-osio" class="huomio-laatikko piilotettu">
-                <p class="huomio-otsikko">PORTTI AVOINNA!</p>
-                <p class="huomio-teksti">Hienoa työtä, kadetti! Anomalia on korjattu. Geokätkön koordinaatit ovat:</p>
-                <p id="koordinaatit" class="leipateksti"><strong>N 61° 00.XXX E 025° 00.YYY</strong></p>
-            </div>
-
-             <div id="virhe-viesti" class="huomio-laatikko piilotettu" style="border-color: #FF4500;">
-                <p class="huomio-otsikko" style="color: #FF4500;">VIRHE!</p>
-                <p id="virhe-teksti" class="huomio-teksti">Syötteesi on virheellinen. Yritä uudelleen.</p>
-             </div>
-
-            <div class="glcars-footer">
-                <div class="glcars-block stub-block-1" style="width: 80px;"></div>
-                <div class="glcars-block num-block-1 lcars-wide" id="glcars-item-7"></div>
-                <div class="glcars-block stub-block-2 flex-grow"></div>
-                <div class="glcars-block num-block-2 lcars-med" id="glcars-item-8"></div>
-                <div class="glcars-elbow"></div>
-            </div>
+            <div id="intro-section"><p id="intro-text-1"></p><p id="intro-text-2" class="leipateksti"></p></div>
+            <div id="login-section" class="piilotettu"><h4 class="alaotsikko" id="login-heading"></h4><div id="login-container" class="piilotettu"><p>Syötä tunnisteesi, kadetti.</p><input type="text" id="nickname-input" placeholder="Geokätköilynimimerkki"><button id="login-button" class="toiminto-nappi">Yhdistä</button></div><div id="auth-sequence" class="piilotettu"><p id="auth-text"></p></div></div>
+            <div id="mission-briefing-section" class="piilotettu"><h3 class="paaotsikko">— Tehtävänanto: Ajan Vartijat —</h3><p id="mission-text" class="leipateksti"></p></div>
+            <div id="aikakone-osio" class="time-circuits-container piilotettu"><h4 class="alaotsikko">Syötä kalibrointipäivämäärät</h4><div class="time-circuit-display color-red"><div class="circuit-label-top">MENNEISYYDEN KAIKU</div><div class="circuit-inputs"><div><span>PP</span><input type="number" id="day1" class="time-circuit-input" min="1" max="31"></div><div><span>KK</span><input type="number" id="month1" class="time-circuit-input" min="1" max="12"></div><div><span>VVVV</span><input type="number" id="year1" class="time-circuit-input" min="0"></div></div><div class="circuit-label-bottom">MÄÄRÄNPÄÄ</div></div><div class="time-circuit-display color-green"><div class="circuit-label-top">KOHTALON HETKI</div><div class="circuit-inputs"><div><span>PP</span><input type="number" id="day2" class="time-circuit-input" min="1" max="31"></div><div><span>KK</span><input type="number" id="month2" class="time-circuit-input" min="1" max="12"></div><div><span>VVVV</span><input type="number" id="year2" class="time-circuit-input" min="0"></div></div><div class="circuit-label-bottom">NYKYHETKI</div></div><div class="time-circuit-display color-yellow"><div class="circuit-label-top">TULEVAISUUDEN VISIO</div><div class="circuit-inputs"><div><span>PP</span><input type="number" id="day3" class="time-circuit-input" min="1" max="31"></div><div><span>KK</span><input type="number" id="month3" class="time-circuit-input" min="1" max="12"></div><div><span>VVVV</span><input type="number" id="year3" class="time-circuit-input" min="0"></div></div><div class="circuit-label-bottom">VIIMEKSI LÄHDETTY</div></div><button id="tarkista-paivamaarat" class="toiminto-nappi">Lukitse päivämäärät</button></div>
+            <div id="stargate-osio" class="piilotettu"><h4 class="alaotsikko">Soita Tähtiportti</h4><p class="vihje-teksti">Päivämäärien numeroiden summa paljastaa oikeat symbolit. Esimerkiksi 01.01.2000 -> 1+1+2 = 4. Valitse kolme symbolia oikeassa järjestyksessä.</p><div id="stargate-container"><div id="event-horizon"></div></div><p id="syote-naytto">Valitut symbolit: <span id="symboli-jono"></span></p></div>
+            <div id="lopputulos-osio" class="huomio-laatikko piilotettu"><p class="huomio-otsikko">PORTTI AVOINNA!</p><p class="huomio-teksti">Hienoa työtä, kadetti! Anomalia on korjattu. Geokätkön koordinaatit ovat:</p><p id="koordinaatit" class="leipateksti"><strong>N 61° 00.XXX E 025° 00.YYY</strong></p></div>
+            <div id="virhe-viesti" class="huomio-laatikko piilotettu" style="border-color: #FF4500;"><p class="huomio-otsikko" style="color: #FF4500;">VIRHE!</p><p id="virhe-teksti" class="huomio-teksti">Syötteesi on virheellinen. Yritä uudelleen.</p></div>
+            <div class="glcars-footer"><div class="glcars-block stub-block-1" style="width: 80px;"></div><div class="glcars-block num-block-1 lcars-wide" id="glcars-item-7"></div><div class="glcars-block stub-block-2 flex-grow"></div><div class="glcars-block num-block-2 lcars-med" id="glcars-item-8"></div><div class="glcars-elbow"></div></div>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
