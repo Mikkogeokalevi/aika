@@ -108,9 +108,13 @@ body {
 .peruuta-nappi:hover { background-color: #999; }
 
 @media (max-width: 768px) {
-    .glcars-container, .glcars-footer { display: flex; }
+    /* TÄMÄ RIVI ON KORJATTU: Poistettu virheellinen asettelu ja lisätty rivittymisen esto */
+    .glcars-bar-top, .glcars-footer { 
+        height: 22px; 
+        padding-left: 10px;
+        flex-wrap: nowrap; /* ESTÄÄ ELEMENTTEJÄ RIVITTYMÄSTÄ */
+    }
     .glcars-title { font-size: 0.8em; padding-right: 10px; }
-    .glcars-bar-top, .glcars-footer { height: 22px; padding-left: 10px; }
     .glcars-bar-top .glcars-block, .glcars-footer .glcars-block { height: 18px; padding: 0 5px; margin-left: 3px;}
     .lcars-wide { min-width: 70px; }
     .lcars-med { min-width: 50px; }
