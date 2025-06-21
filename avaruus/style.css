@@ -67,7 +67,6 @@ body {
     gap: 5px;
 }
 .glcars-left { justify-content: flex-start; }
-/* MUUTOS: Korjattu asettelu peilaamaan vasenta laitaa oikein */
 .glcars-right {
     flex-direction: row-reverse;
     justify-content: flex-start;
@@ -130,27 +129,49 @@ body {
 .time-circuits-container { background-color: #1a1a1a; border: 2px solid #444; border-radius: 8px; padding: 20px; margin-top: 20px; }
 .piilotettu { display: none; }
 
-/* --- Responsiivisuus --- */
-@media (max-width: 768px) {
-    /* MUUTOS: Pienennetään reilusti mobiilissa, ei piiloteta */
-    .glcars-container { margin-bottom: 15px; }
-    .glcars-title { font-size: 0.7em; padding-right: 10px; }
-    .glcars-bar-top { height: 20px; padding-left: 10px; }
-    .glcars-bar-top .glcars-block { height: 16px; padding: 0 5px; margin-left: 3px;}
-    .lcars-wide { min-width: 60px; }
-    .lcars-med { min-width: 40px; }
+#login-section { text-align: center; padding: 20px 0; }
+#login-container { margin-top: 15px; }
+#login-container input { background-color: #11150C; color: #FFD700; border: 1px solid #90EE90; border-radius: 4px; padding: 10px; font-size: 1.1em; text-align: center; width: 70%; max-width: 300px; margin-bottom: 15px; }
+#login-container .toiminto-nappi { margin: 0 auto; }
+#auth-sequence { margin-top: 20px; padding: 15px; border: 1px dashed #90EE90; background-color: #2A381C; color: #90EE90; font-family: 'Courier New', Courier, monospace; min-height: 1.5em; }
 
-    .glcars-header { gap: 3px; }
-    .glcars-elbow { width: 10px; height: 45px; }
-    .glcars-side { gap: 3px; }
-    
-    .glcars-v-stack:nth-of-type(3) { display: none; } /* Piilotetaan uusin lisätty palkki mobiilissa */
-    .glcars-block { font-size: 0.6em; padding: 1px 5px; letter-spacing: 1px; }
-    .stub-block-1 { height: 8px; }
-    .stub-block-2 { height: 16px; }
-    .logo { width: 50px; height: 50px; }
-    
-    .glcars-footer { height: 20px; margin-top: 15px;}
-    .glcars-footer .glcars-elbow { height: 16px; }
-    .glcars-footer .glcars-block { height: 16px; }
+.huomio-laatikko { background-color: #2A381C; padding: 15px; border-radius: 8px; margin-top: 30px; text-align: center; border: 1px dashed #90EE90; }
+.huomio-otsikko { color: #FFD700; font-size: 1.1em; font-weight: bold; margin: 0 0 5px 0; }
+.huomio-teksti { color: #FFFFFF; font-size: 1.0em; margin: 0; }
+.leipateksti { margin-top: 0; margin-bottom: 15px; color: #FFFFFF; font-size: 1.0em; }
+.vihje-teksti { font-size: 0.9em; text-align: center; color: #ccc; font-style: italic; }
+
+.toiminto-nappi { display: block; margin: 20px auto 0; padding: 12px 25px; font-size: 1.1em; font-weight: bold; color: #1a2015; background-color: #90EE90; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s ease, transform 0.2s ease, opacity 0.3s; }
+.toiminto-nappi:hover { background-color: #b3ffb3; transform: scale(1.05); }
+.toiminto-nappi:disabled { background-color: #555; color: #999; cursor: not-allowed; transform: none; }
+#stargate-container { position: relative; width: 300px; height: 300px; margin: 30px auto; border: 5px solid #5F6A7A; border-radius: 50%; }
+#event-horizon { position: absolute; width: 70%; height: 70%; top: 15%; left: 15%; background: radial-gradient(circle, #0077be, #003a5e); border-radius: 50%; box-shadow: 0 0 20px #00aaff, inset 0 0 15px #003a5e; transition: transform 0.5s ease; }
+.stargate-symbol { position: absolute; width: 40px; height: 40px; background-color: #2A381C; border: 1px solid #90EE90; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.2em; font-weight: bold; color: #FFD700; cursor: pointer; user-select: none; transition: background-color 0.2s, transform 0.2s; z-index: 1; }
+.stargate-symbol:hover, .stargate-symbol.selected { z-index: 10; }
+.stargate-symbol.selected { background-color: #FFD700; color: #11150C; box-shadow: 0 0 10px #FFD700; }
+#syote-naytto { text-align: center; font-size: 1.2em; color: #fff; margin-top: 20px; min-height: 1.5em; }
+#koordinaatit { font-size: 1.4em; color: #FFD700; margin-top: 10px; text-align: center; }
+@keyframes kawoosh { 0% { transform: scale(0.1); opacity: 0.5; } 70% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+#event-horizon.active { animation: kawoosh 0.7s forwards; background: radial-gradient(circle, #ffffff, #a7d8ff); box-shadow: 0 0 40px #fff, inset 0 0 20px #a7d8ff; }
+
+/* Ponnahdusikkunan tyylit */
+#modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 100; }
+#zoom-view { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #2A381C; border: 2px solid #90EE90; border-radius: 12px; padding: 20px 30px; z-index: 101; text-align: center; box-shadow: 0 5px 25px rgba(0,0,0,0.5); }
+#zoomed-symbol { font-size: 5em; font-weight: bold; color: #FFD700; background-color: #11150C; border-radius: 50%; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; }
+#zoom-view p { color: #fff; margin-bottom: 20px; }
+.zoom-buttons { display: flex; gap: 15px; justify-content: center; }
+.zoom-buttons .toiminto-nappi { margin: 0; }
+.peruuta-nappi { background-color: #888; }
+.peruuta-nappi:hover { background-color: #999; }
+
+@media (max-width: 768px) {
+    .glcars-container, .glcars-footer { display: none; }
+    .logo-container { margin-bottom: 15px; }
+    #stargate-container { width: 250px; height: 250px; }
+    .stargate-symbol { width: 35px; height: 35px; font-size: 1em; }
+    .time-circuits-container { padding: 10px; }
+    .circuit-inputs { gap: 8px; }
+    .time-circuit-input { font-size: 1.8em; }
+    .circuit-label-bottom { font-size: 0.8em; }
+    .alaotsikko { font-size: 1.1em; }
 }
