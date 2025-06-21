@@ -16,7 +16,7 @@ body {
     border-radius: 12px;
     box-shadow: 5px 5px 15px rgba(0,0,0,0.6);
     transition: margin 0.3s ease;
-    overflow: hidden; /* Varmistaa, että sisältö pysyy laatikon sisällä */
+    overflow: hidden; 
 }
 
 .teksti-alue {
@@ -41,7 +41,7 @@ body {
 .alaotsikko { color: #90EE90; text-align: center; font-size: 1.3em; margin-top: 25px; }
 .vihje-teksti { font-size: 0.9em; text-align: center; color: #ccc; font-style: italic; }
 
-/* UUSI: Typewriter-efektin kursori */
+/* Typewriter-efektin kursori */
 .typewriter-cursor {
     border-left: 2px solid #90EE90;
     animation: blink 0.7s steps(1) infinite;
@@ -51,15 +51,15 @@ body {
     50% { border-color: transparent; }
 }
 
-/* UUSI: Login-osion tyylit */
+/* Login-osion tyylit */
 #login-section {
     text-align: center;
     padding: 20px 0;
 }
-.login-container {
+#login-container {
     margin-top: 15px;
 }
-.login-container input {
+#login-container input {
     background-color: #11150C;
     color: #FFD700;
     border: 1px solid #90EE90;
@@ -71,9 +71,21 @@ body {
     max-width: 300px;
     margin-bottom: 15px;
 }
-.login-container .toiminto-nappi {
+#login-container .toiminto-nappi {
     margin: 0 auto;
 }
+
+/* UUSI: Hakuanimaation laatikko */
+#auth-sequence {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px dashed #90EE90;
+    background-color: #2A381C;
+    color: #90EE90;
+    font-family: 'Courier New', Courier, monospace;
+    min-height: 1.5em;
+}
+
 
 /* --- Huomio-laatikot --- */
 .huomio-laatikko { background-color: #2A381C; padding: 15px; border-radius: 8px; margin-top: 30px; text-align: center; border: 1px dashed #90EE90; }
