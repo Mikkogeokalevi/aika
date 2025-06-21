@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajan Vartijat - Geokätkömysteeri</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,8 +23,23 @@
 
     <div class="sisalto-laatikko">
         <div class="teksti-alue">
-            <div class="logo-container">
-                <img src="https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png" alt="Geokätköily Logo" class="logo" />
+
+            <div class="glcars-header">
+                <div class="glcars-side glcars-left">
+                    <div class="glcars-elbow"></div>
+                    <div class="glcars-block num-block-1" id="glcars-num-1">8923 23</div>
+                    <div class="glcars-block num-block-2" id="glcars-num-2">0054 87</div>
+                </div>
+                
+                <div class="logo-container">
+                    <img src="https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png" alt="Geokätköily Logo" class="logo" />
+                </div>
+
+                <div class="glcars-side glcars-right">
+                    <div class="glcars-block num-block-2" id="glcars-num-3">1198 25</div>
+                    <div class="glcars-block num-block-1" id="glcars-num-4">7743 01</div>
+                    <div class="glcars-elbow"></div>
+                </div>
             </div>
             
             <div id="intro-section">
@@ -47,57 +65,17 @@
             </div>
 
             <div id="aikakone-osio" class="time-circuits-container piilotettu">
-                <h4 class="alaotsikko">Syötä kalibrointipäivämäärät</h4>
-                <div class="time-circuit-display color-red">
-                    <div class="circuit-label-top">MENNEISYYDEN KAIKU</div>
-                    <div class="circuit-inputs">
-                        <div><span>PP</span><input type="number" id="day1" class="time-circuit-input" min="1" max="31"></div>
-                        <div><span>KK</span><input type="number" id="month1" class="time-circuit-input" min="1" max="12"></div>
-                        <div><span>VVVV</span><input type="number" id="year1" class="time-circuit-input" min="0"></div>
-                    </div>
-                    <div class="circuit-label-bottom">MÄÄRÄNPÄÄ</div>
                 </div>
-                <div class="time-circuit-display color-green">
-                    <div class="circuit-label-top">KOHTALON HETKI</div>
-                    <div class="circuit-inputs">
-                        <div><span>PP</span><input type="number" id="day2" class="time-circuit-input" min="1" max="31"></div>
-                        <div><span>KK</span><input type="number" id="month2" class="time-circuit-input" min="1" max="12"></div>
-                        <div><span>VVVV</span><input type="number" id="year2" class="time-circuit-input" min="0"></div>
-                    </div>
-                    <div class="circuit-label-bottom">NYKYHETKI</div>
-                </div>
-                <div class="time-circuit-display color-yellow">
-                    <div class="circuit-label-top">TULEVAISUUDEN VISIO</div>
-                    <div class="circuit-inputs">
-                        <div><span>PP</span><input type="number" id="day3" class="time-circuit-input" min="1" max="31"></div>
-                        <div><span>KK</span><input type="number" id="month3" class="time-circuit-input" min="1" max="12"></div>
-                        <div><span>VVVV</span><input type="number" id="year3" class="time-circuit-input" min="0"></div>
-                    </div>
-                    <div class="circuit-label-bottom">VIIMEKSI LÄHDETTY</div>
-                </div>
-                <button id="tarkista-paivamaarat" class="toiminto-nappi">Lukitse päivämäärät</button>
-            </div>
 
 
             <div id="stargate-osio" class="piilotettu">
-                <h4 class="alaotsikko">Soita Tähtiportti</h4>
-                <p class="vihje-teksti">Päivämäärien numeroiden summa paljastaa oikeat symbolit. Esimerkiksi 01.01.2000 -> 1+1+2 = 4. Valitse kolme symbolia oikeassa järjestyksessä.</p>
-                <div id="stargate-container">
-                    <div id="event-horizon"></div>
                 </div>
-                <p id="syote-naytto">Valitut symbolit: <span id="symboli-jono"></span></p>
-            </div>
             
             <div id="lopputulos-osio" class="huomio-laatikko piilotettu">
-                <p class="huomio-otsikko">PORTTI AVOINNA!</p>
-                <p class="huomio-teksti">Hienoa työtä, kadetti! Anomalia on korjattu. Geokätkön koordinaatit ovat:</p>
-                <p id="koordinaatit" class="leipateksti"><strong>N 61° 00.XXX E 025° 00.YYY</strong></p>
-            </div>
+                </div>
 
              <div id="virhe-viesti" class="huomio-laatikko piilotettu" style="border-color: #FF4500;">
-                <p class="huomio-otsikko" style="color: #FF4500;">VIRHE!</p>
-                <p id="virhe-teksti" class="huomio-teksti">Syötteesi on virheellinen. Yritä uudelleen.</p>
-            </div>
+                </div>
 
         </div>
     </div>
