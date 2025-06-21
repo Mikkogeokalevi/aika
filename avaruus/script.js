@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const OIKEA_SEKVENSSI = [27, 32, 12];
     const LOPULLISET_KOORDINAATIT = "N 61° 00.123 E 025° 00.456"; // !!! VAIHDA TÄMÄ !!!
     const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-    // MUUTOS: Päivitetty kätköilytermit
     const geocachingTerms = ["KÄTKÖ", "REISSARI", "HUNTTI", "PÖLJÄ", "JÄSTI", "DENARI", "MIKKO","KALEVI", "ÖÖRTTI", "MULTI", "TRADI", "MIITTI", "TILTU", "EUKKA", "E5KIMO", "LAHJEMIES", "NAATT1", "MILDE04", "MYSSE"];
 
     // --- Globaalit muuttujat ---
@@ -156,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('day1').focus();
         });
     }
-
+    
     function runPowerUpSequence() {
         elementit.powerUpSequence.classList.remove('piilotettu');
         const powerUpMessages = ["Tarkistetaan ajallista siirtymää...", "Synkronoidaan vuon kondensaattoria...", "Aikapiirit vakaat! Reititetään virtaa...", "Tähtiportin matriisi aktivoitu!"];
