@@ -11,72 +11,61 @@
 </head>
 <body>
 
-    <div id="modal-overlay" class="piilotettu"></div>
-    <div id="zoom-view" class="piilotettu">
-        <div id="zoomed-symbol"></div>
-        <p>Valitaanko tämä symboli?</p>
-        <div class="zoom-buttons">
-            <button id="confirm-selection" class="toiminto-nappi">Valitse</button>
-            <button id="cancel-selection" class="toiminto-nappi peruuta-nappi">Peruuta</button>
-        </div>
-    </div>
-
     <div class="sisalto-laatikko">
         <div class="teksti-alue">
 
-            <div class="glcars-header">
-                <div class="glcars-side glcars-left">
-                    <div class="glcars-elbow"></div>
-                    <div class="glcars-block num-block-1" id="glcars-num-1">8923 23</div>
-                    <div class="glcars-block num-block-2" id="glcars-num-2">0054 87</div>
+            <div class="glcars-container">
+                <div class="glcars-bar-top">
+                    <div class="glcars-title">MK-SYSTEMS</div>
+                    <div class="glcars-block num-block-1 lcars-wide" id="glcars-item-1"></div>
+                    <div class="glcars-block num-block-2 lcars-med" id="glcars-item-2"></div>
+                    <div class="glcars-block stub-block-1" style="height: 20px;"></div>
                 </div>
-                
-                <div class="logo-container">
-                    <img src="https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png" alt="Geokätköily Logo" class="logo" />
-                </div>
+                <div class="glcars-header">
+                    <div class="glcars-side glcars-left">
+                        <div class="glcars-elbow"></div>
+                        <div class="glcars-v-stack">
+                            <div class="glcars-block num-block-1" id="glcars-item-3"></div>
+                            <div class="glcars-block stub-block-1"></div>
+                        </div>
+                        <div class="glcars-v-stack">
+                           <div class="glcars-block num-block-2" id="glcars-item-4"></div>
+                           <div class="glcars-block stub-block-2"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="logo-container">
+                        <img src="https://img.geocaching.com:443/84454fa6-e23a-4aad-a8a4-612b77f23abe.png" alt="Geokätköily Logo" class="logo" />
+                    </div>
 
-                <div class="glcars-side glcars-right">
-                    <div class="glcars-block num-block-2" id="glcars-num-3">1198 25</div>
-                    <div class="glcars-block num-block-1" id="glcars-num-4">7743 01</div>
-                    <div class="glcars-elbow"></div>
+                    <div class="glcars-side glcars-right">
+                        <div class="glcars-elbow"></div>
+                        <div class="glcars-v-stack">
+                            <div class="glcars-block num-block-1" id="glcars-item-5"></div>
+                            <div class="glcars-block stub-block-1"></div>
+                        </div>
+                        <div class="glcars-v-stack">
+                           <div class="glcars-block num-block-2" id="glcars-item-6"></div>
+                           <div class="glcars-block stub-block-2"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-            <div id="intro-section">
-                <p id="intro-text-1"></p>
-                <p id="intro-text-2" class="leipateksti"></p>
+            <hr>
+            <h3>Testialue alla (toiminnallisuus lisätään myöhemmin)</h3>
+            <p>Alkutarinan paikka.</p>
+            <h4 class="alaotsikko">Kirjautumisen paikka</h4>
+            <h3 class="paaotsikko">Tehtävänannon paikka</h3>
+            <div class="time-circuits-container">DeLorean-mittariston paikka</div>
+            <hr>
+            <div class="glcars-footer">
+                <div class="glcars-block stub-block-1" style="width: 80px;"></div>
+                <div class="glcars-block num-block-1 lcars-wide" id="glcars-item-7"></div>
+                <div class="glcars-block stub-block-2 flex-grow"></div>
+                <div class="glcars-block num-block-2 lcars-med" id="glcars-item-8"></div>
+                <div class="glcars-elbow"></div>
             </div>
-
-            <div id="login-section" class="piilotettu">
-                <h4 class="alaotsikko">YHDISTETÄÄN PÄÄTTEESEEN...</h4>
-                <div id="login-container">
-                    <p>Syötä tunnisteesi, kadetti.</p>
-                    <input type="text" id="nickname-input" placeholder="Geokätköilynimimerkki">
-                    <button id="login-button" class="toiminto-nappi">Yhdistä</button>
-                </div>
-                <div id="auth-sequence" class="piilotettu">
-                    <p id="auth-text"></p>
-                </div>
-            </div>
-            
-            <div id="mission-briefing-section" class="piilotettu">
-                 <h3 class="paaotsikko">— Tehtävänanto: Ajan Vartijat —</h3>
-                 <p id="mission-text" class="leipateksti"></p>
-            </div>
-
-            <div id="aikakone-osio" class="time-circuits-container piilotettu">
-                </div>
-
-
-            <div id="stargate-osio" class="piilotettu">
-                </div>
-            
-            <div id="lopputulos-osio" class="huomio-laatikko piilotettu">
-                </div>
-
-             <div id="virhe-viesti" class="huomio-laatikko piilotettu" style="border-color: #FF4500;">
-                </div>
-
         </div>
     </div>
 
