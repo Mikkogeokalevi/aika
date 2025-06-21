@@ -23,64 +23,33 @@
 
             <div id="aikakone-osio" class="time-circuits-container">
                 <h4 class="alaotsikko">Syötä kalibrointipäivämäärät</h4>
-
                 <div class="time-circuit-display color-red">
                     <div class="circuit-label-top">MENNEISYYDEN KAIKU</div>
                     <div class="circuit-inputs">
-                        <div>
-                            <span>PP</span>
-                            <input type="number" id="day1" class="time-circuit-input" min="1" max="31">
-                        </div>
-                        <div>
-                            <span>KK</span>
-                            <input type="number" id="month1" class="time-circuit-input" min="1" max="12">
-                        </div>
-                        <div>
-                            <span>VVVV</span>
-                            <input type="number" id="year1" class="time-circuit-input" min="0">
-                        </div>
+                        <div><span>PP</span><input type="number" id="day1" class="time-circuit-input" min="1" max="31"></div>
+                        <div><span>KK</span><input type="number" id="month1" class="time-circuit-input" min="1" max="12"></div>
+                        <div><span>VVVV</span><input type="number" id="year1" class="time-circuit-input" min="0"></div>
                     </div>
                     <div class="circuit-label-bottom">MÄÄRÄNPÄÄ</div>
                 </div>
-
                 <div class="time-circuit-display color-green">
                     <div class="circuit-label-top">KOHTALON HETKI</div>
                     <div class="circuit-inputs">
-                        <div>
-                            <span>PP</span>
-                            <input type="number" id="day2" class="time-circuit-input" min="1" max="31">
-                        </div>
-                        <div>
-                            <span>KK</span>
-                            <input type="number" id="month2" class="time-circuit-input" min="1" max="12">
-                        </div>
-                        <div>
-                            <span>VVVV</span>
-                            <input type="number" id="year2" class="time-circuit-input" min="0">
-                        </div>
+                        <div><span>PP</span><input type="number" id="day2" class="time-circuit-input" min="1" max="31"></div>
+                        <div><span>KK</span><input type="number" id="month2" class="time-circuit-input" min="1" max="12"></div>
+                        <div><span>VVVV</span><input type="number" id="year2" class="time-circuit-input" min="0"></div>
                     </div>
                     <div class="circuit-label-bottom">NYKYHETKI</div>
                 </div>
-
                 <div class="time-circuit-display color-yellow">
                     <div class="circuit-label-top">TULEVAISUUDEN VISIO</div>
                     <div class="circuit-inputs">
-                        <div>
-                            <span>PP</span>
-                            <input type="number" id="day3" class="time-circuit-input" min="1" max="31">
-                        </div>
-                        <div>
-                            <span>KK</span>
-                            <input type="number" id="month3" class="time-circuit-input" min="1" max="12">
-                        </div>
-                        <div>
-                            <span>VVVV</span>
-                            <input type="number" id="year3" class="time-circuit-input" min="0">
-                        </div>
+                        <div><span>PP</span><input type="number" id="day3" class="time-circuit-input" min="1" max="31"></div>
+                        <div><span>KK</span><input type="number" id="month3" class="time-circuit-input" min="1" max="12"></div>
+                        <div><span>VVVV</span><input type="number" id="year3" class="time-circuit-input" min="0"></div>
                     </div>
                     <div class="circuit-label-bottom">VIIMEKSI LÄHDETTY</div>
                 </div>
-
                 <button id="tarkista-paivamaarat" class="toiminto-nappi">Lukitse päivämäärät</button>
             </div>
 
@@ -105,6 +74,16 @@
                 <p id="virhe-teksti" class="huomio-teksti">Syötteesi on virheellinen. Yritä uudelleen.</p>
             </div>
 
+        </div>
+    </div>
+
+    <div id="modal-overlay" class="piilotettu"></div>
+    <div id="zoom-view" class="piilotettu">
+        <div id="zoomed-symbol"></div>
+        <p>Valitaanko tämä symboli?</p>
+        <div class="zoom-buttons">
+            <button id="confirm-selection" class="toiminto-nappi">Valitse</button>
+            <button id="cancel-selection" class="toiminto-nappi peruuta-nappi">Peruuta</button>
         </div>
     </div>
 
