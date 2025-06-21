@@ -1,9 +1,10 @@
 /*
     AJAN VARTIJAT - MYSTEERIN SKRIPTI
-    Versio 8.0 - Visuaalinen tehostus
+    Versio 9.0 - Asettelun ja mobiilinäkymän korjaus
 */
 document.addEventListener('DOMContentLoaded', function() {
 
+    // Lisätty uudet item-9 ja item-10
     const lcarsItems = [
         document.getElementById('glcars-item-1'),
         document.getElementById('glcars-item-2'),
@@ -13,6 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('glcars-item-6'),
         document.getElementById('glcars-item-7'),
         document.getElementById('glcars-item-8'),
+        document.getElementById('glcars-item-9'),
+        document.getElementById('glcars-item-10'),
     ].filter(el => el !== null);
 
     const geocachingTerms = ["GEOCACHE", "WAYPOINT", "FTF", "TFTC", "SPOILER", "MUGGLED", "TRACKABLE", "CITO", "DNF"];
@@ -33,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let i = 0; i < updateCount; i++) {
             const randomIndex = Math.floor(Math.random() * lcarsItems.length);
             const block = lcarsItems[randomIndex];
-            if (block.classList.contains('is-updating')) continue;
+            if (!block || block.classList.contains('is-updating')) continue;
             block.classList.add('is-updating');
             let newText = '';
             if (Math.random() < 0.3) {
