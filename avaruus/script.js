@@ -1,6 +1,6 @@
 /*
     AJAN VARTIJAT - MYSTEERIN SKRIPTI
-    Versio 12.0 - Lopullinen, toimiva integraatio
+    Versio 13.0 - Automaattinen fokus
 */
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // --- OSA 2: APUFUNKTIOT ---
-
     function generateRandomGcCode() {
         const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         let result = '';
@@ -101,7 +100,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- OSA 3: PÄÄLOGIIKKA JA VAIHEET ---
-
     function startIntro() {
         const introText1 = `U.S.S. Enterprise - Komentosillan loki, kapteeni Jean-Luc Picard. Tähtipäivä 47634.4.`;
         const introText2 = `Olemme havainneet vakavan poikkeaman aika-avaruusjatkumossa Omega-sektorissa. Muinainen porttiteknologia, jota paikalliset kutsuivat "Tähtiportiksi", on fuusioitunut primitiivisen, mutta yllättävän tehokkaan aikakoneen jäänteisiin. Syntynyt paradoksi uhkaa repiä todellisuuden rakenteen. Ajallinen päädirektiivi on vaarassa. Yhdistän sinut, lähimmän kenttäagentin, suoraan aluksen päätteeseen.`;
@@ -151,6 +149,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const missionText = `Kiitos yhteydenotosta, kadetti ${nickname}. Sinun tehtäväsi on kriittinen: sinun on vakautettava portti syöttämällä järjestelmään kolme keskeistä päivämäärää, jotka liittyvät aikakoneen matkoihin. Nämä ajalliset ankkurit stabiloivat jatkumon. Onnistuminen paljastaa symbolisekvenssin portin soittamiseen ja antaa sinulle palkkion sijainnin. Toimi nopeasti. Picard, loppu.`;
         typeWriter(document.getElementById('mission-text'), missionText, 30, () => {
             elementit.aikakoneOsio.classList.remove('piilotettu');
+            // MUUTOS: Asetetaan fokus automaattisesti ensimmäiseen kenttään
+            document.getElementById('day1').focus();
         });
     }
 
@@ -211,13 +211,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- OSA 4: TAPAHTUMANKUUNTELIJAT ---
-
     elementit.loginButton.addEventListener('click', () => {
         const nickname = elementit.nicknameInput.value.trim();
-        if (nickname === "") {
-            alert("Syötä nimimerkki jatkaaksesi.");
-            return;
-        }
+        if (nickname === "") { alert("Syötä nimimerkki jatkaaksesi."); return; }
         elementit.loginContainer.classList.add('piilotettu');
         elementit.authSequence.classList.remove('piilotettu');
         runAuthSequence(nickname);
@@ -252,7 +248,6 @@ document.addEventListener('DOMContentLoaded', function() {
     elementit.modalOverlay.addEventListener('click', () => toggleZoomView(false));
     
     // --- OSA 5: KÄYNNISTYS ---
-
     updateLcarsBlocks();
     setInterval(updateLcarsBlocks, 400);
     startIntro();
