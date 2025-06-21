@@ -1,6 +1,6 @@
 /*
     AJAN VARTIJAT - MYSTEERIN SKRIPTI
-    Versio 11.0 - Animoitu sisäänkirjautuminen
+    Versio 12.0 - Lopullinen, toimiva integraatio
 */
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -36,31 +36,80 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // --- OSA 2: APUFUNKTIOT ---
-    // (Tässä osiossa ei ole muutoksia edelliseen versioon)
 
-    function generateRandomGcCode() { /*...*/ }
-    function updateLcarsBlocks() { /*...*/ }
-    function naytaVirhe(viesti) { /*...*/ }
-    function typeWriter(element, text, speed, callback) { /*...*/ }
-    function toggleZoomView(show = false) { /*...*/ }
+    function generateRandomGcCode() {
+        const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let result = '';
+        const length = Math.floor(Math.random() * 3) + 4;
+        for (let i = 0; i < length; i++) {
+            result += charset.charAt(Math.floor(Math.random() * charset.length));
+        }
+        return 'GC' + result;
+    }
+
+    function updateLcarsBlocks() {
+        if (elementit.lcarsItems.length === 0) return;
+        const updateCount = Math.floor(Math.random() * 3) + 1;
+        for (let i = 0; i < updateCount; i++) {
+            const randomIndex = Math.floor(Math.random() * elementit.lcarsItems.length);
+            const block = elementit.lcarsItems[randomIndex];
+            if (!block || block.classList.contains('is-updating')) continue;
+            block.classList.add('is-updating');
+            let newText = '';
+            if (Math.random() < 0.3) {
+                newText = geocachingTerms[Math.floor(Math.random() * geocachingTerms.length)];
+            } else {
+                newText = generateRandomGcCode();
+            }
+            setTimeout(() => {
+                block.textContent = newText;
+                setTimeout(() => { block.classList.remove('is-updating'); }, 50);
+            }, 150);
+        }
+    }
+
+    function naytaVirhe(viesti) {
+        const virheViestiOsio = document.getElementById('virhe-viesti');
+        const virheTeksti = document.getElementById('virhe-teksti');
+        virheTeksti.textContent = viesti;
+        virheViestiOsio.classList.remove('piilotettu');
+        setTimeout(() => { virheViestiOsio.classList.add('piilotettu'); }, 3000);
+    }
+    
+    function typeWriter(element, text, speed, callback) {
+        let i = 0;
+        element.innerHTML = "";
+        const cursorSpan = document.createElement('span');
+        cursorSpan.className = 'typewriter-cursor';
+        element.appendChild(cursorSpan);
+        const typing = setInterval(() => {
+            if (i < text.length) {
+                cursorSpan.insertAdjacentText('beforebegin', text.charAt(i));
+                i++;
+            } else {
+                element.removeChild(cursorSpan);
+                clearInterval(typing);
+                if (callback) setTimeout(callback, 500);
+            }
+        }, speed);
+    }
+
+    function toggleZoomView(show = false) {
+        elementit.modalOverlay.classList.toggle('piilotettu', !show);
+        elementit.zoomView.classList.toggle('piilotettu', !show);
+        if (!show) valittavaSymboli = null;
+    }
 
     // --- OSA 3: PÄÄLOGIIKKA JA VAIHEET ---
 
     function startIntro() {
         const introText1 = `U.S.S. Enterprise - Komentosillan loki, kapteeni Jean-Luc Picard. Tähtipäivä 47634.4.`;
         const introText2 = `Olemme havainneet vakavan poikkeaman aika-avaruusjatkumossa Omega-sektorissa. Muinainen porttiteknologia, jota paikalliset kutsuivat "Tähtiportiksi", on fuusioitunut primitiivisen, mutta yllättävän tehokkaan aikakoneen jäänteisiin. Syntynyt paradoksi uhkaa repiä todellisuuden rakenteen. Ajallinen päädirektiivi on vaarassa. Yhdistän sinut, lähimmän kenttäagentin, suoraan aluksen päätteeseen.`;
-        
-        // MUUTOS TÄSSÄ: Uusi logiikka siirtymälle login-näkymään
         typeWriter(document.getElementById('intro-text-1'), introText1, 50, () => {
             typeWriter(document.getElementById('intro-text-2'), introText2, 40, () => {
-                // Kun alkutarinat on kerrottu, näytetään login-osio...
                 elementit.loginSection.classList.remove('piilotettu');
                 const loginHeading = document.getElementById('login-heading');
-                const loginHeadingText = "YHDISTETÄÄN PÄÄTTEESEEN";
-
-                // ...ja animoidaan sen otsikko
-                typeWriter(loginHeading, loginHeadingText, 70, () => {
-                    // Kun otsikko on kirjoitettu, animoidaan pisteet
+                typeWriter(loginHeading, "YHDISTETÄÄN PÄÄTTEESEEN", 70, () => {
                     let dotCount = 0;
                     const dotInterval = setInterval(() => {
                         if (dotCount < 4) {
@@ -68,7 +117,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             dotCount++;
                         } else {
                             clearInterval(dotInterval);
-                            // Pisteiden jälkeen näytetään itse syöttökenttä
                             setTimeout(() => {
                                 elementit.loginContainer.classList.remove('piilotettu');
                                 elementit.nicknameInput.focus();
@@ -79,8 +127,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-
-    // --- Koko muu tiedosto alla ennallaan ---
 
     function runAuthSequence(nickname) {
         const authMessages = ["Yhdistetään Tähtilaivaston verkkoon...", "Haetaan tunnistetta...", "Varmennetaan kvanttisignatuuria...", "Tunniste hyväksytty! Tervetuloa järjestelmään."];
@@ -164,6 +210,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // --- OSA 4: TAPAHTUMANKUUNTELIJAT ---
+
     elementit.loginButton.addEventListener('click', () => {
         const nickname = elementit.nicknameInput.value.trim();
         if (nickname === "") {
@@ -204,57 +252,8 @@ document.addEventListener('DOMContentLoaded', function() {
     elementit.modalOverlay.addEventListener('click', () => toggleZoomView(false));
     
     // --- OSA 5: KÄYNNISTYS ---
+
     updateLcarsBlocks();
     setInterval(updateLcarsBlocks, 400);
     startIntro();
 });
-// Lisätty apufunktiot uudelleen, jotta ne ovat varmasti mukana.
-// Nämä ovat samat kuin edellisessä, joten liitän ne tähän loppuun varmuuden vuoksi.
-function generateRandomGcCode() {
-    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let result = '';
-    const length = Math.floor(Math.random() * 3) + 4;
-    for (let i = 0; i < length; i++) {
-        result += charset.charAt(Math.floor(Math.random() * charset.length));
-    }
-    return 'GC' + result;
-}
-function updateLcarsBlocks() {
-    const lcarsItems = Array.from(document.querySelectorAll('[id^="glcars-item-"]'));
-    if (lcarsItems.length === 0) return;
-    const updateCount = Math.floor(Math.random() * 3) + 1;
-    for (let i = 0; i < updateCount; i++) {
-        const randomIndex = Math.floor(Math.random() * lcarsItems.length);
-        const block = lcarsItems[randomIndex];
-        if (!block || block.classList.contains('is-updating')) continue;
-        block.classList.add('is-updating');
-        let newText = '';
-        if (Math.random() < 0.3) {
-            const geocachingTerms = ["GEOCACHE", "WAYPOINT", "FTF", "TFTC", "SPOILER", "MUGGLED", "TRACKABLE", "CITO", "DNF"];
-            newText = geocachingTerms[Math.floor(Math.random() * geocachingTerms.length)];
-        } else {
-            newText = generateRandomGcCode();
-        }
-        setTimeout(() => {
-            block.textContent = newText;
-            setTimeout(() => { block.classList.remove('is-updating'); }, 50);
-        }, 150);
-    }
-}
-function typeWriter(element, text, speed, callback) {
-    let i = 0;
-    element.innerHTML = "";
-    const cursorSpan = document.createElement('span');
-    cursorSpan.className = 'typewriter-cursor';
-    element.appendChild(cursorSpan);
-    const typing = setInterval(() => {
-        if (i < text.length) {
-            cursorSpan.insertAdjacentText('beforebegin', text.charAt(i));
-            i++;
-        } else {
-            element.removeChild(cursorSpan);
-            clearInterval(typing);
-            if (callback) setTimeout(callback, 500);
-        }
-    }, speed);
-}
