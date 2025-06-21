@@ -18,7 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const lopputulosOsio = document.getElementById('lopputulos-osio');
     
     const loginButton = document.getElementById('login-button');
+    const loginContainer = document.getElementById('login-container');
     const nicknameInput = document.getElementById('nickname-input');
+    const authSequence = document.getElementById('auth-sequence');
     const tarkistaNappi = document.getElementById('tarkista-paivamaarat');
     const confirmButton = document.getElementById('confirm-selection');
     const cancelButton = document.getElementById('cancel-selection');
@@ -35,10 +37,9 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => { virheViestiOsio.classList.add('piilotettu'); }, 3000);
     }
     
-    // UUSI: Typewriter-funktio tekstianimaatioille
     function typeWriter(element, text, speed, callback) {
         let i = 0;
-        element.innerHTML = ""; // Tyhjennetään elementti ensin
+        element.innerHTML = "";
         const cursorSpan = document.createElement('span');
         cursorSpan.className = 'typewriter-cursor';
         element.appendChild(cursorSpan);
@@ -50,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 clearInterval(typing);
                 if (callback) {
-                    // Pieni tauko ennen callbackin kutsumista
                     setTimeout(callback, 500);
                 }
             }
@@ -59,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- OSA 3: Mysteerin vaiheiden hallinta ---
 
-    // VAIHE 1: Aloitetaan introanimaatio
     function startIntro() {
         const introText1 = `U.S.S. Enterprise - Komentosillan loki, kapteeni Jean-Luc Picard. Tähtipäivä 47634.4.`;
         const introText2 = `Olemme havainneet vakavan poikkeaman aika-avaruusjatkumossa Omega-sektorissa. Muinainen porttiteknologia, jota paikalliset kutsuivat "Tähtiportiksi", on fuusioitunut primitiivisen, mutta yllättävän tehokkaan aikakoneen jäänteisiin. Syntynyt paradoksi uhkaa repiä todellisuuden rakenteen. Ajallinen päädirektiivi on vaarassa. Yhdistän sinut, lähimmän kenttäagentin, suoraan aluksen päätteeseen.`;
@@ -69,15 +68,51 @@ document.addEventListener('DOMContentLoaded', function() {
 
         typeWriter(textElement1, introText1, 50, () => {
             typeWriter(textElement2, introText2, 40, () => {
-                // Kun molemmat tekstit ovat valmiit, näytä login-osio
-                introSection.classList.add('piilotettu');
+                // MUUTOS: Alkutarinaa EI piiloteta, näytetään vain login-osio sen alapuolella.
                 loginSection.classList.remove('piilotettu');
                 nicknameInput.focus();
             });
         });
     }
 
-    // VAIHE 2: Käyttäjä "kirjautuu sisään"
+    // UUSI: Hakuanimaatio-funktio
+    function runAuthSequence(nickname) {
+        const authMessages = [
+            "Yhdistetään Tähtilaivaston verkkoon...",
+            "Haetaan tunnistetta...",
+            "Varmennetaan kvanttisignatuuria...",
+            "Tunniste hyväksytty! Tervetuloa järjestelmään."
+        ];
+        const authTextElement = document.getElementById('auth-text');
+        let messageIndex = 0;
+
+        function showNextMessage() {
+            if (messageIndex < authMessages.length) {
+                authTextElement.textContent = authMessages[messageIndex];
+                messageIndex++;
+                setTimeout(showNextMessage, 1500); // Viive viestien välillä
+            } else {
+                // Animaatio valmis, siirry seuraavaan vaiheeseen
+                showMissionBriefing(nickname);
+            }
+        }
+        showNextMessage();
+    }
+
+    function showMissionBriefing(nickname) {
+        // Piilotetaan intro- ja login-osiot siististi
+        introSection.classList.add('piilotettu');
+        loginSection.classList.add('piilotettu');
+        
+        missionBriefingSection.classList.remove('piilotettu');
+        const missionText = `Kiitos yhteydenotosta, kadetti ${nickname}. Sinun tehtäväsi on kriittinen: sinun on vakautettava portti syöttämällä järjestelmään kolme keskeistä päivämäärää, jotka liittyvät aikakoneen matkoihin. Nämä ajalliset ankkurit stabiloivat jatkumon. Onnistuminen paljastaa symbolisekvenssin portin soittamiseen ja antaa sinulle palkkion sijainnin. Toimi nopeasti. Picard, loppu.`;
+        const missionElement = document.getElementById('mission-text');
+        
+        typeWriter(missionElement, missionText, 30, () => {
+            aikakoneOsio.classList.remove('piilotettu');
+        });
+    }
+
     loginButton.addEventListener('click', () => {
         const nickname = nicknameInput.value.trim();
         if (nickname === "") {
@@ -85,19 +120,18 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        loginSection.classList.add('piilotettu');
-        missionBriefingSection.classList.remove('piilotettu');
-
-        const missionText = `Tervetuloa, kadetti ${nickname}. Sinun tehtäväsi on kriittinen: sinun on vakautettava portti syöttämällä järjestelmään kolme keskeistä päivämäärää, jotka liittyvät aikakoneen matkoihin. Nämä ajalliset ankkurit stabiloivat jatkumon. Onnistuminen paljastaa symbolisekvenssin portin soittamiseen ja antaa sinulle palkkion sijainnin. Toimi nopeasti. Picard, loppu.`;
-        const missionElement = document.getElementById('mission-text');
+        // MUUTOS: Piilota vain syöttökenttä ja nappi, näytä hakuanimaatio
+        loginContainer.classList.add('piilotettu');
+        authSequence.classList.remove('piilotettu');
         
-        typeWriter(missionElement, missionText, 30, () => {
-            // Kun tehtävänanto on valmis, näytä DeLorean
-            aikakoneOsio.classList.remove('piilotettu');
-        });
+        runAuthSequence(nickname);
     });
 
-    // VAIHE 3: Päivämäärien tarkistus
+    // Tähtiportin logiikka pysyy ennallaan... (lyhennetty selkeyden vuoksi, alla koko koodi)
+    // ...
+
+    // --- Koko tiedoston loppuosa alla ---
+
     tarkistaNappi.addEventListener('click', function() {
         const formatNumber = (num) => num.toString().padStart(2, '0');
         const date1 = `${formatNumber(document.getElementById('day1').value)}.${formatNumber(document.getElementById('month1').value)}.${document.getElementById('year1').value}`;
@@ -117,35 +151,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // VAIHE 4 & 5: Tähtiportin logiikka (sis. laitetunnistuksen)
-
     function luoStargateSymbolit() {
-        const stargateContainer = document.getElementById('stargate-container');
         if (stargateContainer.querySelectorAll('.stargate-symbol').length > 0) return;
-        
         const symbolienMaara = 39;
         const sade = stargateContainer.offsetWidth / 2 - 25;
-
         for (let i = 1; i <= symbolienMaara; i++) {
             const symboliElementti = document.createElement('div');
             symboliElementti.classList.add('stargate-symbol');
             symboliElementti.textContent = i;
             symboliElementti.dataset.symbolId = i;
-
             const kulma = (i / symbolienMaara) * 2 * Math.PI - (Math.PI / 2);
             const x = sade * Math.cos(kulma) + sade;
             const y = sade * Math.sin(kulma) + sade;
-
             symboliElementti.style.left = `${x}px`;
             symboliElementti.style.top = `${y}px`;
-            
             const eventHandler = isTouchDevice ? 'touchend' : 'click';
             symboliElementti.addEventListener(eventHandler, (event) => {
                 event.preventDefault();
                 if(event.target.classList.contains('selected')) return;
-
                 const symbolId = parseInt(event.target.dataset.symbolId);
-
                 if (isTouchDevice) {
                     valittavaSymboli = symbolId;
                     document.getElementById('zoomed-symbol').textContent = valittavaSymboli;
@@ -154,11 +178,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     addSymbolToSequence(symbolId, event.target);
                 }
             });
-            
             stargateContainer.appendChild(symboliElementti);
         }
     }
-
+    
     function addSymbolToSequence(symbolId, symbolElement) {
         if (kayttajanSekvenssi.length >= 3 || kayttajanSekvenssi.includes(symbolId)) return;
         kayttajanSekvenssi.push(symbolId);
@@ -166,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (symbolElement) symbolElement.classList.add('selected');
         if (kayttajanSekvenssi.length === 3) setTimeout(tarkistaSekvenssi, 500);
     }
-    
+
     function tarkistaSekvenssi() {
         if (JSON.stringify(kayttajanSekvenssi) === JSON.stringify(OIKEA_SEKVENSSI)) {
             missionBriefingSection.classList.add('piilotettu');
