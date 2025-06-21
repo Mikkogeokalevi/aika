@@ -5,7 +5,6 @@ body {
     margin: 0;
     padding: 20px;
 }
-
 .sisalto-laatikko {
     max-width: 800px;
     margin: 30px auto;
@@ -16,7 +15,6 @@ body {
     box-shadow: 5px 5px 15px rgba(0,0,0,0.6);
     overflow: hidden; 
 }
-
 .teksti-alue {
     color: #F8F8F8;
     line-height: 1.6;
@@ -25,122 +23,69 @@ body {
 }
 
 /* --- GLCARS-tyylit --- */
-.glcars-container {
-    width: 100%;
-    margin-bottom: 20px;
-    font-family: 'Antonio', sans-serif;
-    text-transform: uppercase;
-}
-.glcars-bar-top {
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-start;
-    height: 35px;
-    background-color: #90EE90;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    padding-left: 15px;
-}
-.glcars-title {
-    color: #11150C;
-    font-size: 1.2em;
-    padding-right: 20px;
-}
-.glcars-bar-top .glcars-block {
-    margin-left: 5px;
-    height: 25px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-}
+.glcars-container { width: 100%; margin-bottom: 20px; font-family: 'Antonio', sans-serif; text-transform: uppercase; }
+.glcars-bar-top { display: flex; align-items: flex-end; justify-content: flex-start; height: 35px; background-color: #90EE90; border-top-left-radius: 10px; border-top-right-radius: 10px; padding-left: 15px; }
+.glcars-title { color: #11150C; font-size: 1.2em; padding-right: 20px; }
+.glcars-bar-top .glcars-block { margin-left: 5px; height: 25px; border-top-left-radius: 8px; border-top-right-radius: 8px; }
 .lcars-wide { min-width: 120px; }
 .lcars-med { min-width: 80px; }
-
-.glcars-header {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    gap: 5px;
-}
-.glcars-side {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
+.glcars-header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 5px; }
+.glcars-side { display: flex; align-items: center; gap: 5px; }
 .glcars-left { justify-content: flex-start; }
-.glcars-right {
-    flex-direction: row-reverse;
-    justify-content: flex-start;
-}
-.glcars-elbow {
-    width: 20px;
-    height: 70px;
-    background-color: #90EE90;
-}
+.glcars-right { flex-direction: row-reverse; justify-content: flex-start; }
+.glcars-elbow { width: 20px; height: 70px; background-color: #90EE90; }
 .glcars-left .glcars-elbow { border-bottom-left-radius: 10px; }
 .glcars-right .glcars-elbow { border-bottom-right-radius: 10px; }
-
-.glcars-v-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-.glcars-block {
-    padding: 3px 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.0em;
-    letter-spacing: 1.5px;
-    white-space: nowrap;
-    overflow: hidden;
-}
+.glcars-v-stack { display: flex; flex-direction: column; gap: 4px; }
+.glcars-block { padding: 3px 10px; display: flex; align-items: center; justify-content: center; font-size: 1.0em; letter-spacing: 1.5px; white-space: nowrap; overflow: hidden; }
 .num-block-1 { background-color: #2A381C; color: #FFD700; }
 .num-block-2 { background-color: #11150C; color: #90EE90; }
 .stub-block-1 { height: 12px; background-color: #2A381C; }
 .stub-block-2 { height: 24px; background-color: #11150C; }
-
-.glcars-footer {
-    display: flex;
-    align-items: flex-start;
-    height: 35px;
-    background-color: #90EE90;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    padding: 4px;
-    margin-top: 25px;
-    gap: 4px;
-}
-.glcars-footer .glcars-elbow {
-    height: 26px;
-    border-radius: 0;
-    border-bottom-right-radius: 8px;
-}
+.glcars-footer { display: flex; align-items: flex-start; height: 35px; background-color: #90EE90; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; padding: 4px; margin-top: 25px; gap: 4px; }
+.glcars-footer .glcars-elbow { height: 26px; border-radius: 0; border-bottom-right-radius: 8px; }
 .glcars-footer .glcars-block { height: 26px; }
 .flex-grow { flex-grow: 1; }
-
 @keyframes lcars-flash { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 .is-updating { animation: lcars-flash 0.3s ease-in-out; }
 
-/* --- Muut tyylit --- */
+/* --- Logo ja yleisotsikot --- */
 .logo-container { text-align: center; padding: 0 10px; }
 .logo { width: 85px; height: 85px; border: 2px solid #90EE90; border-radius: 50%; background-color: #3D4F2B; padding: 3px; }
 .alaotsikko { color: #90EE90; text-align: center; font-size: 1.3em; margin-top: 25px; }
 .paaotsikko { color: #90EE90; text-align: center; margin-top: 0; margin-bottom: 20px; font-size: 1.6em; }
-.time-circuits-container { background-color: #1a1a1a; border: 2px solid #444; border-radius: 8px; padding: 20px; margin-top: 20px; }
-.piilotettu { display: none; }
+.leipateksti { margin-top: 0; margin-bottom: 15px; color: #FFFFFF; font-size: 1.0em; }
+.vihje-teksti { font-size: 0.9em; text-align: center; color: #ccc; font-style: italic; }
 
+/* --- Typewriter & Login --- */
+.typewriter-cursor { border-left: 2px solid #90EE90; animation: blink 0.7s steps(1) infinite; }
+@keyframes blink { 50% { border-color: transparent; } }
 #login-section { text-align: center; padding: 20px 0; }
 #login-container { margin-top: 15px; }
 #login-container input { background-color: #11150C; color: #FFD700; border: 1px solid #90EE90; border-radius: 4px; padding: 10px; font-size: 1.1em; text-align: center; width: 70%; max-width: 300px; margin-bottom: 15px; }
 #login-container .toiminto-nappi { margin: 0 auto; }
 #auth-sequence { margin-top: 20px; padding: 15px; border: 1px dashed #90EE90; background-color: #2A381C; color: #90EE90; font-family: 'Courier New', Courier, monospace; min-height: 1.5em; }
 
+/* PALAUTETUT TYYLIT: DeLorean-aikapiirit */
+.time-circuits-container { background-color: #1a1a1a; border: 2px solid #444; border-radius: 8px; padding: 20px; margin-top: 20px; box-shadow: inset 0 0 10px #000; }
+.time-circuit-display { background-color: #000; border-radius: 5px; padding: 10px 15px; margin-bottom: 15px; text-align: center; }
+.circuit-label-top { font-size: 0.8em; color: #ccc; margin-bottom: 10px; letter-spacing: 1px; font-weight: bold; }
+.circuit-label-bottom { font-size: 0.9em; color: #fff; margin-top: 10px; font-family: 'Orbitron', sans-serif; letter-spacing: 2px; }
+.circuit-inputs { display: flex; justify-content: center; gap: 15px; }
+.circuit-inputs > div { display: flex; flex-direction: column; }
+.circuit-inputs span { color: #fff; font-size: 0.7em; font-family: sans-serif; background-color: #d80000; padding: 2px 5px; border-radius: 3px; margin: 0 auto 5px auto; display: inline-block; }
+.time-circuit-input { background-color: #181818; border: none; font-family: 'Orbitron', sans-serif; font-size: 2.5em; width: 4ch; text-align: center; padding: 0; }
+.time-circuit-input::-webkit-outer-spin-button, .time-circuit-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.time-circuit-input[type=number] { -moz-appearance: textfield; }
+.color-red .time-circuit-input { color: #ff4a4a; text-shadow: 0 0 5px #ff4a4a; }
+.color-green .time-circuit-input { color: #59f859; text-shadow: 0 0 5px #59f859; }
+.color-yellow .time-circuit-input { color: #f8f859; text-shadow: 0 0 5px #f8f859; }
+
+/* --- Muut osiot --- */
 .huomio-laatikko { background-color: #2A381C; padding: 15px; border-radius: 8px; margin-top: 30px; text-align: center; border: 1px dashed #90EE90; }
 .huomio-otsikko { color: #FFD700; font-size: 1.1em; font-weight: bold; margin: 0 0 5px 0; }
 .huomio-teksti { color: #FFFFFF; font-size: 1.0em; margin: 0; }
-.leipateksti { margin-top: 0; margin-bottom: 15px; color: #FFFFFF; font-size: 1.0em; }
-.vihje-teksti { font-size: 0.9em; text-align: center; color: #ccc; font-style: italic; }
-
+.piilotettu { display: none; }
 .toiminto-nappi { display: block; margin: 20px auto 0; padding: 12px 25px; font-size: 1.1em; font-weight: bold; color: #1a2015; background-color: #90EE90; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s ease, transform 0.2s ease, opacity 0.3s; }
 .toiminto-nappi:hover { background-color: #b3ffb3; transform: scale(1.05); }
 .toiminto-nappi:disabled { background-color: #555; color: #999; cursor: not-allowed; transform: none; }
@@ -153,8 +98,6 @@ body {
 #koordinaatit { font-size: 1.4em; color: #FFD700; margin-top: 10px; text-align: center; }
 @keyframes kawoosh { 0% { transform: scale(0.1); opacity: 0.5; } 70% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
 #event-horizon.active { animation: kawoosh 0.7s forwards; background: radial-gradient(circle, #ffffff, #a7d8ff); box-shadow: 0 0 40px #fff, inset 0 0 20px #a7d8ff; }
-
-/* Ponnahdusikkunan tyylit */
 #modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 100; }
 #zoom-view { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #2A381C; border: 2px solid #90EE90; border-radius: 12px; padding: 20px 30px; z-index: 101; text-align: center; box-shadow: 0 5px 25px rgba(0,0,0,0.5); }
 #zoomed-symbol { font-size: 5em; font-weight: bold; color: #FFD700; background-color: #11150C; border-radius: 50%; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; }
@@ -164,27 +107,9 @@ body {
 .peruuta-nappi { background-color: #888; }
 .peruuta-nappi:hover { background-color: #999; }
 
-/* --- Responsiivisuus --- */
 @media (max-width: 768px) {
-    /* KORJATTU MOBIILINÄKYMÄ: Pienennetään reilusti, ei piiloteta */
-    .glcars-title { font-size: 0.8em; padding-right: 10px; }
-    .glcars-bar-top, .glcars-footer { height: 22px; }
-    .glcars-bar-top .glcars-block, .glcars-footer .glcars-block { height: 18px; padding: 0 5px; margin-left: 3px;}
-    .lcars-wide { min-width: 70px; }
-    .lcars-med { min-width: 50px; }
-
-    .glcars-header { gap: 3px; }
-    .glcars-elbow { width: 12px; height: 45px; }
-    .glcars-side { gap: 3px; }
-    
-    .glcars-v-stack:nth-of-type(3) { display: none; } /* Piilotetaan uusin lisätty palkki mobiilissa tilan säästämiseksi */
-    .glcars-block { font-size: 0.7em; padding: 1px 5px; letter-spacing: 1px; }
-    .stub-block-1 { height: 8px; }
-    .stub-block-2 { height: 16px; }
-    .logo { width: 55px; height: 55px; }
-    
-    .glcars-footer .glcars-elbow { height: 18px; }
-    
+    .glcars-container, .glcars-footer { display: none; }
+    .logo-container { margin-bottom: 15px; }
     #stargate-container { width: 250px; height: 250px; }
     .stargate-symbol { width: 35px; height: 35px; font-size: 1em; }
     .time-circuits-container { padding: 10px; }
