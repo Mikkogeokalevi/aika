@@ -1,6 +1,6 @@
 /*
     AJAN VARTIJAT - MYSTEERIN SKRIPTI
-    Versio 14.0 - Tehostettu siirtymä
+    Versio 14.1 - Teema ja vihjeet päivitetty
 */
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -104,13 +104,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- OSA 3: PÄÄLOGIIKKA JA VAIHEET ---
     function startIntro() {
-        const introText1 = `U.S.S. Enterprise - Komentosillan loki, kapteeni Jean-Luc Picard. Tähtipäivä 47634.4.`;
-        const introText2 = `Olemme havainneet vakavan poikkeaman aika-avaruusjatkumossa Omega-sektorissa. Muinainen porttiteknologia, jota paikalliset kutsuivat "Tähtiportiksi", on fuusioitunut primitiivisen, mutta yllättävän tehokkaan aikakoneen jäänteisiin. Syntynyt paradoksi uhkaa repiä todellisuuden rakenteen. Ajallinen päädirektiivi on vaarassa. Yhdistän sinut, lähimmän kenttäagentin, suoraan aluksen päätteeseen.`;
+        // --- TÄSSÄ UUDET, VIHJAAVAT TEKSTIT ---
+        const introText1 = `Suuret kilowatit! Kuuletko minua? Täällä tohtori Emmett Ruskea! DeLoreanin ja jonkin vieraan porttiteknologian yhteensulautuma on luonut vaarallisen aikaparadoksin!`;
+        const introText2 = `Jotta voimme palata takaisin tulevaisuuteen – tai ylipäätään mihinkään tulevaisuuteen – meidän on kalibroitava tämä sotku. Tarvitsen sinulta ne kolme tärkeintä päivämäärää seikkailuistamme. Syötä ne aikapiireihin, niin voimme vakauttaa jatkumon. Olen yhdistänyt sinut suoraan järjestelmään.`;
+        
         typeWriter(document.getElementById('intro-text-1'), introText1, 50, () => {
             typeWriter(document.getElementById('intro-text-2'), introText2, 40, () => {
                 elementit.loginSection.classList.remove('piilotettu');
                 const loginHeading = document.getElementById('login-heading');
-                typeWriter(loginHeading, "YHDISTETÄÄN PÄÄTTEESEEN", 70, () => {
+                typeWriter(loginHeading, "YHDISTETÄÄN AIKAKONEEN PÄÄTTEESEEN", 70, () => {
                     let dotCount = 0;
                     const dotInterval = setInterval(() => {
                         if (dotCount < 4) {
@@ -149,7 +151,10 @@ document.addEventListener('DOMContentLoaded', function() {
         elementit.introSection.classList.add('piilotettu');
         elementit.loginSection.classList.add('piilotettu');
         elementit.missionBriefingSection.classList.remove('piilotettu');
-        const missionText = `Kiitos yhteydenotosta, kadetti ${nickname}. Sinun tehtäväsi on kriittinen: sinun on vakautettava portti syöttämällä järjestelmään kolme keskeistä päivämäärää, jotka liittyvät aikakoneen matkoihin. Nämä ajalliset ankkurit stabiloivat jatkumon. Onnistuminen paljastaa symbolisekvenssin portin soittamiseen ja antaa sinulle palkkion sijainnin. Toimi nopeasti. Picard, loppu.`;
+        
+        // --- MYÖS TÄMÄN TEKSTIN PUHUJA ON VAIHDETTU ---
+        const missionText = `Hienoa, ${nickname}, että pääsit linjoille! Tehtäväsi on elintärkeä: syötä ne kolme kohtalokasta päivämäärää aikakoneen piireihin. Ne toimivat ajallisina ankkureina ja korjaavat paradoksin. Onnistuminen paljastaa symbolit, joilla saat portin soitettua ja palkkion koordinaatit. Älä aikaile, koko aika-avaruusjatkumo on sinusta kiinni! Tohtori Ruskea, loppu.`;
+        
         typeWriter(document.getElementById('mission-text'), missionText, 30, () => {
             elementit.aikakoneOsio.classList.remove('piilotettu');
             document.getElementById('day1').focus();
