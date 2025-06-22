@@ -1,6 +1,6 @@
 /*
     AJAN VARTIJAT - MYSTEERIN SKRIPTI
-    Versio 14.1 - Teema ja vihjeet päivitetty
+    Versio 14.3 - Dynaaminen portin ohjeistus
 */
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Globaalit muuttujat ---
     let kayttajanSekvenssi = [];
     let valittavaSymboli = null;
-    
+    let nickname = ''; // Nimimerkki tallennetaan tänne globaalisti
+
     // --- DOM-elementtien viittaukset ---
     const elementit = {
         introSection: document.getElementById('intro-section'),
@@ -35,7 +36,10 @@ document.addEventListener('DOMContentLoaded', function() {
         powerUpSequence: document.getElementById('power-up-sequence'),
         powerUpText: document.getElementById('power-up-text'),
         progressBarInner: document.querySelector('.progress-bar-inner'),
-        lcarsItems: Array.from(document.querySelectorAll('[id^="glcars-item-"]'))
+        lcarsItems: Array.from(document.querySelectorAll('[id^="glcars-item-"]')),
+        stargateOhjeTeksti: document.getElementById('stargate-ohje-teksti'),
+        stargateContainer: document.getElementById('stargate-container'),
+        syoteNaytto: document.getElementById('syote-naytto')
     };
     
     // --- OSA 2: APUFUNKTIOT ---
@@ -104,8 +108,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- OSA 3: PÄÄLOGIIKKA JA VAIHEET ---
     function startIntro() {
-        // --- TÄSSÄ UUDET, VIHJAAVAT TEKSTIT ---
-        const introText1 = `Suuret kilowatit! Kuuletko minua? Täällä tohtori Emmett Ruskea! DeLoreanin ja jonkin vieraan porttiteknologian yhteensulautuma on luonut vaarallisen aikaparadoksin!`;
+        // --- NIMET MUUTETTU: Emmett -> Erkki, DeLorean -> aikakone ---
+        const introText1 = `Suuret kilowatit! Kuuletko minua? Täällä tohtori Erkki Ruskea! Aikakoneen ja jonkin vieraan porttiteknologian yhteensulautuma on luonut vaarallisen aikaparadoksin!`;
         const introText2 = `Jotta voimme palata takaisin tulevaisuuteen – tai ylipäätään mihinkään tulevaisuuteen – meidän on kalibroitava tämä sotku. Tarvitsen sinulta ne kolme tärkeintä päivämäärää seikkailuistamme. Syötä ne aikapiireihin, niin voimme vakauttaa jatkumon. Olen yhdistänyt sinut suoraan järjestelmään.`;
         
         typeWriter(document.getElementById('intro-text-1'), introText1, 50, () => {
@@ -132,16 +136,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function runAuthSequence(nickname) {
-        const authMessages = ["Yhdistetään Tähtilaivaston verkkoon...", "Haetaan tunnistetta...", "Varmennetaan kvanttisignatuuria...", "Tunniste hyväksytty! Tervetuloa järjestelmään."];
+        const authMessages = [
+            "Yhdistetään aikakoneen verkkoon...",
+            `Haetaan tunnistetta: ${nickname}...`,
+            "Varmennetaan kvanttisignatuuria...",
+            `Tunniste ${nickname} hyväksytty!`,
+            `Tervetuloa järjestelmään, ${nickname}.`
+        ];
         const authTextElement = document.getElementById('auth-text');
         let messageIndex = 0;
         function showNextMessage() {
             if (messageIndex < authMessages.length) {
                 authTextElement.textContent = authMessages[messageIndex];
                 messageIndex++;
-                setTimeout(showNextMessage, 1500);
+                setTimeout(showNextMessage, 2200);
             } else {
-                showMissionBriefing(nickname);
+                elementit.authSequence.classList.add('fade-out');
+                setTimeout(() => {
+                    showMissionBriefing(nickname);
+                    elementit.authSequence.classList.remove('fade-out'); 
+                }, 500); 
             }
         }
         showNextMessage();
@@ -151,9 +165,8 @@ document.addEventListener('DOMContentLoaded', function() {
         elementit.introSection.classList.add('piilotettu');
         elementit.loginSection.classList.add('piilotettu');
         elementit.missionBriefingSection.classList.remove('piilotettu');
-        
-        // --- MYÖS TÄMÄN TEKSTIN PUHUJA ON VAIHDETTU ---
-        const missionText = `Hienoa, ${nickname}, että pääsit linjoille! Tehtäväsi on elintärkeä: syötä ne kolme kohtalokasta päivämäärää aikakoneen piireihin. Ne toimivat ajallisina ankkureina ja korjaavat paradoksin. Onnistuminen paljastaa symbolit, joilla saat portin soitettua ja palkkion koordinaatit. Älä aikaile, koko aika-avaruusjatkumo on sinusta kiinni! Tohtori Ruskea, loppu.`;
+        // --- Nimi muutettu myös täällä ---
+        const missionText = `Hienoa, ${nickname}, että pääsit linjoille! Tehtäväsi on elintärkeä: syötä ne kolme kohtalokasta päivämäärää aikakoneen piireihin. Ne toimivat ajallisina ankkureina ja korjaavat paradoksin. Onnistuminen paljastaa symbolit, joilla saat portin soitettua ja palkkion koordinaatit. Älä aikaile, koko aika-avaruusjatkumo on sinusta kiinni! Tohtori Erkki Ruskea, loppu.`;
         
         typeWriter(document.getElementById('mission-text'), missionText, 30, () => {
             elementit.aikakoneOsio.classList.remove('piilotettu');
@@ -163,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function runPowerUpSequence() {
         elementit.powerUpSequence.classList.remove('piilotettu');
-        const powerUpMessages = ["Tarkistetaan ajallista siirtymää...", "Synkronoidaan vuon kondensaattoria...", "Aikapiirit vakaat! Reititetään virtaa...", "Tähtiportin matriisi aktivoitu!"];
+        const powerUpMessages = ["Tarkistetaan ajallista siirtymää...", "Synkronoidaan vuon kondensaattoria...", "Aikapiirit vakaat! Reititetään virtaa...", "Portin matriisi aktivoitu! Valmistaudutaan aktivointiin..."];
         setTimeout(() => { elementit.powerUpText.textContent = powerUpMessages[0]; }, 0);
         setTimeout(() => { elementit.powerUpText.textContent = powerUpMessages[1]; }, 1000);
         setTimeout(() => { elementit.powerUpText.textContent = powerUpMessages[2]; }, 2500);
@@ -172,8 +185,21 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             elementit.powerUpSequence.classList.add('piilotettu');
             elementit.stargateOsio.classList.remove('piilotettu');
-            luoStargateSymbolit();
+            // Kutsutaan uutta funktiota, joka hoitaa ohjeiden kirjoittamisen
+            showStargateInstructions();
         }, 4500);
+    }
+
+    // --- TÄMÄ ON UUSI FUNKTIO PORTIN OHJEILLE ---
+    function showStargateInstructions() {
+        const ohjeTeksti = `Loistavaa, ${nickname}! Virta on vakaa, mutta portti vaatii vielä oikean symbolisekvenssin. Olen päätellyt, että tarvittavat symbolit liittyvät niihin kolmeen päivämäärään. Laske kunkin päivämäärän numerot yhteen. Esimerkiksi 01.01.2000 olisi 1+1+2, eli symboli 4. Syötä kolme symbolia oikeassa järjestyksessä, niin tämä sotku on selvitetty!`;
+        
+        typeWriter(elementit.stargateOhjeTeksti, ohjeTeksti, 40, () => {
+            // Kun teksti on kirjoitettu, näytetään portti ja luodaan symbolit
+            elementit.stargateContainer.classList.remove('piilotettu');
+            elementit.syoteNaytto.classList.remove('piilotettu');
+            luoStargateSymbolit();
+        });
     }
 
     function addSymbolToSequence(symbolId, symbolElement) {
@@ -202,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function luoStargateSymbolit() {
         const stargateContainer = document.getElementById('stargate-container');
-        if (stargateContainer.querySelectorAll('.stargate-symbol').length > 0) return;
+        if (!stargateContainer || stargateContainer.querySelectorAll('.stargate-symbol').length > 0) return;
         const symbolienMaara = 39;
         const sade = stargateContainer.offsetWidth / 2 - 25;
         for (let i = 1; i <= symbolienMaara; i++) {
@@ -234,7 +260,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- OSA 4: TAPAHTUMANKUUNTELIJAT ---
     elementit.loginButton.addEventListener('click', () => {
-        const nickname = elementit.nicknameInput.value.trim();
+        // Tallennetaan nimimerkki globaaliin muuttujaan
+        nickname = elementit.nicknameInput.value.trim();
         if (nickname === "") { alert("Syötä nimimerkki jatkaaksesi."); return; }
         elementit.loginContainer.classList.add('piilotettu');
         elementit.authSequence.classList.remove('piilotettu');
