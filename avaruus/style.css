@@ -134,6 +134,16 @@ body {
 
 /* --- LCARS-OSIOIDEN TYYLIT (Kalibrointi ja Warp) --- */
 #calibration-osio, #warp-game-container { margin-top: 25px; }
+
+/* Uusi wrapperi, jolla on kehys ja tausta */
+.lcars-component-wrapper {
+    border: 2px solid #FF9900;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: rgba(0,0,0,0.4);
+    margin-bottom: 10px;
+}
+
 .lcars-master-header { display: flex; margin-bottom: 5px; }
 .lcars-master-header-arm { display: flex; flex-direction: column; gap: 4px; }
 .lcars-arm-block { background-color: #9C9CFF; color: #000; padding: 5px 10px; font-family: 'Antonio', sans-serif; font-weight: bold; text-align: right; }
@@ -143,15 +153,14 @@ body {
 .lcars-header-title { color: #FF9900; font-family: 'Antonio', sans-serif; font-size: 2.2em; font-weight: bold; text-align: right; padding-right: 10px; }
 .lcars-number-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 2px 8px; margin-top: 5px; font-family: monospace; font-size: 0.9em; color: #EEDDAA; max-height: 60px; overflow: hidden; }
 .lcars-number-grid > span { text-align: right; }
-.lcars-frame { border: 2px solid #FF9900; border-radius: 8px; padding: 5px; background-color: rgba(0,0,0,0.4); }
-.lcars-content-area { flex-grow: 1; padding: 10px; }
+.lcars-content-area { flex-grow: 1; padding-top: 10px; }
 #calibration-osio .leipateksti, #warp-game-container .leipateksti { color: #FFCC99; margin-bottom: 20px; }
 .calibration-rivi { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 15px; }
 .calibration-label { color: #9999CC; font-size: 1.1em; letter-spacing: 1.5px; width: 150px; flex-shrink: 0; }
 .calibration-input { background-color: transparent; border: none; border-bottom: 2px solid #FFCC99; color: #FFCC99; font-family: 'Orbitron', sans-serif; font-size: 1.4em; font-weight: bold; text-align: center; padding: 5px 0; border-radius: 0; flex-grow: 1; max-width: 120px; }
 .calibration-input:focus { outline: none; border-bottom-color: #FF9900; color: #FF9900; }
 .input-icon { color: #FFCC99; font-size: 1.4em; margin-left: 10px; }
-.lcars-button { background-color: #FF9900; color: #000; display: block; width: auto; padding: 8px 30px; font-size: 1.2em; font-weight: bold; border-radius: 4px; margin: 15px 0 5px auto; float: none; }
+.lcars-button { background-color: #FF9900; color: #000; display: block; width: auto; padding: 8px 30px; font-size: 1.2em; font-weight: bold; border-radius: 4px; margin: 0 0 5px auto; }
 .lcars-button:hover { background-color: #ffad33; }
 #warp-core-osio { padding: 10px 0; }
 #warp-core-status { color: #FFCC99; text-align: center; font-family: 'Antonio', sans-serif; text-transform: uppercase; font-size: 1.2em; margin-bottom: 15px; }
@@ -194,18 +203,17 @@ body {
     .lcars-arm-block:last-child { border-radius: 0 8px 8px 0; }
     .lcars-header-title { font-size: 1.5em; text-align: center; margin: 5px 0; }
     
-    /* TÄSSÄ MUUTOS: Numeroruudukko näytetään, mutta pienennettynä */
     .lcars-number-grid {
-        display: grid; /* Varmistetaan että näkyy */
-        max-height: 40px; /* Pienennetään korkeutta */
-        font-size: 0.7em; /* Pienennetään fonttia */
+        display: grid; 
+        max-height: 40px; 
+        font-size: 0.7em; 
     }
     
     .calibration-rivi { flex-direction: column; align-items: flex-start; }
     .calibration-label { width: auto; margin-bottom: 5px; }
     .calibration-input { width: 100%; text-align: left; }
     .input-icon { margin-left: 5px; }
-    .lcars-button { float: none; display: block; width: 100%; text-align: center; margin-top: 20px; }
+    .lcars-button { float: none; display: block; width: 100%; text-align: center; margin-top: 15px; }
 }
 
 .osio-valmis {
