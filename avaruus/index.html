@@ -56,17 +56,17 @@
             <div id="stargate-osio" class="piilotettu"><h4 class="alaotsikko">Aktivoi Portti</h4><p id="stargate-ohje-teksti" class="leipateksti"></p><div id="stargate-container" class="piilotettu"><div id="event-horizon"></div></div><p id="syote-naytto" class="piilotettu">Valitut symbolit: <span id="symboli-jono"></span></p></div>
             
             <div id="calibration-osio" class="piilotettu">
-                <div class="lcars-master-header">
-                    <div class="lcars-master-header-arm">
-                        <div class="lcars-arm-block lcars-color-pink">LCARS 40274</div>
-                        <div class="lcars-arm-block lcars-color-lilac">02-854598</div>
+                <div class="lcars-component-wrapper">
+                    <div class="lcars-master-header">
+                        <div class="lcars-master-header-arm">
+                            <div class="lcars-arm-block lcars-color-pink">LCARS 40274</div>
+                            <div class="lcars-arm-block lcars-color-lilac">02-854598</div>
+                        </div>
+                        <div class="lcars-master-header-main">
+                            <div class="lcars-header-title">KENTÄN KALIBROINTI</div>
+                            <div class="lcars-number-grid" id="number-grid"></div>
+                        </div>
                     </div>
-                    <div class="lcars-master-header-main">
-                        <div class="lcars-header-title">LCARS ACCESS 210</div>
-                        <div class="lcars-number-grid" id="number-grid"></div>
-                    </div>
-                </div>
-                <div class="lcars-frame">
                     <div class="lcars-content-area">
                         <p id="calibration-ohje-teksti" class="leipateksti"></p>
                         <div id="calibration-inputs-container" class="piilotettu">
@@ -93,21 +93,20 @@
             </div>
             
             <div id="warp-game-container" class="piilotettu">
-                <div class="lcars-master-header" style="margin-top: 25px;">
-                    <div class="lcars-master-header-arm">
-                        <div class="lcars-arm-block lcars-color-pink">WARP CORE</div>
-                        <div class="lcars-arm-block lcars-color-lilac">90-210334</div>
+                <div class="lcars-component-wrapper">
+                    <div class="lcars-master-header" style="margin-top: 5px;">
+                        <div class="lcars-master-header-arm">
+                            <div class="lcars-arm-block lcars-color-pink">WARP CORE</div>
+                            <div class="lcars-arm-block lcars-color-lilac">90-210334</div>
+                        </div>
+                        <div class="lcars-master-header-main">
+                            <div class="lcars-header-title">YTIMEN VAKAUSPROTOKOLLA</div>
+                            <div class="lcars-number-grid"></div>
+                        </div>
                     </div>
-                    <div class="lcars-master-header-main">
-                        <div class="lcars-header-title">YTIMEN VAKAUSPROTOKOLLA</div>
-                        <div class="lcars-number-grid"></div>
-                    </div>
-                </div>
-                <div class="lcars-frame">
                     <div class="lcars-content-area">
                         <div id="warp-core-osio">
                             <p id="warp-core-ohje-teksti" class="leipateksti"></p>
-                            <button id="start-warp-game-button" class="toiminto-nappi lcars-button piilotettu">Aloita vakautus</button>
                             <div id="warp-core-status" class="piilotettu">Taso: <span id="warp-level">1</span></div>
                             <div class="warp-pads-container piilotettu">
                                 <div class="warp-pad pad-blue" data-pad="1"></div>
@@ -118,6 +117,7 @@
                         </div>
                     </div>
                 </div>
+                <button id="start-warp-game-button" class="toiminto-nappi lcars-button piilotettu">Aloita vakautus</button>
             </div>
 
             <div id="lopputulos-osio" class="huomio-laatikko piilotettu"><p class="huomio-otsikko">JÄRJESTELMÄ STABIILI!</p><p class="huomio-teksti">Loistavaa! Kaikki järjestelmät ovat toiminnassa. Anomalia on korjattu. Geokätkön koordinaatit ovat:</p><p id="koordinaatit" class="leipateksti"><strong>N 61° 00.XXX E 025° 00.YYY</strong></p></div>
