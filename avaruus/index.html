@@ -35,38 +35,8 @@
             <div id="login-section" class="piilotettu"><h4 class="alaotsikko" id="login-heading"></h4><div id="login-container" class="piilotettu"><p>Syötä tunnisteesi, kadetti.</p><input type="text" id="nickname-input" placeholder="Geokätköilynimimerkki"><button id="login-button" class="toiminto-nappi">Yhdistä</button></div><div id="auth-sequence" class="piilotettu"><p id="auth-text"></p></div></div>
             <div id="mission-briefing-section" class="piilotettu"><h3 class="paaotsikko">— Tehtävänanto: Ajan Vartijat —</h3><p id="mission-text" class="leipateksti"></p></div>
             
-            <div id="aikakone-osio" class="time-circuits-container piilotettu">
-                <h4 class="alaotsikko">Syötä kalibrointipäivämäärät</h4>
-                <div class="time-circuit-display color-red">
-                    <div class="circuit-label-top">MENNEISYYDEN KAIKU</div>
-                    <div class="circuit-inputs">
-                        <div><span>PP</span><input type="number" id="day1" class="time-circuit-input" min="1" max="31"></div>
-                        <div><span>KK</span><input type="number" id="month1" class="time-circuit-input" min="1" max="12"></div>
-                        <div><span>VVVV</span><input type="number" id="year1" class="time-circuit-input" min="0"></div>
-                    </div>
-                    <div class="circuit-label-bottom">MÄÄRÄNPÄÄ</div>
-                </div>
-                <div class="time-circuit-display color-green">
-                    <div class="circuit-label-top">KOHTALON HETKI</div>
-                    <div class="circuit-inputs">
-                        <div><span>PP</span><input type="number" id="day2" class="time-circuit-input" min="1" max="31"></div>
-                        <div><span>KK</span><input type="number" id="month2" class="time-circuit-input" min="1" max="12"></div>
-                        <div><span>VVVV</span><input type="number" id="year2" class="time-circuit-input" min="0"></div>
-                    </div>
-                    <div class="circuit-label-bottom">NYKYHETKI</div>
-                </div>
-                <div class="time-circuit-display color-yellow">
-                    <div class="circuit-label-top">TULEVAISUUDEN VISIO</div>
-                    <div class="circuit-inputs">
-                        <div><span>PP</span><input type="number" id="day3" class="time-circuit-input" min="1" max="31"></div>
-                        <div><span>KK</span><input type="number" id="month3" class="time-circuit-input" min="1" max="12"></div>
-                        <div><span>VVVV</span><input type="number" id="year3" class="time-circuit-input" min="0"></div>
-                    </div>
-                    <div class="circuit-label-bottom">VIIMEKSI LÄHDETTY</div>
-                </div>
-                <button id="tarkista-paivamaarat" class="toiminto-nappi">Lukitse päivämäärät</button>
-            </div>
-
+            <div id="aikakone-osio" class="time-circuits-container piilotettu"><h4 class="alaotsikko">Syötä kalibrointipäivämäärät</h4><div class="time-circuit-display color-red"><div class="circuit-label-top">MENNEISYYDEN KAIKU</div><div class="circuit-inputs"><div><span>PP</span><input type="number" id="day1" class="time-circuit-input" min="1" max="31"></div><div><span>KK</span><input type="number" id="month1" class="time-circuit-input" min="1" max="12"></div><div><span>VVVV</span><input type="number" id="year1" class="time-circuit-input" min="0"></div></div><div class="circuit-label-bottom">MÄÄRÄNPÄÄ</div></div><div class="time-circuit-display color-green"><div class="circuit-label-top">KOHTALON HETKI</div><div class="circuit-inputs"><div><span>PP</span><input type="number" id="day2" class="time-circuit-input" min="1" max="31"></div><div><span>KK</span><input type="number" id="month2" class="time-circuit-input" min="1" max="12"></div><div><span>VVVV</span><input type="number" id="year2" class="time-circuit-input" min="0"></div></div><div class="circuit-label-bottom">NYKYHETKI</div></div><div class="time-circuit-display color-yellow"><div class="circuit-label-top">TULEVAISUUDEN VISIO</div><div class="circuit-inputs"><div><span>PP</span><input type="number" id="day3" class="time-circuit-input" min="1" max="31"></div><div><span>KK</span><input type="number" id="month3" class="time-circuit-input" min="1" max="12"></div><div><span>VVVV</span><input type="number" id="year3" class="time-circuit-input" min="0"></div></div><div class="circuit-label-bottom">VIIMEKSI LÄHDETTY</div></div><button id="tarkista-paivamaarat" class="toiminto-nappi">Lukitse päivämäärät</button></div>
+            
             <div id="power-up-sequence" class="piilotettu"><p id="power-up-text"></p><div class="progress-bar"><div class="progress-bar-inner"></div></div></div>
             
             <div id="stargate-osio" class="piilotettu">
@@ -78,11 +48,40 @@
                 <p id="syote-naytto" class="piilotettu">Valitut symbolit: <span id="symboli-jono"></span></p>
             </div>
 
-            <div id="lopputulos-osio" class="huomio-laatikko piilotettu"><p class="huomio-otsikko">PORTTI AVOINNA!</p><p class="huomio-teksti">Hienoa työtä, kadetti! Anomalia on korjattu. Geokätkön koordinaatit ovat:</p><p id="koordinaatit" class="leipateksti"><strong>N 61° 00.XXX E 025° 00.YYY</strong></p></div>
+            <div id="calibration-osio" class="piilotettu">
+                <div class="lcars-master-header"><div class="lcars-master-header-arm"><div class="lcars-arm-block lcars-color-pink">LCARS 40274</div><div class="lcars-arm-block lcars-color-lilac">02-854598</div></div><div class="lcars-master-header-main"><div class="lcars-header-title">LCARS ACCESS 210</div><div class="lcars-number-grid" id="number-grid"></div></div></div>
+                <div class="lcars-frame">
+                    <div class="lcars-content-area">
+                        <p id="calibration-ohje-teksti" class="leipateksti"></p>
+                        <div id="calibration-inputs-container" class="piilotettu"><div class="calibration-rivi"><span class="calibration-label">TAAJUUS ALPHA</span><input type="number" id="freq1" class="calibration-input"></div><div class="calibration-rivi"><span class="calibration-label">TAAJUUS BETA</span><input type="number" id="freq2" class="calibration-input"></div><div class="calibration-rivi"><span class="calibration-label">TAAJUUS GAMMA</span><input type="number" id="freq3" class="calibration-input"></div><button id="kalibroi-nappi" class="toiminto-nappi lcars-button">Kalibroi Kenttä</button></div>
+                        
+                        <div id="warp-core-osio" class="piilotettu">
+                            <p id="warp-core-ohje-teksti" class="leipateksti"></p>
+                            <div id="warp-core-status">Taso: <span id="warp-level">1</span></div>
+                            <div class="warp-pads-container">
+                                <div class="warp-pad" data-pad="1"></div>
+                                <div class="warp-pad" data-pad="2"></div>
+                                <div class="warp-pad" data-pad="3"></div>
+                                <div class="warp-pad" data-pad="4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="lopputulos-osio" class="huomio-laatikko piilotettu"><p class="huomio-otsikko">JÄRJESTELMÄ STABIILI!</p><p class="huomio-teksti">Loistavaa! Kaikki järjestelmät ovat toiminnassa. Anomalia on korjattu. Geokätkön koordinaatit ovat:</p><p id="koordinaatit" class="leipateksti"><strong>N 61° 00.XXX E 025° 00.YYY</strong></p></div>
             <div id="virhe-viesti" class="huomio-laatikko piilotettu" style="border-color: #FF4500;"><p class="huomio-otsikko" style="color: #FF4500;">VIRHE!</p><p id="virhe-teksti" class="huomio-teksti">Syötteesi on virheellinen. Yritä uudelleen.</p></div>
             <div class="glcars-footer"><div class="glcars-block stub-block-1" style="width: 80px;"></div><div class="glcars-block num-block-1 lcars-wide" id="glcars-item-7"></div><div class="glcars-block stub-block-2 flex-grow"></div><div class="glcars-block num-block-2 lcars-med" id="glcars-item-8"></div><div class="glcars-elbow"></div></div>
         </div>
     </div>
+
+    <audio id="typewriter-sound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_24b380275b.mp3" preload="auto" muted></audio>
+    <audio id="pad-sound-1" src="https://cdn.pixabay.com/audio/2021/08/04/audio_a558423f5b.mp3" preload="auto"></audio>
+    <audio id="pad-sound-2" src="https://cdn.pixabay.com/audio/2021/08/04/audio_55321f3afb.mp3" preload="auto"></audio>
+    <audio id="pad-sound-3" src="https://cdn.pixabay.com/audio/2021/08/04/audio_363f06ab62.mp3" preload="auto"></audio>
+    <audio id="pad-sound-4" src="https://cdn.pixabay.com/audio/2021/08/04/audio_7366a7a2a0.mp3" preload="auto"></audio>
+    <audio id="error-sound" src="https://cdn.pixabay.com/audio/2022/03/10/audio_c63474c7ce.mp3" preload="auto"></audio>
+    
     <script src="script.js"></script>
 </body>
 </html>
