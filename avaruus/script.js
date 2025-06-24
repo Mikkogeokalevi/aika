@@ -47,8 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
             stargateOsio: document.getElementById('stargate-osio'),
             calibrationOsio: document.getElementById('calibration-osio'),
             warpGameContainer: document.getElementById('warp-game-container'),
-            warpCoreOsio: document.getElementById('warp-core-osio'),
-            lopputulosOsio: document.getElementById('lopputulos-osio'),
+            lopputulosOsio: document.getElementById('lopputulos-osio'), // Tämä on nyt aluksi null
             loginButton: document.getElementById('login-button'),
             loginContainer: document.getElementById('login-container'),
             nicknameInput: document.getElementById('nickname-input'),
@@ -112,7 +111,38 @@ document.addEventListener('DOMContentLoaded', function() {
     function playWarpSequence() { let i = 0; const sequenceInterval = setInterval(() => { if (i >= warpGameSequence.length) { clearInterval(sequenceInterval); playerCanClickPad = true; return; } lightUpPad(warpGameSequence[i]); i++; }, 800); }
     function lightUpPad(padId) { const pad = document.querySelector(`.warp-pad[data-pad='${padId}']`); const sound = elementit.sounds[`pad${padId}`]; if (!pad || !sound) return; pad.classList.add('lit'); playSound(sound); setTimeout(() => pad.classList.remove('lit'), 400); }
     function warpPadClickHandler(e) { if (!playerCanClickPad) return; const padElement = e.currentTarget; const padId = parseInt(padElement.dataset.pad, 10); lightUpPad(padId); playerWarpSequence.push(padId); const lastIndex = playerWarpSequence.length - 1; if (playerWarpSequence[lastIndex] !== warpGameSequence[lastIndex]) { playSound(elementit.sounds.error); naytaVirhe("Sekvenssivirhe! Ytimen epävakaus kasvaa... Yritetään alusta."); playerCanClickPad = false; elementit.warpPadsContainer.classList.add('piilotettu'); elementit.warpCoreStatus.classList.add('piilotettu'); startWarpGame(); return; } if (playerWarpSequence.length === warpGameSequence.length) { playerCanClickPad = false; if (warpLevel >= WARP_GAME_LEVELS) { setTimeout(warpGameWin, 1000); } else { setTimeout(nextWarpRound, 1500); } } }
-    function warpGameWin() { document.getElementById('lopputulos-osio').classList.remove('piilotettu'); document.getElementById('warp-game-container').classList.add('osio-valmis'); }
+    
+    // --- MUUTETTU FUNKTIO ---
+    function warpGameWin() {
+        // Merkitään edellinen osio valmiiksi
+        const warpGameContainer = document.getElementById('warp-game-container');
+        if (warpGameContainer) {
+            warpGameContainer.classList.add('osio-valmis');
+        }
+
+        // Varmistetaan, ettei lopputulosta luoda moneen kertaan
+        if (document.getElementById('lopputulos-osio')) {
+            return;
+        }
+
+        // Luodaan uusi div-elementti lopputulokselle
+        const lopputulosDiv = document.createElement('div');
+        lopputulosDiv.id = 'lopputulos-osio';
+        lopputulosDiv.className = 'huomio-laatikko'; // Ei piilotettu-luokkaa, näkyy heti
+
+        // Rakennetaan elementin sisältö käyttäen LOPULLISET_KOORDINAATIT-vakiota
+        lopputulosDiv.innerHTML = `
+            <p class="huomio-otsikko">JÄRJESTELMÄ STABIILI!</p>
+            <p class="huomio-teksti">Loistavaa! Kaikki järjestelmät ovat toiminnassa. Anomalia on korjattu. Geokätkön koordinaatit ovat:</p>
+            <p id="koordinaatit" class="leipateksti"><strong>${LOPULLISET_KOORDINAATIT}</strong></p>
+        `;
+
+        // Lisätään luotu elementti sivulle warp-pelin jälkeen
+        if (warpGameContainer) {
+            warpGameContainer.insertAdjacentElement('afterend', lopputulosDiv);
+        }
+    }
+
     function startIntro() { const introText1 = `Suuret kilowatit! Kuuletko minua? Täällä tohtori Erkki Ruskea! Aikakoneen ja jonkin vieraan porttiteknologian yhteensulautuma on luonut vaarallisen aikaparadoksin!`; const introText2 = `Jotta voimme palata takaisin tulevaisuuteen – tai ylipäätään mihinkään tulevaisuuteen – meidän on kalibroitava tämä sotku. Tarvitsen sinulta ne **neljä** tärkeintä päivämäärää seikkailuistamme. Syötä ne aikapiireihin, niin voimme vakauttaa jatkumon. Olen yhdistänyt sinut suoraan järjestelmään.`; typeWriter(document.getElementById('intro-text-1'), introText1, 50, () => { typeWriter(document.getElementById('intro-text-2'), introText2, 40, () => { elementit.loginSection.classList.remove('piilotettu'); const loginHeading = document.getElementById('login-heading'); typeWriter(loginHeading, "YHDISTETÄÄN AIKAKONEEN PÄÄTTEESEEN", 70, () => { let dotCount = 0; const dotInterval = setInterval(() => { if (dotCount < 4) { loginHeading.textContent += "."; dotCount++; } else { clearInterval(dotInterval); setTimeout(() => { elementit.loginContainer.classList.remove('piilotettu'); elementit.nicknameInput.focus(); }, 300); } }, 400); }); }); }); }
     function runAuthSequence(nickname) { const authMessages = ["Yhdistetään aikakoneen verkkoon...",`Haetaan tunnistetta: ${nickname}...`,"Varmennetaan kvanttisignatuuria...",`Tunniste ${nickname} hyväksytty!`,`Tervetuloa järjestelmään, ${nickname}.`]; const authTextElement = document.getElementById('auth-text'); let messageIndex = 0; function showNextMessage() { if (messageIndex < authMessages.length) { authTextElement.textContent = authMessages[messageIndex]; messageIndex++; setTimeout(showNextMessage, 2200); } else { elementit.authSequence.classList.add('fade-out'); setTimeout(() => { showMissionBriefing(nickname); elementit.authSequence.classList.remove('fade-out'); }, 500); } } showNextMessage(); }
     function showMissionBriefing(nickname) { const missionText = `Hienoa, ${nickname}, että pääsit linjoille! Tehtäväsi on elintärkeä: syötä ne **neljä** kohtalokasta päivämäärää aikakoneen piireihin. Ne toimivat ajallisina ankkureina ja korjaavat paradoksin. Onnistuminen paljastaa symbolit, joilla saat portin soitettua ja palkkion koordinaatit. Älä aikaile, koko aika-avaruusjatkumo on sinusta kiinni! Tohtori Erkki Ruskea, loppu.`; elementit.missionBriefingSection.classList.remove('piilotettu'); typeWriter(document.getElementById('mission-text'), missionText, 30, () => { elementit.aikakoneOsio.classList.remove('piilotettu'); document.getElementById('day1').focus(); }); }
@@ -188,9 +218,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function jumpToSection(targetId) {
         unlockAudio();
-        const allSections = [ elementit.introSection, elementit.loginSection, elementit.missionBriefingSection, elementit.aikakoneOsio, elementit.powerUpSequence, elementit.stargateOsio, elementit.calibrationOsio, elementit.warpGameContainer, elementit.lopputulosOsio ];
+        // Huom: 'lopputulosOsio' on poistettu HTML:stä, joten se on null aluksi.
+        const allSections = [ elementit.introSection, elementit.loginSection, elementit.missionBriefingSection, elementit.aikakoneOsio, elementit.powerUpSequence, elementit.stargateOsio, elementit.calibrationOsio, elementit.warpGameContainer, document.getElementById('lopputulos-osio') ];
         allSections.forEach(sec => { if (sec) { sec.classList.add('piilotettu'); sec.classList.remove('osio-valmis'); } });
         
+        // Jos hyppää ohi, poistetaan mahdollisesti luotu vanha lopputulos
+        const oldResult = document.getElementById('lopputulos-osio');
+        if(oldResult) oldResult.remove();
+
         nickname = 'Kehittäjä';
         
         const targetElement = document.getElementById(targetId);
@@ -203,11 +238,11 @@ document.addEventListener('DOMContentLoaded', function() {
             elementit.aikakoneOsio.classList.add('osio-valmis');
             showStargateInstructions();
         } else if (targetId === 'calibration-osio') {
-            ['aikakoneOsio', 'stargateOsio'].forEach(id => { elementit[id].classList.remove('piilotettu'); elementit[id].classList.add('osio-valmis'); });
+            ['aikakoneOsio', 'stargateOsio'].forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('piilotettu'); el.classList.add('osio-valmis'); }});
             kayttajanSekvenssi = OIKEA_SEKVENSSI;
             showCalibrationInstructions();
         } else if (targetId === 'warp-game-container') {
-            ['aikakoneOsio', 'stargateOsio', 'calibrationOsio'].forEach(id => { elementit[id].classList.remove('piilotettu'); elementit[id].classList.add('osio-valmis'); });
+            ['aikakoneOsio', 'stargateOsio', 'calibrationOsio'].forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('piilotettu'); el.classList.add('osio-valmis'); }});
             startWarpGame();
         } else if (targetId === 'aikakone-osio') {
             showMissionBriefing(nickname);
