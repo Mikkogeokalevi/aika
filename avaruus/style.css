@@ -216,6 +216,13 @@ body {
     gap: 10px;
     z-index: 9999;
 }
+
+/* --- LISÄTTY KORJAUS --- */
+/* Tämä sääntö on spesifisempi kuin pelkkä #dev-panel, joten se kumoaa yllä olevan 'display: flex' -säännön, kun piilotettu-luokka on käytössä. */
+#dev-panel.piilotettu {
+    display: none;
+}
+
 .dev-button {
     background-color: #FF9900;
     color: #000;
